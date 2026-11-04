@@ -19,11 +19,16 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+
+  // add favicon it inside the public and imags folder
+  icons: {
+    icon: [{ url: "/images/favicon.png", sizes: "512x512", type: "image/png" }],
+  },
   title: {
     default: "Per-Cent Kerala | Property Marketing",
     template: "%s | Per-Cent Kerala",
   },
-  
+
   description:
     "Sell or rent your property in Kerala with professional photography and targeted marketing campaigns.",
 };
