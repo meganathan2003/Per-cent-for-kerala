@@ -1,12 +1,10 @@
-
 import Link from "next/link";
 import Image from "next/image";
-import {
-    ArrowUpRight,
-    MapPin,
-    Mail,
-    Phone,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+
+/* Palette: Trust Blue + Sand
+   ink #1f2d3d | muted #55657a | blue #2b5d94 | soft blue #e4eef8
+   accent #e9a55a | accent text #9a6226 */
 
 const quickLinks = [
     { label: "Home", href: "/" },
@@ -25,31 +23,23 @@ const services = [
 
 const currentYear = new Date().getFullYear();
 
+const linkClass =
+    "group flex w-fit items-center gap-2 text-sm text-[#55657a] transition-colors duration-300 hover:text-[#2b5d94] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 focus-visible:ring-offset-[#e4eef8]";
+
+const arrowClass =
+    "opacity-0 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100";
+
 export default function Footer() {
     return (
-        <footer className="overflow-hidden bg-[#173D32] text-white">
-
-            {/* TOP BRAND MESSAGE */}
-            <div className="border-b border-white/10">
-                <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-10 lg:py-16">
-                    <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
-                        <Link
-                            href="/promote-property"
-                            className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-[#E8D7C1] px-6 py-3.5 text-sm font-semibold text-[#303B35] transition duration-300 hover:-translate-y-1 hover:bg-[#DCC4A5]"
-                        >
-                            Promote your property
-                            <ArrowUpRight size={17} />
-                        </Link>
-                    </div>
-                </div>
-            </div>
+        <footer className="overflow-hidden bg-[#e4eef8] text-[#1f2d3d]">
+            {/* soft top accent line */}
+            <div className="h-1 w-full bg-gradient-to-r from-[#2b5d94] via-[#e9a55a] to-[#f9e6dc]" />
 
             {/* THREE COLUMN FOOTER */}
             <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-5 py-14 sm:px-8 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr] lg:gap-16 lg:px-10 lg:py-16">
-
                 {/* COLUMN 1: BRAND */}
-                <div className="max-w-md">
-                    <Link href="/" className="inline-flex">
+                <div className="max-w-md md:col-span-2 lg:col-span-1">
+                    <Link href="/" className="inline-flex" aria-label="Per-Cent Kerala home">
                         <Image
                             src="/images/app-logo.png"
                             alt="Per-Cent Kerala"
@@ -59,41 +49,34 @@ export default function Footer() {
                         />
                     </Link>
 
-                    <p className="mt-5 text-sm leading-7 text-white/65">
-                        Helping property owners across Kerala connect their
-                        properties with the right audience through thoughtful,
-                        planned and focused property marketing.
+                    <p className="mt-5 text-sm leading-7 text-[#55657a]">
+                        Helping property owners across Kerala connect their properties
+                        with the right audience through thoughtful, planned and focused
+                        property marketing.
                     </p>
 
-                    <blockquote className="mt-7 border-l-2 border-[#D6AD7B] pl-4">
-                        <p className="font-display text-lg italic leading-7 text-[#E8D7C1]">
+                    <blockquote className="mt-7 border-l-2 border-[#e9a55a] pl-4">
+                        <p className="font-display text-lg italic leading-7 text-[#2b5d94]">
                             "The right property deserves the right attention."
                         </p>
                     </blockquote>
 
-                    <p className="mt-6 text-xs font-medium uppercase tracking-[0.16em] text-white/40">
+                    <p className="mt-6 text-xs font-medium uppercase tracking-[0.16em] text-[#9a6226]">
                         Property marketing across Kerala
                     </p>
                 </div>
 
                 {/* COLUMN 2: QUICK LINKS */}
                 <div>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-white">
+                    <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-[#1f2d3d]">
                         Explore
                     </h3>
 
                     <div className="mt-6 space-y-4">
                         {quickLinks.map((link) => (
-                            <Link
-                                key={link.label}
-                                href={link.href}
-                                className="group flex w-fit items-center gap-2 text-sm text-white/60 transition hover:text-[#E8C9A5]"
-                            >
+                            <Link key={link.label} href={link.href} className={linkClass}>
                                 <span>{link.label}</span>
-                                <ArrowUpRight
-                                    size={14}
-                                    className="opacity-0 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
-                                />
+                                <ArrowUpRight size={14} className={arrowClass} />
                             </Link>
                         ))}
                     </div>
@@ -101,22 +84,15 @@ export default function Footer() {
 
                 {/* COLUMN 3: SERVICES */}
                 <div>
-                    <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-white">
+                    <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-[#1f2d3d]">
                         What We Do
                     </h3>
 
                     <div className="mt-6 space-y-4">
                         {services.map((service) => (
-                            <Link
-                                key={service.label}
-                                href={service.href}
-                                className="group flex w-fit items-center gap-2 text-sm text-white/60 transition hover:text-[#E8C9A5]"
-                            >
+                            <Link key={service.label} href={service.href} className={linkClass}>
                                 <span>{service.label}</span>
-                                <ArrowUpRight
-                                    size={14}
-                                    className="opacity-0 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
-                                />
+                                <ArrowUpRight size={14} className={arrowClass} />
                             </Link>
                         ))}
                     </div>
@@ -124,28 +100,27 @@ export default function Footer() {
             </div>
 
             {/* BOTTOM BAR */}
-            <div className="border-t border-white/10">
-                <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-7 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
-
-                    <p className="text-xs leading-6 text-white/45">
+            <div className="border-t border-[#1f2d3d]/10 bg-[#d8e6f4]">
+                <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-6 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
+                    <p className="text-xs leading-6 text-[#55657a]">
                         © {currentYear} Per-Cent Kerala. All rights reserved.
                     </p>
 
-                    <p className="text-xs leading-6 text-white/45">
+                    <p className="text-xs leading-6 text-[#55657a]">
                         Thoughtful marketing. Meaningful connections.
                     </p>
 
                     <div className="flex items-center gap-5">
                         <Link
                             href="/contact"
-                            className="text-xs text-white/55 transition hover:text-[#E8C9A5]"
+                            className="text-xs font-medium text-[#1f2d3d] transition-colors duration-300 hover:text-[#2b5d94]"
                         >
                             Contact
                         </Link>
 
                         <Link
                             href="/how-it-works"
-                            className="text-xs text-white/55 transition hover:text-[#E8C9A5]"
+                            className="text-xs font-medium text-[#1f2d3d] transition-colors duration-300 hover:text-[#2b5d94]"
                         >
                             How It Works
                         </Link>

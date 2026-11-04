@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     default: "Per-Cent Kerala | Property Marketing",
     template: "%s | Per-Cent Kerala",
   },
+  
   description:
     "Sell or rent your property in Kerala with professional photography and targeted marketing campaigns.",
 };

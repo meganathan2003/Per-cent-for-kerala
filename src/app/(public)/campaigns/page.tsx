@@ -1,23 +1,25 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+    ArrowLeft,
     ArrowRight,
     ArrowUpRight,
-    ArrowLeft,
-    MapPin,
-    Sparkles,
-    Megaphone,
-    Target,
-    TrendingUp,
-    X,
     CheckCircle2,
+    MapPin,
+    Megaphone,
     Ruler,
-    IndianRupee,
+    Target,
+    X,
 } from "lucide-react";
+
+/* Palette: Trust Blue + Sand (soft, low glare)
+   ink #1f2d3d | muted #55657a | page #fbf9f4 | blue #2b5d94 | blue hover #3a70ab
+   soft blue #e4eef8 | pale blue #eef4fb | sand #f8ecd9 | accent #e9a55a | accent text #9a6226 */
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const categories = ["All", "Villas", "Apartments", "Land", "Commercial"];
 
@@ -31,8 +33,7 @@ const campaigns = [
         size: "5 cents",
         description:
             "A sample campaign showcasing how a residential plot can be presented to potential buyers through focused digital marketing.",
-        image:
-            "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&q=85",
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&q=85",
         tag: "Sample Campaign",
         highlights: [
             "Residential location",
@@ -53,8 +54,7 @@ const campaigns = [
         size: "2400 sq.ft",
         description:
             "An illustrative premium villa campaign designed to highlight architecture, lifestyle and property features.",
-        image:
-            "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=85",
+        image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=85",
         tag: "Premium Property",
         highlights: [
             "Contemporary villa design",
@@ -75,8 +75,7 @@ const campaigns = [
         size: "1500 sq.ft",
         description:
             "A sample apartment marketing concept focused on modern living and urban home seekers.",
-        image:
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=85",
+        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=85",
         tag: "Urban Living",
         highlights: [
             "Modern apartment concept",
@@ -97,8 +96,7 @@ const campaigns = [
         size: "2000 sq.ft",
         description:
             "A sample creative direction for presenting a residential villa to relevant regional audiences.",
-        image:
-            "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1200&q=85",
+        image: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1200&q=85",
         tag: "Lifestyle",
         highlights: [
             "Contemporary architecture",
@@ -119,8 +117,7 @@ const campaigns = [
         size: "Commercial property",
         description:
             "An illustrative commercial property campaign concept for business owners and investors.",
-        image:
-            "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=85",
+        image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=85",
         tag: "Commercial",
         highlights: [
             "Commercial property concept",
@@ -129,8 +126,7 @@ const campaigns = [
             "Investor-focused promotion",
         ],
         audience: "Business owners, commercial buyers and property investors.",
-        strategy:
-            "Business-focused creatives and targeted digital promotion.",
+        strategy: "Business-focused creatives and targeted digital promotion.",
     },
     {
         id: "apartment-kottayam",
@@ -141,8 +137,7 @@ const campaigns = [
         size: "1300 sq.ft",
         description:
             "An illustrative regional apartment promotion concept for residential property marketing.",
-        image:
-            "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=85",
+        image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=85",
         tag: "Residential",
         highlights: [
             "Residential apartment concept",
@@ -156,505 +151,320 @@ const campaigns = [
     },
 ];
 
-const strategies = [
-    {
-        number: "01",
-        icon: Target,
-        title: "Audience Targeting",
-        description:
-            "Identify relevant audiences based on property type, location and buyer interests.",
-    },
-    {
-        number: "02",
-        icon: Megaphone,
-        title: "Creative Promotion",
-        description:
-            "Present your property through engaging visuals and carefully planned campaigns.",
-    },
-    {
-        number: "03",
-        icon: TrendingUp,
-        title: "Enquiry Generation",
-        description:
-            "Generate interested buyer enquiries and share them with the property owner.",
-    },
-];
+type Campaign = (typeof campaigns)[number];
 
 export default function CampaignsPage() {
     const [activeCategory, setActiveCategory] = useState("All");
-    const [selectedCampaign, setSelectedCampaign] =
-        useState<(typeof campaigns)[number] | null>(null);
+    const [selected, setSelected] = useState<Campaign | null>(null);
 
+    // close on Escape + lock page scroll while the popup is open
     useEffect(() => {
-        if (!selectedCampaign) return;
+        if (!selected) return;
 
-        const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                setSelectedCampaign(null);
-            }
+        const onKey = (event: KeyboardEvent) => {
+            if (event.key === "Escape") setSelected(null);
         };
 
-        document.addEventListener("keydown", handleEscape);
+        document.addEventListener("keydown", onKey);
         document.body.style.overflow = "hidden";
 
         return () => {
-            document.removeEventListener("keydown", handleEscape);
+            document.removeEventListener("keydown", onKey);
             document.body.style.overflow = "";
         };
-    }, [selectedCampaign]);
+    }, [selected]);
 
-    const filteredCampaigns =
+    const filtered =
         activeCategory === "All"
             ? campaigns
-            : campaigns.filter(
-                (campaign) => campaign.category === activeCategory
-            );
+            : campaigns.filter((item) => item.category === activeCategory);
 
     return (
-        <main className="min-h-screen overflow-hidden bg-[#f8f7f2]">
+        <main className="min-h-screen overflow-x-clip bg-[#fbf9f4] text-[#1f2d3d] antialiased">
+            {/* HEADER: back link on the left, small heading */}
+            <header className="mx-auto max-w-7xl px-5 pb-8 pt-28 sm:px-6 sm:pt-32 lg:px-8">
+                <Link
+                    href="/"
+                    className="group inline-flex items-center gap-2 text-sm font-semibold text-[#2b5d94] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                >
+                    <ArrowLeft
+                        size={16}
+                        className="transition-transform duration-300 group-hover:-translate-x-1"
+                    />
+                    Back to Home
+                </Link>
 
-            {/* HERO */}
-            <section className="relative flex min-h-[480px] items-center justify-center overflow-hidden bg-[#142f27] px-5 py-24 text-center text-white sm:min-h-[540px] sm:px-6">
-                <div className="absolute -left-40 top-0 h-96 w-96 rounded-full bg-[#b68a59]/15 blur-[110px]" />
-                <div className="absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-[#d6ad7b]/10 blur-[110px]" />
-
-                <div className="relative z-10 mx-auto max-w-4xl">
-                    <Link
-                        href="/"
-                        className="mb-12 inline-flex items-center rounded-full border border-white/15 bg-white/[0.06] px-5 py-2.5 text-xs text-white/70 backdrop-blur-xl transition hover:bg-white/10"
-                    >
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to Home
-                    </Link>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        <span className="inline-flex items-center gap-2 rounded-full border border-[#d6ad7b]/30 bg-[#d6ad7b]/10 px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#e5c49d] sm:text-xs">
-                            <Sparkles size={15} />
-                            Our Campaign Showcase
-                        </span>
-
-                        <h1 className="mt-8 font-display text-4xl leading-tight sm:text-5xl md:text-7xl">
-                            Campaigns that bring
-                            <span className="mt-2 block text-[#d6ad7b]">
-                                properties into focus.
-                            </span>
+                <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: EASE }}
+                    className="mt-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
+                >
+                    <div>
+                        <h1 className="font-display text-2xl leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+                            Campaigns that bring properties into focus.
                         </h1>
-
-                        <p className="mx-auto mt-7 max-w-2xl text-sm leading-7 text-white/65 sm:text-base sm:leading-8">
-                            Explore illustrative campaign concepts and discover how
-                            strategic digital marketing can help your property reach
-                            the right audience across Kerala.
-                        </p>
-
-                        <Link
-                            href="/promote-property"
-                            className="mt-9 inline-flex items-center rounded-full bg-[#d6ad7b] px-7 py-4 text-sm font-bold text-[#17392f] transition hover:-translate-y-1 hover:bg-[#e5c49d]"
-                        >
-                            Promote Your Property
-                            <ArrowUpRight className="ml-2 h-4 w-4" />
-                        </Link>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* CAMPAIGN GRID */}
-            <section className="px-5 py-16 sm:px-6 sm:py-20">
-                <div className="mx-auto max-w-7xl">
-                    <div className="grid gap-6 md:grid-cols-2 md:items-end">
-                        <div>
-                            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b68a59]">
-                                Campaign inspiration
-                            </p>
-
-                            <h2 className="mt-3 font-display text-3xl text-[#17392f] sm:text-4xl md:text-5xl">
-                                Every property deserves
-                                <br className="hidden sm:block" /> a better spotlight.
-                            </h2>
-                        </div>
-
-                        <p className="max-w-xl text-sm leading-7 text-[#68746d] md:justify-self-end">
-                            Explore sample campaign presentations to understand how
-                            different property types can be marketed to relevant
-                            audiences.
+                        <p className="mt-2 max-w-xl text-sm leading-6 text-[#55657a]">
+                            Illustrative campaign concepts showing how different property
+                            types can be marketed across Kerala.
                         </p>
                     </div>
 
-                    {/* FILTERS */}
-                    <div className="mt-12 flex flex-wrap gap-2">
-                        {categories.map((category) => (
-                            <button
-                                key={category}
-                                onClick={() => setActiveCategory(category)}
-                                aria-pressed={activeCategory === category}
-                                className={`rounded-full px-5 py-3 text-xs font-semibold transition-all duration-300 ${activeCategory === category
-                                        ? "bg-[#17392f] text-white shadow-lg"
-                                        : "border border-[#e4e3d9] bg-white text-[#53645a] hover:border-[#b68a59]"
-                                    }`}
-                            >
-                                {category}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* CARDS */}
-                    <motion.div
-                        layout
-                        className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                    <Link
+                        href="/promote-property"
+                        className="group inline-flex h-11 shrink-0 items-center justify-center self-start rounded-full bg-[#2b5d94] px-6 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 md:self-auto"
                     >
-                        <AnimatePresence mode="popLayout">
-                            {filteredCampaigns.map((campaign, index) => (
-                                <motion.article
-                                    layout
-                                    key={campaign.id}
-                                    initial={{ opacity: 0, y: 25 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.96 }}
-                                    transition={{ duration: 0.35, delay: index * 0.04 }}
-                                    className="group overflow-hidden rounded-3xl border border-[#e8e5dc] bg-white transition-all duration-500 hover:-translate-y-2 hover:shadow-xl"
+                        Promote Your Property
+                        <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </Link>
+                </motion.div>
+            </header>
+
+            {/* FILTER BAR (stays visible under the navbar while scrolling) */}
+            <div className="sticky top-[72px] z-30 border-y border-[#1f2d3d]/10 bg-[#fbf9f4]/90 backdrop-blur-lg sm:top-20">
+                <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-6 lg:px-8">
+                    <div className="-mx-5 min-w-0 flex-1 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
+                        <div className="flex w-max gap-2">
+                            {categories.map((category) => (
+                                <button
+                                    key={category}
+                                    type="button"
+                                    onClick={() => setActiveCategory(category)}
+                                    aria-pressed={activeCategory === category}
+                                    className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 sm:text-sm ${activeCategory === category
+                                        ? "bg-[#2b5d94] text-white"
+                                        : "bg-white text-[#1f2d3d] ring-1 ring-[#1f2d3d]/15 hover:ring-[#2b5d94]"
+                                        }`}
                                 >
-                                    <button
-                                        type="button"
-                                        onClick={() => setSelectedCampaign(campaign)}
-                                        className="block w-full text-left"
-                                        aria-label={`View ${campaign.title} campaign`}
-                                    >
-                                        <div className="relative aspect-[4/3] overflow-hidden">
-                                            <img
-                                                src={campaign.image}
-                                                alt={campaign.title}
-                                                loading="lazy"
-                                                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                            />
-
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent" />
-
-                                            <span className="absolute left-5 top-5 rounded-full border border-white/30 bg-black/20 px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-md">
-                                                {campaign.tag}
-                                            </span>
-
-                                            <span className="absolute bottom-5 left-5 flex items-center gap-1.5 text-xs font-medium text-white">
-                                                <MapPin size={14} />
-                                                {campaign.location}
-                                            </span>
-                                        </div>
-
-                                        <div className="p-6">
-                                            <div className="flex items-start justify-between gap-3">
-                                                <h3 className="font-display text-xl text-[#17392f]">
-                                                    {campaign.title}
-                                                </h3>
-
-                                                <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-[#b68a59] transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-                                            </div>
-
-                                            <p className="mt-3 text-sm leading-6 text-[#68746d]">
-                                                {campaign.description}
-                                            </p>
-
-                                            <div className="mt-6 flex items-center justify-between gap-3 border-t border-[#eeede6] pt-5">
-                                                <div>
-                                                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#89928b]">
-                                                        Illustrative price
-                                                    </p>
-                                                    <p className="mt-1 text-sm font-bold text-[#17392f]">
-                                                        {campaign.price}
-                                                    </p>
-                                                </div>
-
-                                                <span className="rounded-full bg-[#edf1eb] px-3 py-2 text-[10px] font-semibold text-[#53645a]">
-                                                    {campaign.category}
-                                                </span>
-                                            </div>
-
-                                            <div className="mt-5 flex items-center gap-2 text-xs font-bold text-[#17392f]">
-                                                View Campaign Details
-                                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                            </div>
-                                        </div>
-                                    </button>
-                                </motion.article>
+                                    {category}
+                                </button>
                             ))}
-                        </AnimatePresence>
-                    </motion.div>
+                        </div>
+                    </div>
 
-                    <p className="mt-8 text-center text-xs leading-6 text-[#89928b]">
-                        These are illustrative campaign concepts only. They are not
-                        active property listings, verified offers or live advertisements.
+                    <p className="hidden shrink-0 text-xs text-[#55657a] sm:block">
+                        {filtered.length} {filtered.length === 1 ? "campaign" : "campaigns"}
                     </p>
                 </div>
-            </section>
+            </div>
 
-            {/* STRATEGY */}
-            <section className="bg-[#eeefe8] px-5 py-16 sm:px-6 sm:py-24">
-                <div className="mx-auto max-w-7xl">
-                    <div className="mx-auto max-w-2xl text-center">
-                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b68a59]">
-                            Our approach
-                        </p>
-
-                        <h2 className="mt-3 font-display text-3xl text-[#17392f] sm:text-4xl md:text-5xl">
-                            More than just promotion.
-                        </h2>
-
-                        <p className="mt-5 text-sm leading-7 text-[#68746d]">
-                            A thoughtful marketing process that connects your property
-                            with people most likely to be interested.
-                        </p>
-                    </div>
-
-                    <div className="mt-14 grid gap-6 md:grid-cols-3">
-                        {strategies.map((strategy, index) => {
-                            const Icon = strategy.icon;
-
-                            return (
-                                <motion.div
-                                    key={strategy.number}
-                                    initial={{ opacity: 0, y: 25 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ duration: 0.6, delay: index * 0.12 }}
-                                    className="rounded-3xl border border-[#e2e3d9] bg-white p-7 sm:p-9"
+            {/* CAMPAIGN GRID: image first, text below, no heavy card boxes */}
+            <section className="mx-auto max-w-7xl px-5 py-10 sm:px-6 sm:py-12 lg:px-8">
+                <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+                    <AnimatePresence mode="popLayout">
+                        {filtered.map((item, index) => (
+                            <motion.article
+                                layout="position"
+                                key={item.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 10 }}
+                                transition={{ duration: 0.4, delay: index * 0.04, ease: EASE }}
+                            >
+                                <button
+                                    type="button"
+                                    onClick={() => setSelected(item)}
+                                    aria-label={`View ${item.title} campaign`}
+                                    className="group block w-full text-left focus-visible:outline-none"
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf1eb] text-[#17392f]">
-                                            <Icon size={22} />
-                                        </span>
-
-                                        <span className="font-display text-3xl text-[#d6ad7b]">
-                                            {strategy.number}
+                                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#e4eef8] ring-offset-2 group-focus-visible:ring-2 group-focus-visible:ring-[#2b5d94]">
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            loading="lazy"
+                                            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                        />
+                                        <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-[#1f2d3d]">
+                                            {item.tag}
                                         </span>
                                     </div>
 
-                                    <h3 className="mt-8 font-display text-2xl text-[#17392f]">
-                                        {strategy.title}
-                                    </h3>
+                                    <div className="mt-4">
+                                        <p className="flex items-center gap-1.5 text-xs text-[#55657a]">
+                                            <MapPin size={13} className="shrink-0" />
+                                            <span className="truncate">
+                                                {item.location} · {item.category}
+                                            </span>
+                                        </p>
 
-                                    <p className="mt-4 text-sm leading-7 text-[#68746d]">
-                                        {strategy.description}
-                                    </p>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
+                                        <div className="mt-2 flex items-start justify-between gap-3">
+                                            <h2 className="font-display text-xl leading-snug transition-colors duration-300 group-hover:text-[#2b5d94]">
+                                                {item.title}
+                                            </h2>
+                                            <ArrowUpRight
+                                                size={20}
+                                                className="mt-1 shrink-0 text-[#e9a55a] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                                            />
+                                        </div>
+
+                                        <p className="mt-2 text-sm font-semibold text-[#9a6226]">
+                                            {item.price}
+                                            <span className="ml-2 font-normal text-[#55657a]">
+                                                · {item.size}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </button>
+                            </motion.article>
+                        ))}
+                    </AnimatePresence>
                 </div>
-            </section>
 
-            {/* FINAL CTA */}
-            <section className="px-5 py-16 sm:px-6 sm:py-24">
-                <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[#17392f] px-6 py-16 text-center text-white sm:px-12 sm:py-20">
-                    <div className="absolute -right-20 -top-32 h-80 w-80 rounded-full bg-[#b68a59]/15 blur-[100px]" />
+                <p className="mt-12 text-center text-xs leading-6 text-[#55657a]">
+                    These are illustrative campaign concepts only. They are not active
+                    property listings, verified offers or live advertisements.
+                </p>
 
-                    <div className="relative z-10 mx-auto max-w-2xl">
-                        <Sparkles className="mx-auto h-8 w-8 text-[#d6ad7b]" />
-
-                        <h2 className="mt-6 font-display text-3xl sm:text-4xl md:text-5xl">
-                            Ready to put your property
-                            <span className="block text-[#d6ad7b]">
-                                in the spotlight?
-                            </span>
-                        </h2>
-
-                        <p className="mt-5 text-sm leading-7 text-white/60 sm:text-base">
-                            Tell us about your property. Let&apos;s plan a marketing
-                            campaign that makes it stand out.
+                {/* slim CTA */}
+                <div className="mt-10 flex flex-col items-start justify-between gap-4 rounded-2xl bg-[#e4eef8] p-6 sm:flex-row sm:items-center sm:p-8">
+                    <div>
+                        <p className="font-display text-xl sm:text-2xl">
+                            Want a campaign like this for your property?
                         </p>
-
-                        <Link
-                            href="/promote-property"
-                            className="mt-9 inline-flex items-center rounded-full bg-[#d6ad7b] px-8 py-4 text-sm font-bold text-[#17392f] transition hover:-translate-y-1 hover:bg-[#e5c49d]"
-                        >
-                            Start Your Campaign
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
+                        <p className="mt-1 text-sm text-[#55657a]">
+                            Tell us about it and our team will plan the right approach.
+                        </p>
                     </div>
+
+                    <Link
+                        href="/promote-property"
+                        className="group inline-flex h-12 w-full shrink-0 items-center justify-center rounded-full bg-[#2b5d94] px-7 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 sm:w-auto"
+                    >
+                        Start Your Campaign
+                        <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
                 </div>
             </section>
 
-            {/* CAMPAIGN DETAIL MODAL */}
+            {/* DETAILS POPUP: split layout on desktop, stacked on mobile */}
             <AnimatePresence>
-                {selectedCampaign && (
+                {selected && (
                     <motion.div
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-[#071710]/75 p-3 backdrop-blur-md sm:p-6"
+                        className="fixed inset-0 z-[100] flex items-end justify-center bg-[#1f2d3d]/50 backdrop-blur-sm sm:items-center sm:p-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onMouseDown={(event) => {
-                            if (event.target === event.currentTarget) {
-                                setSelectedCampaign(null);
-                            }
+                            if (event.target === event.currentTarget) setSelected(null);
                         }}
                         role="presentation"
                     >
                         <motion.div
                             role="dialog"
                             aria-modal="true"
-                            aria-labelledby="campaign-modal-title"
-                            initial={{ opacity: 0, y: 35, scale: 0.97 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 25, scale: 0.97 }}
-                            transition={{ duration: 0.3 }}
-                            className="relative max-h-[94dvh] w-full max-w-3xl overflow-y-auto rounded-3xl bg-[#f8f7f2] shadow-2xl sm:max-h-[90vh]"
+                            aria-labelledby="campaign-title"
+                            initial={{ opacity: 0, y: 40 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 30 }}
+                            transition={{ duration: 0.35, ease: EASE }}
+                            className="flex max-h-[92dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-3xl bg-[#fbf9f4] shadow-2xl sm:max-h-[88dvh] sm:rounded-3xl lg:flex-row"
                         >
-                            {/* MODAL HEADER */}
-                            <div className="sticky top-0 z-20 flex items-center justify-between border-b border-[#e8e5dc] bg-[#f8f7f2]/95 px-5 py-4 backdrop-blur-xl sm:px-7">
-                                <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#b68a59]">
-                                        Illustrative Kerala property setting
-                                    </p>
-
-                                    <p className="mt-1 text-xs font-semibold text-[#53645a]">
-                                        Sample campaign
-                                    </p>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedCampaign(null)}
-                                    aria-label="Close campaign details"
-                                    className="flex h-10 w-10 items-center justify-center rounded-full border border-[#e5e5dc] bg-white text-[#17392f] transition hover:bg-[#edf1eb]"
-                                >
-                                    <X size={19} />
-                                </button>
+                            {/* photo */}
+                            <div className="relative h-44 shrink-0 sm:h-60 lg:h-auto lg:w-[42%]">
+                                <img
+                                    src={selected.image}
+                                    alt={selected.title}
+                                    className="absolute inset-0 h-full w-full object-cover"
+                                />
+                                <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-[#1f2d3d]">
+                                    {selected.tag}
+                                </span>
                             </div>
 
-                            {/* MODAL CONTENT */}
-                            <div className="p-5 sm:p-8">
-                                <div className="mb-5 flex items-center gap-2">
-                                    <CheckCircle2 className="h-4 w-4 text-[#3c8064]" />
+                            {/* info (scrolls on its own) */}
+                            <div className="relative min-h-0 flex-1 overflow-y-auto">
+                                <button
+                                    type="button"
+                                    onClick={() => setSelected(null)}
+                                    aria-label="Close campaign details"
+                                    className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[#1f2d3d]/15 bg-white text-[#1f2d3d] transition duration-300 hover:bg-[#e4eef8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94]"
+                                >
+                                    <X size={18} />
+                                </button>
 
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#3c8064]">
-                                        Owner details reviewed · Sample only
-                                    </span>
-                                </div>
-
-                                <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
-                                    <img
-                                        src={selectedCampaign.image}
-                                        alt={selectedCampaign.title}
-                                        className="h-full w-full object-cover"
-                                    />
-
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-
-                                    <span className="absolute bottom-4 left-4 rounded-full border border-white/30 bg-black/20 px-4 py-2 text-xs font-semibold text-white backdrop-blur-md">
-                                        {selectedCampaign.tag}
-                                    </span>
-                                </div>
-
-                                <div className="mt-6">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[#b68a59]">
-                                        {selectedCampaign.category} · Sample campaign
+                                <div className="p-5 pb-8 sm:p-7 lg:p-8">
+                                    <p className="pr-12 text-xs font-semibold text-[#9a6226]">
+                                        {selected.category} · Sample campaign
                                     </p>
 
                                     <h2
-                                        id="campaign-modal-title"
-                                        className="mt-2 font-display text-2xl leading-tight text-[#17392f] sm:text-4xl"
+                                        id="campaign-title"
+                                        className="mt-2 pr-12 font-display text-2xl leading-tight sm:text-3xl"
                                     >
-                                        {selectedCampaign.title}
+                                        {selected.title}
                                     </h2>
 
-                                    <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#68746d]">
+                                    <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#55657a]">
                                         <span className="flex items-center gap-1.5">
                                             <MapPin size={15} />
-                                            {selectedCampaign.location}
+                                            {selected.location}
                                         </span>
-
                                         <span className="flex items-center gap-1.5">
                                             <Ruler size={15} />
-                                            {selectedCampaign.size}
+                                            {selected.size}
                                         </span>
                                     </div>
 
-                                    <div className="mt-6 rounded-2xl border border-[#e8e5dc] bg-white p-5 sm:p-6">
-                                        <p className="text-xs font-semibold uppercase tracking-wider text-[#89928b]">
+                                    <div className="mt-5 rounded-2xl bg-[#e4eef8] p-4 sm:p-5">
+                                        <p className="text-xs font-semibold text-[#55657a]">
                                             Illustrative property value
                                         </p>
-
-                                        <p className="mt-2 flex items-center font-display text-3xl font-semibold text-[#17392f] sm:text-4xl">
-                                            {selectedCampaign.price}
-                                        </p>
-
-                                        <p className="mt-3 text-xs leading-6 text-[#89928b]">
-                                            This sample shows how a property campaign could be
-                                            presented. It is not an active listing and has no
-                                            live contact details.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* PROPERTY HIGHLIGHTS */}
-                                <div className="mt-8">
-                                    <h3 className="font-display text-xl text-[#17392f]">
-                                        Campaign highlights
-                                    </h3>
-
-                                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                                        {selectedCampaign.highlights.map((highlight) => (
-                                            <div
-                                                key={highlight}
-                                                className="flex items-center gap-3 rounded-xl bg-white p-4"
-                                            >
-                                                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#b68a59]" />
-
-                                                <span className="text-sm text-[#53645a]">
-                                                    {highlight}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* MARKETING STRATEGY */}
-                                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                                    <div className="rounded-2xl bg-[#eaece4] p-5">
-                                        <Target className="h-5 w-5 text-[#b68a59]" />
-
-                                        <h4 className="mt-4 font-semibold text-[#17392f]">
-                                            Target audience
-                                        </h4>
-
-                                        <p className="mt-2 text-sm leading-6 text-[#68746d]">
-                                            {selectedCampaign.audience}
+                                        <p className="mt-1 font-display text-2xl font-semibold sm:text-3xl">
+                                            {selected.price}
                                         </p>
                                     </div>
 
-                                    <div className="rounded-2xl bg-[#eaece4] p-5">
-                                        <Megaphone className="h-5 w-5 text-[#b68a59]" />
-
-                                        <h4 className="mt-4 font-semibold text-[#17392f]">
-                                            Marketing approach
-                                        </h4>
-
-                                        <p className="mt-2 text-sm leading-6 text-[#68746d]">
-                                            {selectedCampaign.strategy}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* MODAL CTA */}
-                                <div className="mt-8 rounded-2xl bg-[#17392f] p-5 text-white sm:p-7">
-                                    <p className="font-display text-xl sm:text-2xl">
-                                        Like this campaign style?
+                                    <p className="mt-5 text-sm leading-7 text-[#55657a]">
+                                        {selected.description}
                                     </p>
 
-                                    <p className="mt-2 text-sm leading-6 text-white/60">
-                                        Tell us about your property. Our team will review
-                                        whether a similar marketing approach is suitable.
+                                    <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
+                                        {selected.highlights.map((highlight) => (
+                                            <li
+                                                key={highlight}
+                                                className="flex items-start gap-2.5 text-sm"
+                                            >
+                                                <CheckCircle2
+                                                    size={16}
+                                                    className="mt-0.5 shrink-0 text-[#2b5d94]"
+                                                />
+                                                <span>{highlight}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                                        <div className="rounded-2xl bg-[#f8ecd9] p-4">
+                                            <Target size={18} className="text-[#9a6226]" />
+                                            <h3 className="mt-3 text-sm font-bold">Target audience</h3>
+                                            <p className="mt-1 text-xs leading-5 text-[#55657a]">
+                                                {selected.audience}
+                                            </p>
+                                        </div>
+
+                                        <div className="rounded-2xl bg-[#eef4fb] p-4">
+                                            <Megaphone size={18} className="text-[#2b5d94]" />
+                                            <h3 className="mt-3 text-sm font-bold">Marketing approach</h3>
+                                            <p className="mt-1 text-xs leading-5 text-[#55657a]">
+                                                {selected.strategy}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <p className="mt-5 text-xs leading-5 text-[#55657a]">
+                                        This sample shows how a campaign could be presented. It is
+                                        not an active listing and has no live contact details.
                                     </p>
 
                                     <Link
-                                        href={`/promote-property?campaign=${selectedCampaign.id}`}
-                                        className="mt-6 flex w-full items-center justify-center rounded-full bg-[#d6ad7b] px-6 py-4 text-sm font-bold text-[#17392f] transition hover:-translate-y-1 hover:bg-[#e5c49d]"
+                                        href={`/promote-property?campaign=${selected.id}`}
+                                        className="group mt-6 flex h-12 w-full items-center justify-center rounded-full bg-[#2b5d94] px-6 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
                                     >
                                         Promote a Similar Property
-                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                        <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                                     </Link>
 
-                                    <p className="mt-3 text-center text-[10px] text-white/40">
+                                    <p className="mt-3 text-center text-[11px] text-[#55657a]">
                                         No payment required at this stage.
                                     </p>
                                 </div>

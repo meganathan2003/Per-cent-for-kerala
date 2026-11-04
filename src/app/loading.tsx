@@ -6,14 +6,14 @@ export default function Loading() {
         <main
             aria-label="Loading Per-Cent Kerala"
             aria-busy="true"
-            className="fixed inset-0 z-[9999] flex min-h-screen items-center justify-center bg-[#F7F5EF]"
+            className="fixed inset-0 z-9999 flex min-h-screen items-center justify-center bg-[#F7F5EF]"
         >
             <div className="flex w-full max-w-sm flex-col items-center px-6 text-center">
                 <div className="relative flex h-40 w-64 items-center justify-center sm:h-48 sm:w-80">
                     <div className="absolute h-36 w-36 animate-ping rounded-full bg-[#173D32]/5" />
 
                     <Image
-                        src="/images/per-cent-kerala-logo.png"
+                        src="/images/app-logo.png"
                         alt="Per-Cent Kerala"
                         width={420}
                         height={320}
