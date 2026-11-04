@@ -33,7 +33,7 @@ export default function Footer() {
     return (
         <footer className="overflow-hidden bg-[#e4eef8] text-[#1f2d3d]">
             {/* soft top accent line */}
-            <div className="h-1 w-full bg-gradient-to-r from-[#2b5d94] via-[#e9a55a] to-[#f9e6dc]" />
+            <div className="h-1 w-full bg-linear-to-r from-[#2b5d94] via-[#e9a55a] to-[#f9e6dc]" />
 
             {/* THREE COLUMN FOOTER */}
             <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-5 py-14 sm:px-8 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr] lg:gap-16 lg:px-10 lg:py-16">
@@ -43,7 +43,7 @@ export default function Footer() {
                         <Image
                             src="/images/logo.png"
                             alt="Per-Cent Kerala"
-                            width={200}
+                            width={100}
                             height={90}
                             className="h-14 w-auto object-contain"
                         />
