@@ -41,7 +41,7 @@ export default function Footer() {
                 <div className="max-w-md md:col-span-2 lg:col-span-1">
                     <Link href="/" className="inline-flex" aria-label="Per-Cent Kerala home">
                         <Image
-                            src="/images/app-logo.png"
+                            src="/images/logo.png"
                             alt="Per-Cent Kerala"
                             width={200}
                             height={90}

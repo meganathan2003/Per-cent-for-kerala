@@ -66,7 +66,7 @@ export default function Navbar() {
                     className="relative z-10 flex shrink-0 items-center"
                 >
                     <Image
-                        src="/images/app-logo.png"
+                        src="/images/logo.png"
                         alt="Per-Cent Kerala"
                         width={450}
                         height={100}
