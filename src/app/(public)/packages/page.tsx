@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
     ArrowRight,
@@ -22,12 +23,26 @@ import {
     useSpring,
     useTransform,
 } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { animate, stagger } from "animejs";
 import Navbar from "@/components/layout/navbar";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /* ---------- DESIGN SYSTEM ---------- */
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const container = "mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8";
+
+/*
+  PER-CENT KERALA V2
+  White:       #FFFFFF
+  Charcoal:    #1C1C1C
+  Gold:        #B8924A
+  Gold Hover:  #9F7C3D
+  Warm BG:     #F8F6F1
+*/
 
 /* ---------- PACKAGE DATA ---------- */
 
@@ -139,28 +154,28 @@ const steps = [
         number: "1",
         title: "Share details",
         text: "Tell us about your property and marketing goals.",
-        tint: "bg-[#e4eef8]",
+        tint: "bg-[#F5EFE3]",
     },
     {
         icon: FileCheck,
         number: "2",
         title: "We review",
         text: "Our team reviews the information and understands your needs.",
-        tint: "bg-[#f8ecd9]",
+        tint: "bg-[#F3EBDD]",
     },
     {
         icon: Target,
         number: "3",
         title: "Choose a plan",
         text: "We discuss the suitable package, scope and quotation.",
-        tint: "bg-[#f9e6dc]",
+        tint: "bg-[#F6EDE1]",
     },
     {
         icon: Megaphone,
         number: "4",
         title: "Start promoting",
         text: "After your approval, we prepare and launch the campaign.",
-        tint: "bg-[#dcebf5]",
+        tint: "bg-[#EFE5D2]",
     },
 ];
 
@@ -278,11 +293,11 @@ function SectionHeading({
 }) {
     return (
         <div className={center ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
-            <p className="text-sm font-semibold text-[#2b5d94]">
+            <p className="text-sm font-semibold tracking-wide text-[#B8924A]">
                 {label}
             </p>
 
-            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#1f2d3d] sm:text-4xl lg:text-[2.75rem]">
+            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#1C1C1C] sm:text-4xl lg:text-[2.75rem]">
                 {title}
             </h2>
 
@@ -292,12 +307,13 @@ function SectionHeading({
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.25, ease: EASE }}
-                className={`mt-4 block h-1 w-16 rounded-full bg-[#e9a55a] ${center ? "mx-auto origin-center" : "origin-left"
-                    }`}
+                className={`mt-4 block h-1 w-16 rounded-full bg-[#B8924A] ${
+                    center ? "mx-auto origin-center" : "origin-left"
+                }`}
             />
 
             {text && (
-                <p className="mt-5 text-base leading-7 text-[#4a5a6e]">
+                <p className="mt-5 text-base leading-7 text-[#66615A]">
                     {text}
                 </p>
             )}
@@ -317,12 +333,9 @@ function CellValue({ value }: { value: string }) {
                     stiffness: 380,
                     damping: 18,
                 }}
-                className="mx-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#2b5d94]"
+                className="mx-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#B8924A]"
             >
-                <Check
-                    className="h-4 w-4 text-white"
-                    aria-label="Included"
-                />
+                <Check className="h-4 w-4 text-white" aria-label="Included" />
             </motion.span>
         );
     }
@@ -330,7 +343,7 @@ function CellValue({ value }: { value: string }) {
     if (value === "no") {
         return (
             <Minus
-                className="mx-auto h-5 w-5 text-[#7b8898]"
+                className="mx-auto h-5 w-5 text-[#99938A]"
                 aria-label="Not included"
             />
         );
@@ -340,10 +353,10 @@ function CellValue({ value }: { value: string }) {
         value.toLowerCase().includes("to be confirmed") ||
         value.toLowerCase().includes("to be discussed")
     ) {
-        return <span className="text-[#626d78]">{value}</span>;
+        return <span className="text-[#81796D]">{value}</span>;
     }
 
-    return <span className="text-[#1f2d3d]">{value}</span>;
+    return <span className="text-[#1C1C1C]">{value}</span>;
 }
 
 function FloatChip({
@@ -375,7 +388,7 @@ function FloatChip({
                     ease: "easeInOut",
                 },
             }}
-            className={`absolute z-20 rounded-2xl bg-white px-4 py-3 shadow-[0_12px_30px_rgba(31,45,61,0.14)] ${className}`}
+            className={`absolute z-20 rounded-2xl border border-[#B8924A]/10 bg-white px-4 py-3 shadow-[0_12px_30px_rgba(28,28,28,0.12)] ${className}`}
         >
             {children}
         </motion.div>
@@ -399,14 +412,12 @@ export default function PackagesPage() {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
     const [activePlan, setActivePlan] = useState(1);
 
-    // Scroll progress animation
     const { scrollYProgress } = useScroll();
     const progress = useSpring(scrollYProgress, {
         stiffness: 120,
         damping: 28,
     });
 
-    // Hero parallax animation
     const heroRef = useRef<HTMLElement>(null);
 
     const { scrollYProgress: heroProgress } = useScroll({
@@ -416,13 +427,249 @@ export default function PackagesPage() {
 
     const imageY = useTransform(heroProgress, [0, 1], ["0%", "12%"]);
 
+    /* ---------- GSAP + ANIME.JS ---------- */
+
+    useEffect(() => {
+        if (reduceMotion) return;
+
+        const ctx = gsap.context(() => {
+            /* Hero content reveal */
+            gsap.fromTo(
+                ".packages-gsap-heading",
+                { opacity: 0, y: 45, filter: "blur(8px)" },
+                {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".packages-gsap-heading",
+                        start: "top 90%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* Package cards entrance */
+            gsap.fromTo(
+                ".gsap-package-card",
+                { opacity: 0, y: 75, rotateX: 8 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    rotateX: 0,
+                    duration: 0.9,
+                    stagger: 0.18,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".gsap-package-grid",
+                        start: "top 85%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* Package image reveal */
+            gsap.utils
+                .toArray<HTMLElement>(".gsap-package-image")
+                .forEach((image) => {
+                    gsap.fromTo(
+                        image,
+                        { scale: 1.2, clipPath: "inset(8% 8% 8% 8%)" },
+                        {
+                            scale: 1,
+                            clipPath: "inset(0% 0% 0% 0%)",
+                            duration: 1.2,
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: image,
+                                start: "top 90%",
+                                once: true,
+                            },
+                        }
+                    );
+                });
+
+            /* Comparison rows */
+            gsap.fromTo(
+                ".gsap-comparison-row",
+                { opacity: 0, x: -20 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.55,
+                    stagger: 0.08,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: ".gsap-comparison-table",
+                        start: "top 85%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* Process steps */
+            gsap.fromTo(
+                ".gsap-process-step",
+                { opacity: 0, y: 35 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.75,
+                    stagger: 0.15,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".gsap-process-grid",
+                        start: "top 85%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* FAQ items */
+            gsap.fromTo(
+                ".gsap-faq-item",
+                { opacity: 0, x: 25 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.65,
+                    stagger: 0.1,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: ".gsap-faq-list",
+                        start: "top 85%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* Final CTA */
+            gsap.fromTo(
+                ".gsap-package-cta",
+                { opacity: 0, y: 55, scale: 0.97 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.9,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".gsap-package-cta",
+                        start: "top 88%",
+                        once: true,
+                    },
+                }
+            );
+
+            gsap.to(".gsap-cta-ring", {
+                rotate: 360,
+                duration: 35,
+                repeat: -1,
+                ease: "none",
+            });
+        });
+
+        /* Anime.js: package icons and badges */
+        const iconObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+
+                    animate(entry.target, {
+                        scale: [0.5, 1.18, 1],
+                        rotate: ["-15deg", "8deg", "0deg"],
+                        opacity: [0, 1],
+                        duration: 900,
+                        ease: "outElastic(1, .65)",
+                    });
+
+                    iconObserver.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.5 }
+        );
+
+        document
+            .querySelectorAll("[data-anime-package-icon]")
+            .forEach((element) => iconObserver.observe(element));
+
+        /* Anime.js: feature list stagger */
+        const featureObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+
+                    const items = entry.target.querySelectorAll(
+                        "[data-anime-feature]"
+                    );
+
+                    animate(items, {
+                        opacity: [0, 1],
+                        translateX: [-15, 0],
+                        delay: stagger(90),
+                        duration: 600,
+                        ease: "outQuad",
+                    });
+
+                    featureObserver.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.25 }
+        );
+
+        document
+            .querySelectorAll("[data-anime-features]")
+            .forEach((element) => featureObserver.observe(element));
+
+        /* Anime.js: CTA button hover */
+        const buttons = document.querySelectorAll("[data-anime-button]");
+        const cleanups: (() => void)[] = [];
+
+        buttons.forEach((button) => {
+            const enter = () => {
+                animate(button, {
+                    scale: 1.04,
+                    duration: 220,
+                    ease: "outQuad",
+                });
+            };
+
+            const leave = () => {
+                animate(button, {
+                    scale: 1,
+                    duration: 350,
+                    ease: "outElastic(1, .7)",
+                });
+            };
+
+            button.addEventListener("mouseenter", enter);
+            button.addEventListener("mouseleave", leave);
+
+            cleanups.push(() => {
+                button.removeEventListener("mouseenter", enter);
+                button.removeEventListener("mouseleave", leave);
+            });
+        });
+
+        return () => {
+            ctx.revert();
+            iconObserver.disconnect();
+            featureObserver.disconnect();
+            cleanups.forEach((cleanup) => cleanup());
+        };
+    }, [reduceMotion]);
+
     return (
-        <main className="overflow-x-clip bg-[#fbf9f4] text-[#1f2d3d] antialiased">
+        <main className="overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C] antialiased">
+            {/* PAGE PROGRESS */}
+
             {!reduceMotion && (
                 <motion.div
                     aria-hidden
                     style={{ scaleX: progress }}
-                    className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-[#e9a55a]"
+                    className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-[#B8924A]"
                 />
             )}
 
@@ -432,7 +679,7 @@ export default function PackagesPage() {
 
             <section
                 ref={heroRef}
-                className="relative bg-gradient-to-b from-[#e4eef8] to-[#fbf9f4]"
+                className="relative overflow-hidden bg-gradient-to-b from-[#F5EFE3] to-[#F8F6F1]"
             >
                 <motion.div
                     aria-hidden
@@ -446,7 +693,7 @@ export default function PackagesPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -left-24 top-24 h-64 w-64 rounded-full bg-[#dcebf5] blur-2xl sm:h-80 sm:w-80"
+                    className="pointer-events-none absolute -left-24 top-24 h-64 w-64 rounded-full bg-[#E9DFC9] blur-2xl sm:h-80 sm:w-80"
                 />
 
                 <motion.div
@@ -459,7 +706,7 @@ export default function PackagesPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#f8ecd9] blur-2xl sm:h-72 sm:w-72"
+                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#E8D9BC] blur-2xl sm:h-72 sm:w-72"
                 />
 
                 <div
@@ -477,16 +724,16 @@ export default function PackagesPage() {
                     >
                         <motion.p
                             variants={heroItem}
-                            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-[#2b5d94] shadow-sm sm:text-sm"
+                            className="inline-flex items-center gap-2 rounded-full border border-[#B8924A]/15 bg-white px-4 py-2 text-xs font-semibold text-[#8B6B35] shadow-sm sm:text-sm"
                         >
                             <span className="relative flex h-2 w-2">
-                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#e9a55a] opacity-70 motion-reduce:animate-none" />
-                                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#e9a55a]" />
+                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#B8924A] opacity-70 motion-reduce:animate-none" />
+                                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#B8924A]" />
                             </span>
                             Property marketing packages
                         </motion.p>
 
-                        <h1 className="mt-6 font-display text-4xl leading-[1.1] tracking-tight text-[#1f2d3d] sm:text-5xl lg:text-6xl">
+                        <h1 className="packages-gsap-heading mt-6 font-display text-4xl leading-[1.1] tracking-tight text-[#1C1C1C] sm:text-5xl lg:text-6xl">
                             <MaskedLine
                                 text="Find the right plan."
                                 baseDelay={0.2}
@@ -499,7 +746,7 @@ export default function PackagesPage() {
 
                         <motion.p
                             variants={heroItem}
-                            className="mt-5 max-w-xl text-base leading-8 text-[#4a5a6e] sm:text-lg"
+                            className="mt-5 max-w-xl text-base leading-8 text-[#66615A] sm:text-lg"
                         >
                             Every property is different. Compare our campaign
                             options and choose the level of marketing support
@@ -512,7 +759,8 @@ export default function PackagesPage() {
                         >
                             <Link
                                 href="#packages"
-                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#2b5d94] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:text-white hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                                data-anime-button
+                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
                             >
                                 View packages
                                 <ArrowUpRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -520,7 +768,8 @@ export default function PackagesPage() {
 
                             <Link
                                 href="#how-it-works"
-                                className="group inline-flex h-14 items-center justify-center rounded-full border border-[#1f2d3d]/25 bg-white px-8 text-sm font-semibold text-[#1f2d3d] transition duration-300 hover:-translate-y-0.5 hover:border-[#2b5d94] hover:bg-[#e4eef8] hover:text-[#1f2d3d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                                data-anime-button
+                                className="group inline-flex h-14 items-center justify-center rounded-full border border-[#1C1C1C]/20 bg-white px-8 text-sm font-semibold text-[#1C1C1C] transition duration-300 hover:-translate-y-0.5 hover:border-[#B8924A] hover:bg-[#F5EFE3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
                             >
                                 How it works
                                 <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -529,11 +778,11 @@ export default function PackagesPage() {
 
                         <motion.p
                             variants={heroItem}
-                            className="mt-8 flex items-center gap-2 text-sm text-[#4a5a6e]"
+                            className="mt-8 flex items-center gap-2 text-sm text-[#66615A]"
                         >
                             <ShieldCheck
                                 size={18}
-                                className="shrink-0 text-[#2b5d94]"
+                                className="shrink-0 text-[#B8924A]"
                             />
                             Share your property details first. Discuss the plan
                             before payment.
@@ -559,26 +808,24 @@ export default function PackagesPage() {
                                 delay: 0.2,
                                 ease: EASE,
                             }}
-                            className="relative h-[320px] overflow-hidden rounded-3xl shadow-[0_20px_50px_rgba(31,45,61,0.14)] sm:h-[400px] lg:h-[480px]"
+                            className="relative h-[320px] overflow-hidden rounded-3xl shadow-[0_20px_50px_rgba(28,28,28,0.14)] sm:h-[400px] lg:h-[480px]"
                         >
                             <motion.img
                                 src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1600&auto=format&fit=crop"
                                 alt="Modern residential property"
                                 loading="eager"
                                 style={
-                                    reduceMotion
-                                        ? undefined
-                                        : { y: imageY }
+                                    reduceMotion ? undefined : { y: imageY }
                                 }
                                 className="absolute inset-0 h-[115%] w-full object-cover"
                             />
                         </motion.div>
 
                         <FloatChip className="-top-3 left-3 sm:-left-4 lg:-left-8 lg:top-10">
-                            <p className="text-xs font-semibold text-[#4a5a6e]">
+                            <p className="text-xs font-semibold text-[#81796D]">
                                 Campaign options
                             </p>
-                            <p className="text-sm font-bold text-[#1f2d3d]">
+                            <p className="text-sm font-bold text-[#1C1C1C]">
                                 Choose your level of support
                             </p>
                         </FloatChip>
@@ -587,10 +834,10 @@ export default function PackagesPage() {
                             className="-bottom-4 right-3 sm:-right-3 lg:-right-6 lg:bottom-12"
                             delay={0.25}
                         >
-                            <p className="text-xs font-semibold text-[#9a6226]">
+                            <p className="text-xs font-semibold text-[#9F7C3D]">
                                 Personalised plan
                             </p>
-                            <p className="text-sm font-bold text-[#1f2d3d]">
+                            <p className="text-sm font-bold text-[#1C1C1C]">
                                 Discuss before you start
                             </p>
                         </FloatChip>
@@ -600,13 +847,13 @@ export default function PackagesPage() {
 
             {/* ANIMATED HIGHLIGHTS */}
 
-            <div className="overflow-hidden border-y border-[#2b5d94]/15 bg-[#e4eef8] py-4">
+            <div className="overflow-hidden border-y border-[#B8924A]/20 bg-[#F0E7D7] py-4">
                 {reduceMotion ? (
                     <ul className="flex flex-wrap justify-center gap-x-8 gap-y-2 px-5">
                         {marqueeItems.map((item) => (
                             <li
                                 key={item}
-                                className="text-sm font-semibold text-[#1f2d3d]"
+                                className="text-sm font-semibold text-[#1C1C1C]"
                             >
                                 {item}
                             </li>
@@ -628,10 +875,10 @@ export default function PackagesPage() {
                                 <li
                                     key={`${item}-${i}`}
                                     aria-hidden={i >= marqueeItems.length}
-                                    className="flex items-center gap-10 whitespace-nowrap text-sm font-semibold text-[#1f2d3d]"
+                                    className="flex items-center gap-10 whitespace-nowrap text-sm font-semibold text-[#1C1C1C]"
                                 >
                                     {item}
-                                    <span className="h-1.5 w-1.5 rounded-full bg-[#e9a55a]" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-[#B8924A]" />
                                 </li>
                             )
                         )}
@@ -648,13 +895,13 @@ export default function PackagesPage() {
                 <div className={container}>
                     <Reveal>
                         <SectionHeading
-                            label="Find your campaign"
+                            label="FIND YOUR CAMPAIGN"
                             title="Compare our campaign packages."
                             text="See what each package is designed for. We will confirm the exact deliverables, pricing and campaign plan with you before you proceed."
                         />
                     </Reveal>
 
-                    <div className="mx-auto mt-14 grid max-w-xl gap-6 lg:max-w-none lg:grid-cols-3 lg:gap-7">
+                    <div className="gsap-package-grid mx-auto mt-14 grid max-w-xl gap-6 lg:max-w-none lg:grid-cols-3 lg:gap-7">
                         {packages.map((plan, index) => {
                             const featured = plan.popular;
 
@@ -662,8 +909,9 @@ export default function PackagesPage() {
                                 <Reveal
                                     key={plan.name}
                                     delay={index * 0.1}
-                                    className={`h-full ${featured ? "" : "lg:mt-8"
-                                        }`}
+                                    className={`gsap-package-card h-full ${
+                                        featured ? "" : "lg:mt-8"
+                                    }`}
                                 >
                                     <motion.article
                                         whileHover={
@@ -676,10 +924,11 @@ export default function PackagesPage() {
                                             stiffness: 260,
                                             damping: 20,
                                         }}
-                                        className={`group relative flex h-full flex-col overflow-hidden rounded-3xl text-[#1f2d3d] hover:shadow-xl ${featured
-                                                ? "border-2 border-[#2b5d94]/35 bg-gradient-to-b from-[#e4eef8] to-[#dcebf5] shadow-[0_18px_40px_rgba(43,93,148,0.18)]"
-                                                : "border border-[#1f2d3d]/10 bg-white shadow-sm"
-                                            }`}
+                                        className={`group relative flex h-full flex-col overflow-hidden rounded-3xl text-[#1C1C1C] ${
+                                            featured
+                                                ? "border-2 border-[#B8924A]/60 bg-gradient-to-b from-[#F5EFE3] to-[#EFE5D2] shadow-[0_18px_40px_rgba(184,146,74,0.16)]"
+                                                : "border border-[#1C1C1C]/10 bg-white shadow-sm"
+                                        }`}
                                     >
                                         {featured && (
                                             <motion.span
@@ -687,19 +936,19 @@ export default function PackagesPage() {
                                                     reduceMotion
                                                         ? undefined
                                                         : {
-                                                            scale: [
-                                                                1,
-                                                                1.06,
-                                                                1,
-                                                            ],
-                                                        }
+                                                              scale: [
+                                                                  1,
+                                                                  1.06,
+                                                                  1,
+                                                              ],
+                                                          }
                                                 }
                                                 transition={{
                                                     duration: 2.4,
                                                     repeat: Infinity,
                                                     ease: "easeInOut",
                                                 }}
-                                                className="absolute right-4 top-4 z-10 rounded-full bg-[#e9a55a] px-4 py-1.5 text-xs font-bold text-[#1f2d3d] shadow-sm"
+                                                className="absolute right-4 top-4 z-10 rounded-full bg-[#B8924A] px-4 py-1.5 text-xs font-bold text-white shadow-sm"
                                             >
                                                 Popular choice
                                             </motion.span>
@@ -710,96 +959,70 @@ export default function PackagesPage() {
                                                 src={plan.image}
                                                 alt={plan.imageAlt}
                                                 loading="lazy"
-                                                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                                className="gsap-package-image h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                                             />
+
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                                         </div>
 
                                         <div className="flex flex-1 flex-col p-6 sm:p-7">
-                                            <h3 className="font-display text-3xl text-[#1f2d3d]">
+                                            <h3 className="font-display text-3xl text-[#1C1C1C]">
                                                 {plan.name}
                                             </h3>
 
-                                            <p
-                                                className={`mt-1 text-sm font-semibold ${featured
-                                                        ? "text-[#7d4e17]"
-                                                        : "text-[#9a6226]"
-                                                    }`}
-                                            >
+                                            <p className="mt-1 text-sm font-semibold text-[#9F7C3D]">
                                                 {plan.subtitle}
                                             </p>
 
-                                            <p className="mt-4 text-sm leading-7 text-[#4a5a6e] lg:min-h-[84px]">
+                                            <p className="mt-4 text-sm leading-7 text-[#66615A] lg:min-h-[84px]">
                                                 {plan.description}
                                             </p>
 
-                                            <ul className="mt-6 flex-1 space-y-3.5">
+                                            <ul
+                                                data-anime-features
+                                                className="mt-6 flex-1 space-y-3.5"
+                                            >
                                                 {plan.features.map(
-                                                    (feature, fi) => (
-                                                        <motion.li
+                                                    (feature) => (
+                                                        <li
                                                             key={feature}
-                                                            initial={
-                                                                reduceMotion
-                                                                    ? false
-                                                                    : {
-                                                                        opacity: 0,
-                                                                        x: -14,
-                                                                    }
-                                                            }
-                                                            whileInView={{
-                                                                opacity: 1,
-                                                                x: 0,
-                                                            }}
-                                                            viewport={{
-                                                                once: true,
-                                                                amount: 0.8,
-                                                            }}
-                                                            transition={{
-                                                                duration: 0.45,
-                                                                delay:
-                                                                    0.2 +
-                                                                    fi * 0.07,
-                                                                ease: EASE,
-                                                            }}
-                                                            className="flex gap-3 text-sm leading-6 text-[#1f2d3d]"
+                                                            data-anime-feature
+                                                            className="flex gap-3 text-sm leading-6 text-[#1C1C1C]"
                                                         >
-                                                            <span
-                                                                className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[#2b5d94] ${featured
-                                                                        ? "bg-white"
-                                                                        : "bg-[#e4eef8]"
-                                                                    }`}
-                                                            >
+                                                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F0E7D7] text-[#9F7C3D]">
                                                                 <Check size={13} />
                                                             </span>
 
-                                                            <span>
-                                                                {feature}
-                                                            </span>
-                                                        </motion.li>
+                                                            <span>{feature}</span>
+                                                        </li>
                                                     )
                                                 )}
                                             </ul>
 
                                             <div
-                                                className={`mt-7 rounded-2xl p-4 ${featured
+                                                className={`mt-7 rounded-2xl p-4 ${
+                                                    featured
                                                         ? "bg-white/80"
-                                                        : "bg-[#eef4fb]"
-                                                    }`}
+                                                        : "bg-[#F8F6F1]"
+                                                }`}
                                             >
-                                                <p className="text-xs font-semibold text-[#4a5a6e]">
+                                                <p className="text-xs font-semibold text-[#81796D]">
                                                     Best suited for
                                                 </p>
 
-                                                <p className="mt-1 text-sm font-bold text-[#1f2d3d]">
+                                                <p className="mt-1 text-sm font-bold text-[#1C1C1C]">
                                                     {plan.suitable}
                                                 </p>
                                             </div>
 
                                             <Link
                                                 href={`/promote-property?package=${plan.name.toLowerCase()}`}
-                                                className={`group/btn mt-6 flex h-12 items-center justify-center rounded-full px-5 text-sm font-bold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 ${featured
-                                                        ? "bg-[#2b5d94] text-white hover:bg-[#3a70ab] hover:text-white"
-                                                        : "border border-[#2b5d94]/60 bg-white text-[#1f2d3d] hover:border-[#2b5d94] hover:bg-[#e4eef8] hover:text-[#1f2d3d]"
-                                                    }`}
+                                                data-anime-button
+                                                className={`group/btn mt-6 flex h-12 items-center justify-center rounded-full px-5 text-sm font-bold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 ${
+                                                    featured
+                                                        ? "bg-[#B8924A] text-white hover:bg-[#9F7C3D]"
+                                                        : "border border-[#B8924A]/60 bg-white text-[#1C1C1C] hover:border-[#B8924A] hover:bg-[#F5EFE3]"
+                                                }`}
                                             >
                                                 Enquire about {plan.name}
                                                 <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5" />
@@ -811,7 +1034,7 @@ export default function PackagesPage() {
                         })}
                     </div>
 
-                    <p className="mx-auto mt-10 max-w-2xl text-center text-xs leading-6 text-[#4a5a6e]">
+                    <p className="mx-auto mt-10 max-w-2xl text-center text-xs leading-6 text-[#81796D]">
                         Package pricing, deliverables, advertising budget and
                         campaign duration are confirmed with you before
                         payment. Enquiry outcomes depend on campaign
@@ -824,12 +1047,12 @@ export default function PackagesPage() {
 
             <section
                 id="compare"
-                className="scroll-mt-24 bg-[#eef4fb] py-20 sm:py-28"
+                className="scroll-mt-24 bg-[#F0EDE6] py-20 sm:py-28"
             >
                 <div className={container}>
                     <Reveal>
                         <SectionHeading
-                            label="Compare your options"
+                            label="COMPARE YOUR OPTIONS"
                             title="Understand the differences."
                             text="Some deliverables depend on your property and agreed campaign scope. We confirm these details before you make a payment."
                         />
@@ -838,21 +1061,22 @@ export default function PackagesPage() {
                     {/* DESKTOP COMPARISON TABLE */}
 
                     <Reveal className="mt-12 hidden md:block">
-                        <div className="overflow-hidden rounded-3xl border border-[#1f2d3d]/10 bg-white shadow-sm">
+                        <div className="gsap-comparison-table overflow-hidden rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-sm">
                             <table className="w-full border-collapse text-left">
                                 <thead>
                                     <tr>
-                                        <th className="w-[32%] px-6 py-5 text-sm font-semibold text-[#4a5a6e] lg:px-8">
+                                        <th className="w-[32%] px-6 py-5 text-sm font-semibold text-[#66615A] lg:px-8">
                                             Features
                                         </th>
 
                                         {packages.map((plan) => (
                                             <th
                                                 key={plan.name}
-                                                className={`px-4 py-5 text-center font-display text-xl text-[#1f2d3d] ${plan.popular
-                                                        ? "border-b-4 border-[#2b5d94] bg-[#dcebf5]"
+                                                className={`px-4 py-5 text-center font-display text-xl text-[#1C1C1C] ${
+                                                    plan.popular
+                                                        ? "border-b-4 border-[#B8924A] bg-[#F5EFE3]"
                                                         : ""
-                                                    }`}
+                                                }`}
                                             >
                                                 {plan.name}
                                             </th>
@@ -861,33 +1085,12 @@ export default function PackagesPage() {
                                 </thead>
 
                                 <tbody>
-                                    {comparison.map((row, rowIndex) => (
-                                        <motion.tr
+                                    {comparison.map((row) => (
+                                        <tr
                                             key={row.feature}
-                                            initial={
-                                                reduceMotion
-                                                    ? false
-                                                    : {
-                                                        opacity: 0,
-                                                        x: -16,
-                                                    }
-                                            }
-                                            whileInView={{
-                                                opacity: 1,
-                                                x: 0,
-                                            }}
-                                            viewport={{
-                                                once: true,
-                                                amount: 0.6,
-                                            }}
-                                            transition={{
-                                                duration: 0.5,
-                                                delay: rowIndex * 0.06,
-                                                ease: EASE,
-                                            }}
-                                            className="border-t border-[#1f2d3d]/10 transition-colors hover:bg-[#f4f8fc]"
+                                            className="gsap-comparison-row border-t border-[#1C1C1C]/10 transition-colors hover:bg-[#FAF8F3]"
                                         >
-                                            <td className="px-6 py-4 text-sm font-semibold text-[#1f2d3d] lg:px-8">
+                                            <td className="px-6 py-4 text-sm font-semibold text-[#1C1C1C] lg:px-8">
                                                 {row.feature}
                                             </td>
 
@@ -895,18 +1098,17 @@ export default function PackagesPage() {
                                                 (value, valueIndex) => (
                                                     <td
                                                         key={`${row.feature}-${valueIndex}`}
-                                                        className={`px-4 py-4 text-center text-sm ${valueIndex === 1
-                                                                ? "bg-[#e4eef8]"
+                                                        className={`px-4 py-4 text-center text-sm ${
+                                                            valueIndex === 1
+                                                                ? "bg-[#F8F3E9]"
                                                                 : ""
-                                                            }`}
+                                                        }`}
                                                     >
-                                                        <CellValue
-                                                            value={value}
-                                                        />
+                                                        <CellValue value={value} />
                                                     </td>
                                                 )
                                             )}
-                                        </motion.tr>
+                                        </tr>
                                     ))}
                                 </tbody>
                             </table>
@@ -919,7 +1121,7 @@ export default function PackagesPage() {
                         <div
                             role="tablist"
                             aria-label="Choose a package to view"
-                            className="relative mx-auto flex max-w-sm rounded-full bg-white p-1 shadow-sm ring-1 ring-[#1f2d3d]/10"
+                            className="relative mx-auto flex max-w-sm rounded-full bg-white p-1 shadow-sm ring-1 ring-[#1C1C1C]/10"
                         >
                             {packages.map((plan, i) => (
                                 <button
@@ -928,7 +1130,7 @@ export default function PackagesPage() {
                                     role="tab"
                                     aria-selected={activePlan === i}
                                     onClick={() => setActivePlan(i)}
-                                    className="relative z-10 flex-1 rounded-full px-3 py-2.5 text-sm font-bold text-[#1f2d3d] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94]"
+                                    className="relative z-10 flex-1 rounded-full px-3 py-2.5 text-sm font-bold text-[#1C1C1C] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A]"
                                 >
                                     {activePlan === i && (
                                         <motion.span
@@ -938,7 +1140,7 @@ export default function PackagesPage() {
                                                 stiffness: 380,
                                                 damping: 30,
                                             }}
-                                            className="absolute inset-0 -z-10 rounded-full bg-[#dcebf5] ring-2 ring-[#2b5d94]/50"
+                                            className="absolute inset-0 -z-10 rounded-full bg-[#F0E7D7] ring-2 ring-[#B8924A]/50"
                                         />
                                     )}
 
@@ -966,40 +1168,39 @@ export default function PackagesPage() {
                                     duration: 0.3,
                                     ease: EASE,
                                 }}
-                                className="mx-auto mt-5 max-w-md overflow-hidden rounded-2xl border border-[#1f2d3d]/10 bg-white"
+                                className="mx-auto mt-5 max-w-md overflow-hidden rounded-2xl border border-[#1C1C1C]/10 bg-white"
                             >
                                 <div
-                                    className={`flex items-center justify-between px-5 py-4 text-[#1f2d3d] ${packages[activePlan].popular
-                                            ? "bg-[#dcebf5]"
-                                            : "bg-[#e4eef8]"
-                                        }`}
+                                    className={`flex items-center justify-between px-5 py-4 text-[#1C1C1C] ${
+                                        packages[activePlan].popular
+                                            ? "bg-[#F0E7D7]"
+                                            : "bg-[#F8F6F1]"
+                                    }`}
                                 >
                                     <h3 className="font-display text-2xl">
                                         {packages[activePlan].name}
                                     </h3>
 
                                     {packages[activePlan].popular && (
-                                        <span className="rounded-full bg-[#e9a55a] px-3 py-1 text-xs font-bold text-[#1f2d3d]">
+                                        <span className="rounded-full bg-[#B8924A] px-3 py-1 text-xs font-bold text-white">
                                             Popular
                                         </span>
                                     )}
                                 </div>
 
-                                <div className="divide-y divide-[#1f2d3d]/10 px-5">
+                                <div className="divide-y divide-[#1C1C1C]/10 px-5">
                                     {comparison.map((row) => (
                                         <div
                                             key={row.feature}
                                             className="flex items-center justify-between gap-4 py-3.5"
                                         >
-                                            <span className="text-sm text-[#4a5a6e]">
+                                            <span className="text-sm text-[#66615A]">
                                                 {row.feature}
                                             </span>
 
                                             <span className="text-right text-sm font-semibold">
                                                 <CellValue
-                                                    value={
-                                                        row.values[activePlan]
-                                                    }
+                                                    value={row.values[activePlan]}
                                                 />
                                             </span>
                                         </div>
@@ -1012,17 +1213,17 @@ export default function PackagesPage() {
                     {/* PACKAGE RECOMMENDATION CTA */}
 
                     <Reveal className="mt-10">
-                        <div className="flex flex-col items-start justify-between gap-5 rounded-3xl bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:p-8">
+                        <div className="flex flex-col items-start justify-between gap-5 rounded-3xl border border-[#B8924A]/15 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:p-8">
                             <div>
-                                <p className="text-sm font-semibold text-[#9a6226]">
-                                    Need some guidance?
+                                <p className="text-sm font-semibold text-[#9F7C3D]">
+                                    NEED SOME GUIDANCE?
                                 </p>
 
-                                <h3 className="mt-1 font-display text-2xl text-[#1f2d3d] sm:text-3xl">
+                                <h3 className="mt-1 font-display text-2xl text-[#1C1C1C] sm:text-3xl">
                                     Not sure which package fits?
                                 </h3>
 
-                                <p className="mt-2 text-sm text-[#4a5a6e]">
+                                <p className="mt-2 text-sm text-[#66615A]">
                                     Tell us about your property. We will help
                                     you choose.
                                 </p>
@@ -1030,7 +1231,8 @@ export default function PackagesPage() {
 
                             <Link
                                 href="/promote-property"
-                                className="group inline-flex h-12 w-full shrink-0 items-center justify-center rounded-full bg-[#2b5d94] px-6 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 sm:w-auto"
+                                data-anime-button
+                                className="group inline-flex h-12 w-full shrink-0 items-center justify-center rounded-full bg-[#B8924A] px-6 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#9F7C3D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:w-auto"
                             >
                                 Get a recommendation
                                 <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -1049,106 +1251,78 @@ export default function PackagesPage() {
                 <div className={container}>
                     <Reveal>
                         <SectionHeading
-                            label="Getting started"
+                            label="GETTING STARTED"
                             title="A clear process, from enquiry to launch."
                             text="Share your property details first. We review your enquiry, discuss the right plan and share payment details only after you agree."
                         />
                     </Reveal>
 
-                    <ol className="relative mx-auto mt-14 grid max-w-xl gap-10 lg:max-w-none lg:grid-cols-4 lg:gap-6">
-                        {/* Desktop connecting line */}
+                    <ol className="gsap-process-grid relative mx-auto mt-14 grid max-w-xl gap-10 lg:max-w-none lg:grid-cols-4 lg:gap-6">
+                        {/* DESKTOP CONNECTING LINE */}
 
                         <motion.div
                             aria-hidden
-                            initial={
-                                reduceMotion ? false : { scaleX: 0 }
-                            }
+                            initial={reduceMotion ? false : { scaleX: 0 }}
                             whileInView={{ scaleX: 1 }}
-                            viewport={{
-                                once: true,
-                                amount: 0.5,
-                            }}
+                            viewport={{ once: true, amount: 0.5 }}
                             transition={{
                                 duration: 1.2,
                                 ease: EASE,
                             }}
-                            className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-6 hidden h-0.5 origin-left bg-[#2b5d94]/30 lg:block"
+                            className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-6 hidden h-0.5 origin-left bg-[#B8924A]/40 lg:block"
                         />
 
-                        {/* Mobile connecting line */}
+                        {/* MOBILE CONNECTING LINE */}
 
                         <motion.div
                             aria-hidden
-                            initial={
-                                reduceMotion ? false : { scaleY: 0 }
-                            }
+                            initial={reduceMotion ? false : { scaleY: 0 }}
                             whileInView={{ scaleY: 1 }}
-                            viewport={{
-                                once: true,
-                                amount: 0.2,
-                            }}
+                            viewport={{ once: true, amount: 0.2 }}
                             transition={{
                                 duration: 1.2,
                                 ease: EASE,
                             }}
-                            className="pointer-events-none absolute bottom-6 left-6 top-6 w-0.5 origin-top bg-[#2b5d94]/30 lg:hidden"
+                            className="pointer-events-none absolute bottom-6 left-6 top-6 w-0.5 origin-top bg-[#B8924A]/40 lg:hidden"
                         />
 
-                        {steps.map((step, index) => {
+                        {steps.map((step) => {
                             const Icon = step.icon;
 
                             return (
                                 <motion.li
                                     key={step.number}
-                                    initial={
-                                        reduceMotion
-                                            ? false
-                                            : { opacity: 0, y: 28 }
-                                    }
-                                    whileInView={{
-                                        opacity: 1,
-                                        y: 0,
-                                    }}
-                                    viewport={{
-                                        once: true,
-                                        amount: 0.3,
-                                    }}
-                                    transition={{
-                                        duration: 0.6,
-                                        delay: index * 0.12,
-                                        ease: EASE,
-                                    }}
-                                    className="relative flex gap-5 lg:flex-col lg:items-center lg:text-center"
+                                    className="gsap-process-step relative flex gap-5 lg:flex-col lg:items-center lg:text-center"
                                 >
                                     <motion.span
                                         whileHover={
                                             reduceMotion
                                                 ? undefined
                                                 : {
-                                                    scale: 1.12,
-                                                    rotate: -6,
-                                                }
+                                                      scale: 1.12,
+                                                      rotate: -6,
+                                                  }
                                         }
                                         transition={{
                                             type: "spring",
                                             stiffness: 300,
                                             damping: 15,
                                         }}
-                                        className={`relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#2b5d94]/30 text-[#1f2d3d] ${step.tint}`}
+                                        className={`relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#B8924A]/40 text-[#8B6B35] ${step.tint}`}
                                     >
                                         <Icon size={20} />
 
-                                        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#2b5d94] text-[11px] font-bold text-white">
+                                        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#B8924A] text-[11px] font-bold text-white">
                                             {step.number}
                                         </span>
                                     </motion.span>
 
                                     <div className="lg:mt-5">
-                                        <h3 className="font-display text-xl text-[#1f2d3d]">
+                                        <h3 className="font-display text-xl text-[#1C1C1C]">
                                             {step.title}
                                         </h3>
 
-                                        <p className="mt-2 text-sm leading-6 text-[#4a5a6e]">
+                                        <p className="mt-2 text-sm leading-6 text-[#66615A]">
                                             {step.text}
                                         </p>
                                     </div>
@@ -1161,21 +1335,21 @@ export default function PackagesPage() {
 
             {/* FAQ SECTION */}
 
-            <section className="bg-[#eef4fb] py-20 sm:py-28">
+            <section className="bg-[#F0EDE6] py-20 sm:py-28">
                 <div
                     className={`${container} grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16`}
                 >
                     <Reveal className="lg:sticky lg:top-28 lg:self-start">
                         <SectionHeading
                             center={false}
-                            label="Frequently asked questions"
+                            label="FREQUENTLY ASKED QUESTIONS"
                             title="A few things you may want to know."
                             text="Still have questions about packages or the campaign process? Talk to our team."
                         />
 
                         <Link
                             href="/contact"
-                            className="group mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#2b5d94] hover:text-[#1f4a78]"
+                            className="group mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#9F7C3D] transition-colors hover:text-[#7D602F]"
                         >
                             Contact our team
                             <ArrowUpRight
@@ -1186,17 +1360,18 @@ export default function PackagesPage() {
                     </Reveal>
 
                     <Reveal delay={0.1}>
-                        <div className="space-y-3">
+                        <div className="gsap-faq-list space-y-3">
                             {faqs.map((faq, index) => {
                                 const isOpen = openFaq === index;
 
                                 return (
                                     <div
                                         key={faq.question}
-                                        className={`overflow-hidden rounded-2xl border bg-white transition-colors duration-300 ${isOpen
-                                                ? "border-[#2b5d94]/40"
-                                                : "border-[#1f2d3d]/10"
-                                            }`}
+                                        className={`gsap-faq-item overflow-hidden rounded-2xl border bg-white transition-colors duration-300 ${
+                                            isOpen
+                                                ? "border-[#B8924A]/50"
+                                                : "border-[#1C1C1C]/10"
+                                        }`}
                                     >
                                         <button
                                             type="button"
@@ -1206,7 +1381,7 @@ export default function PackagesPage() {
                                                 )
                                             }
                                             aria-expanded={isOpen}
-                                            className="flex w-full items-center justify-between gap-5 px-5 py-5 text-left text-[#1f2d3d] transition-colors duration-300 hover:bg-[#f4f8fc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#2b5d94] sm:px-6"
+                                            className="flex w-full items-center justify-between gap-5 px-5 py-5 text-left text-[#1C1C1C] transition-colors duration-300 hover:bg-[#FAF8F3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#B8924A] sm:px-6"
                                         >
                                             <span className="text-sm font-semibold sm:text-base">
                                                 {faq.question}
@@ -1220,7 +1395,7 @@ export default function PackagesPage() {
                                                     duration: 0.3,
                                                     ease: EASE,
                                                 }}
-                                                className="shrink-0 text-[#2b5d94]"
+                                                className="shrink-0 text-[#B8924A]"
                                             >
                                                 <ChevronDown size={19} />
                                             </motion.span>
@@ -1250,7 +1425,7 @@ export default function PackagesPage() {
                                                     }}
                                                     className="overflow-hidden"
                                                 >
-                                                    <p className="px-5 pb-5 text-sm leading-7 text-[#4a5a6e] sm:px-6">
+                                                    <p className="px-5 pb-5 text-sm leading-7 text-[#66615A] sm:px-6">
                                                         {faq.answer}
                                                     </p>
                                                 </motion.div>
@@ -1268,23 +1443,23 @@ export default function PackagesPage() {
 
             <section className="px-5 py-16 sm:px-6 sm:py-24 lg:px-8">
                 <Reveal>
-                    <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-gradient-to-br from-[#e4eef8] via-[#dcebf5] to-[#f8ecd9] px-6 py-12 text-[#1f2d3d] shadow-sm ring-1 ring-[#2b5d94]/15 sm:px-12 sm:py-16">
+                    <div className="gsap-package-cta relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-[#B8924A]/20 bg-gradient-to-br from-[#F5EFE3] via-[#EFE5D2] to-[#E8D9BC] px-6 py-12 text-[#1C1C1C] shadow-sm sm:px-12 sm:py-16">
                         <motion.div
                             aria-hidden
                             animate={
                                 reduceMotion
                                     ? undefined
                                     : {
-                                        scale: [1, 1.12, 1],
-                                        rotate: [0, 8, 0],
-                                    }
+                                          scale: [1, 1.12, 1],
+                                          rotate: [0, 8, 0],
+                                      }
                             }
                             transition={{
                                 duration: 14,
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
-                            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/50"
+                            className="gsap-cta-ring pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#B8924A]/30 bg-white/20"
                         />
 
                         <motion.div
@@ -1299,16 +1474,20 @@ export default function PackagesPage() {
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
-                            className="pointer-events-none absolute -bottom-32 right-24 h-64 w-64 rounded-full bg-white/40"
+                            className="pointer-events-none absolute -bottom-32 right-24 h-64 w-64 rounded-full bg-white/30"
                         />
 
                         <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
                             <div>
-                                <h2 className="font-display text-3xl leading-tight text-[#1f2d3d] sm:text-4xl lg:text-5xl">
+                                <p className="text-sm font-semibold tracking-wide text-[#8B6B35]">
+                                    YOUR PROPERTY JOURNEY STARTS HERE
+                                </p>
+
+                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#1C1C1C] sm:text-4xl lg:text-5xl">
                                     Ready to give your property more reach?
                                 </h2>
 
-                                <p className="mt-4 max-w-xl text-base leading-7 text-[#4a5a6e]">
+                                <p className="mt-4 max-w-xl text-base leading-7 text-[#66615A]">
                                     Share your property details. Let us
                                     understand your goals and discuss a
                                     campaign that works for you.
@@ -1326,7 +1505,8 @@ export default function PackagesPage() {
                                 >
                                     <Link
                                         href="/promote-property"
-                                        className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#2b5d94] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#3a70ab] hover:text-white hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 sm:w-auto"
+                                        data-anime-button
+                                        className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:w-auto"
                                     >
                                         Promote your property
                                         <ArrowUpRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

@@ -18,10 +18,10 @@ import {
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Navbar from "@/components/layout/navbar";
 
-/* Palette: Trust Blue + Sand (light, soft, low glare)
-   ink #1f2d3d | muted #4a5a6e | page #fbf9f4 | blue #2b5d94 | blue hover #3a70ab
-   soft blue #e4eef8 | pale blue #eef4fb | sky #dcebf5 | sand #f8ecd9 | peach #f9e6dc
-   accent #e9a55a | accent text #9a6226 | dark gold #7d4e17 */
+/* Per-Cent Kerala V2 palette
+   White #FFFFFF | Charcoal #1C1C1C | Gold #B8924A | Gold hover #9F7C3D
+   Warm neutral #F8F6F1 | Light warm neutral #F5EFE3 / #EFE5D2
+   Premium serif headlines + clean sans-serif body. */
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const container = "mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8";
@@ -132,7 +132,7 @@ const nextSteps = [
 ];
 
 const inputClass =
-    "w-full rounded-xl border border-[#1f2d3d]/15 bg-white px-4 py-3.5 text-base text-[#1f2d3d] outline-none transition placeholder:text-[#6f7d8f] hover:border-[#2b5d94]/50 focus:border-[#2b5d94] focus:ring-4 focus:ring-[#2b5d94]/15 sm:text-sm";
+    "w-full rounded-xl border border-[#1C1C1C]/15 bg-white px-4 py-3.5 text-base text-[#1C1C1C] outline-none transition placeholder:text-[#81796C] hover:border-[#B8924A]/50 focus:border-[#B8924A] focus:ring-4 focus:ring-[#B8924A]/15 sm:text-sm";
 
 type FormData = {
     ownerName: string;
@@ -211,9 +211,9 @@ function Field({
 }) {
     return (
         <label className={`block ${className}`}>
-            <span className="text-sm font-semibold text-[#1f2d3d]">
+            <span className="text-sm font-semibold text-[#1C1C1C]">
                 {label}
-                {required && <span className="text-[#9a6226]"> *</span>}
+                {required && <span className="text-[#9F7C3D]"> *</span>}
             </span>
             <div className="mt-2">{children}</div>
         </label>
@@ -230,8 +230,8 @@ function SummaryRow({
     const filled = value.trim().length > 0;
 
     return (
-        <div className="flex items-start justify-between gap-4 border-b border-[#1f2d3d]/10 py-3 last:border-b-0">
-            <span className="text-sm text-[#4a5a6e]">{label}</span>
+        <div className="flex items-start justify-between gap-4 border-b border-[#1C1C1C]/10 py-3 last:border-b-0">
+            <span className="text-sm text-[#5F5A50]">{label}</span>
             <AnimatePresence mode="wait" initial={false}>
                 <motion.span
                     key={value}
@@ -239,8 +239,9 @@ function SummaryRow({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.2 }}
-                    className={`max-w-[60%] break-words text-right text-sm font-semibold ${filled ? "text-[#1f2d3d]" : "text-[#6f7d8f]"
-                        }`}
+                    className={`max-w-[60%] break-words text-right text-sm font-semibold ${
+                        filled ? "text-[#1C1C1C]" : "text-[#81796C]"
+                    }`}
                 >
                     {filled ? value : "Not added yet"}
                 </motion.span>
@@ -349,15 +350,15 @@ export default function PromotePropertyPage() {
     /* ---------- SUCCESS ---------- */
     if (submitted) {
         return (
-            <main className="min-h-screen overflow-x-clip bg-[#fbf9f4] text-[#1f2d3d] antialiased">
+            <main className="min-h-screen overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C] antialiased">
                 <Navbar />
 
-                <section className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#e4eef8] to-[#fbf9f4] px-5 pb-16 pt-28">
+                <section className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#EFE5D2] to-[#F8F6F1] px-5 pb-16 pt-28">
                     <motion.div
                         initial={{ opacity: 0, y: 28, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.7, ease: EASE }}
-                        className="w-full max-w-lg rounded-3xl border border-[#1f2d3d]/10 bg-white p-8 text-center shadow-[0_20px_50px_rgba(31,45,61,0.12)] sm:p-10"
+                        className="w-full max-w-lg rounded-3xl border border-[#1C1C1C]/10 bg-white p-8 text-center shadow-[0_20px_50px_rgba(28,28,28,0.12)] sm:p-10"
                     >
                         <svg
                             viewBox="0 0 52 52"
@@ -368,8 +369,8 @@ export default function PromotePropertyPage() {
                                 cx="26"
                                 cy="26"
                                 r="24"
-                                fill="#e4eef8"
-                                stroke="#2b5d94"
+                                fill="#EFE5D2"
+                                stroke="#B8924A"
                                 strokeWidth="2"
                                 initial={{ pathLength: 0 }}
                                 animate={{ pathLength: 1 }}
@@ -378,7 +379,7 @@ export default function PromotePropertyPage() {
                             <motion.path
                                 d="M15 27 l8 8 l15 -17"
                                 fill="none"
-                                stroke="#2b5d94"
+                                stroke="#B8924A"
                                 strokeWidth="3.5"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -388,36 +389,36 @@ export default function PromotePropertyPage() {
                             />
                         </svg>
 
-                        <h1 className="mt-6 font-display text-3xl text-[#1f2d3d]">
+                        <h1 className="mt-6 font-display text-3xl text-[#1C1C1C]">
                             Thank you{form.ownerName ? `, ${form.ownerName.split(" ")[0]}` : ""}!
                         </h1>
 
-                        <p className="mt-4 text-sm leading-7 text-[#4a5a6e]">
+                        <p className="mt-4 text-sm leading-7 text-[#5F5A50]">
                             Your property details have been captured in this demo. Our
                             team will review your enquiry and discuss the next steps.
                         </p>
 
-                        <div className="mt-6 rounded-2xl bg-[#eef4fb] p-5 text-left">
-                            <p className="text-xs font-semibold text-[#4a5a6e]">
+                        <div className="mt-6 rounded-2xl bg-[#F5EFE3] p-5 text-left">
+                            <p className="text-xs font-semibold text-[#5F5A50]">
                                 Selected package
                             </p>
-                            <p className="mt-1 font-semibold text-[#1f2d3d]">
+                            <p className="mt-1 font-semibold text-[#1C1C1C]">
                                 {activePackage?.name}
                             </p>
                         </div>
 
                         {campaignInfo && (
-                            <div className="mt-4 rounded-2xl bg-[#eef4fb] p-5 text-left">
-                                <p className="text-xs font-semibold text-[#4a5a6e]">
+                            <div className="mt-4 rounded-2xl bg-[#F5EFE3] p-5 text-left">
+                                <p className="text-xs font-semibold text-[#5F5A50]">
                                     Campaign reference
                                 </p>
-                                <p className="mt-1 font-semibold text-[#1f2d3d]">
+                                <p className="mt-1 font-semibold text-[#1C1C1C]">
                                     {campaignInfo.title}
                                 </p>
-                                <p className="mt-1 text-xs text-[#4a5a6e]">
+                                <p className="mt-1 text-xs text-[#5F5A50]">
                                     {campaignInfo.category} · {campaignInfo.location}
                                 </p>
-                                <p className="mt-2 text-xs text-[#4a5a6e]">
+                                <p className="mt-2 text-xs text-[#5F5A50]">
                                     Reference ID: {campaignId}
                                 </p>
                             </div>
@@ -425,7 +426,7 @@ export default function PromotePropertyPage() {
 
                         <Link
                             href="/"
-                            className="group mt-8 inline-flex h-14 items-center justify-center rounded-full bg-[#2b5d94] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:text-white hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                            className="group mt-8 inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#9F7C3D] hover:text-white hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
                         >
                             Back to Home
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -438,28 +439,28 @@ export default function PromotePropertyPage() {
 
     /* ---------- FORM PAGE ---------- */
     return (
-        <main className="overflow-x-clip bg-[#fbf9f4] text-[#1f2d3d] antialiased">
+        <main className="overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C] antialiased">
             <Navbar />
 
             {/* HERO (compact) */}
-            <section className="relative bg-gradient-to-b from-[#e4eef8] to-[#fbf9f4]">
+            <section className="relative bg-gradient-to-b from-[#EFE5D2] to-[#F8F6F1]">
                 <motion.div
                     aria-hidden
                     animate={reduceMotion ? undefined : { y: [0, 24, 0], x: [0, 12, 0] }}
                     transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                    className="pointer-events-none absolute -left-24 top-20 h-64 w-64 rounded-full bg-[#dcebf5] blur-2xl sm:h-80 sm:w-80"
+                    className="pointer-events-none absolute -left-24 top-20 h-64 w-64 rounded-full bg-[#EFE5D2] blur-2xl sm:h-80 sm:w-80"
                 />
                 <motion.div
                     aria-hidden
                     animate={reduceMotion ? undefined : { y: [0, -20, 0] }}
                     transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#f8ecd9] blur-2xl sm:h-72 sm:w-72"
+                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#F5EFE3] blur-2xl sm:h-72 sm:w-72"
                 />
 
                 <div className={`${container} relative pb-12 pt-28 sm:pt-32 lg:pb-16`}>
                     <Link
                         href="/"
-                        className="group inline-flex items-center text-sm font-semibold text-[#4a5a6e] transition hover:text-[#2b5d94]"
+                        className="group inline-flex items-center text-sm font-semibold text-[#5F5A50] transition hover:text-[#B8924A]"
                     >
                         <ArrowLeft className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
                         Back to Home
@@ -476,24 +477,24 @@ export default function PromotePropertyPage() {
                     >
                         <motion.p
                             variants={heroItem}
-                            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-[#2b5d94] shadow-sm sm:text-sm"
+                            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-semibold text-[#B8924A] shadow-sm sm:text-sm"
                         >
-                            <Sparkles className="h-4 w-4 text-[#e9a55a]" />
+                            <Sparkles className="h-4 w-4 text-[#B8924A]" />
                             Property marketing in Kerala
                         </motion.p>
 
-                        <h1 className="mt-6 font-display text-4xl leading-[1.1] tracking-tight text-[#1f2d3d] sm:text-5xl lg:text-6xl">
+                        <h1 className="mt-6 font-display text-4xl leading-[1.1] tracking-tight text-[#1C1C1C] sm:text-5xl lg:text-6xl">
                             <MaskedLine text="Your property deserves" baseDelay={0.2} />
                             <MaskedLine
                                 text="the right attention."
                                 baseDelay={0.5}
-                                className="text-[#2b5d94]"
+                                className="text-[#B8924A]"
                             />
                         </h1>
 
                         <motion.p
                             variants={heroItem}
-                            className="mt-5 max-w-xl text-base leading-8 text-[#4a5a6e] sm:text-lg"
+                            className="mt-5 max-w-xl text-base leading-8 text-[#5F5A50] sm:text-lg"
                         >
                             Tell us about your property. Our team will understand your
                             requirements and help you choose the right marketing
@@ -502,14 +503,14 @@ export default function PromotePropertyPage() {
 
                         <motion.ul
                             variants={heroItem}
-                            className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-[#1f2d3d]"
+                            className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-[#1C1C1C]"
                         >
                             <li className="flex items-center gap-2">
-                                <ShieldCheck size={18} className="text-[#2b5d94]" />
+                                <ShieldCheck size={18} className="text-[#B8924A]" />
                                 No payment needed to enquire
                             </li>
                             <li className="flex items-center gap-2">
-                                <Check size={18} className="text-[#2b5d94]" />
+                                <Check size={18} className="text-[#B8924A]" />
                                 Takes around 2 minutes
                             </li>
                         </motion.ul>
@@ -526,10 +527,10 @@ export default function PromotePropertyPage() {
                         initial={reduceMotion ? false : { opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
-                        className="scroll-mt-24 min-w-0 rounded-3xl border border-[#1f2d3d]/10 bg-white shadow-[0_16px_40px_rgba(31,45,61,0.08)]"
+                        className="scroll-mt-24 min-w-0 rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-[0_16px_40px_rgba(28,28,28,0.08)]"
                     >
                         {/* STEPPER */}
-                        <div className="border-b border-[#1f2d3d]/10 px-5 py-6 sm:px-8">
+                        <div className="border-b border-[#1C1C1C]/10 px-5 py-6 sm:px-8">
                             <ol className="flex items-center" aria-label="Form progress">
                                 {formSteps.map((s, i) => {
                                     const done = i < step;
@@ -539,15 +540,16 @@ export default function PromotePropertyPage() {
                                     return (
                                         <li
                                             key={s.title}
-                                            className={`flex items-center ${i < formSteps.length - 1 ? "flex-1" : ""
-                                                }`}
+                                            className={`flex items-center ${
+                                                i < formSteps.length - 1 ? "flex-1" : ""
+                                            }`}
                                         >
                                             <button
                                                 type="button"
                                                 onClick={() => done && goTo(i)}
                                                 disabled={!done}
                                                 aria-current={current ? "step" : undefined}
-                                                className="group flex items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 disabled:cursor-default"
+                                                className="group flex items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 disabled:cursor-default"
                                             >
                                                 <motion.span
                                                     animate={
@@ -556,25 +558,27 @@ export default function PromotePropertyPage() {
                                                             : { scale: current ? 1.08 : 1 }
                                                     }
                                                     transition={{ type: "spring", stiffness: 300, damping: 18 }}
-                                                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors duration-300 ${done
-                                                        ? "border-[#2b5d94] bg-[#2b5d94] text-white"
-                                                        : current
-                                                            ? "border-[#2b5d94] bg-[#e4eef8] text-[#2b5d94] ring-4 ring-[#2b5d94]/15"
-                                                            : "border-[#1f2d3d]/20 bg-white text-[#6f7d8f]"
-                                                        }`}
+                                                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors duration-300 ${
+                                                        done
+                                                            ? "border-[#B8924A] bg-[#B8924A] text-white"
+                                                            : current
+                                                                ? "border-[#B8924A] bg-[#EFE5D2] text-[#9F7C3D] ring-4 ring-[#B8924A]/15"
+                                                                : "border-[#1C1C1C]/20 bg-white text-[#81796C]"
+                                                    }`}
                                                 >
                                                     {done ? <Check size={18} /> : <Icon size={18} />}
                                                 </motion.span>
 
                                                 <span className="hidden sm:block">
-                                                    <span className="block text-xs font-semibold text-[#4a5a6e]">
+                                                    <span className="block text-xs font-semibold text-[#5F5A50]">
                                                         Step {i + 1}
                                                     </span>
                                                     <span
-                                                        className={`block text-sm font-bold ${current || done
-                                                            ? "text-[#1f2d3d]"
-                                                            : "text-[#6f7d8f]"
-                                                            }`}
+                                                        className={`block text-sm font-bold ${
+                                                            current || done
+                                                                ? "text-[#1C1C1C]"
+                                                                : "text-[#81796C]"
+                                                        }`}
                                                     >
                                                         {s.title}
                                                     </span>
@@ -584,12 +588,12 @@ export default function PromotePropertyPage() {
                                             {i < formSteps.length - 1 && (
                                                 <span
                                                     aria-hidden
-                                                    className="relative mx-3 h-0.5 flex-1 overflow-hidden rounded-full bg-[#1f2d3d]/10 sm:mx-5"
+                                                    className="relative mx-3 h-0.5 flex-1 overflow-hidden rounded-full bg-[#1C1C1C]/10 sm:mx-5"
                                                 >
                                                     <motion.span
                                                         animate={{ scaleX: step > i ? 1 : 0 }}
                                                         transition={{ duration: reduceMotion ? 0 : 0.5, ease: EASE }}
-                                                        className="absolute inset-0 origin-left bg-[#2b5d94]"
+                                                        className="absolute inset-0 origin-left bg-[#B8924A]"
                                                     />
                                                 </span>
                                             )}
@@ -599,7 +603,7 @@ export default function PromotePropertyPage() {
                             </ol>
 
                             {/* mobile step label */}
-                            <p className="mt-4 text-sm font-semibold text-[#1f2d3d] sm:hidden">
+                            <p className="mt-4 text-sm font-semibold text-[#1C1C1C] sm:hidden">
                                 Step {step + 1} of {formSteps.length} · {formSteps[step].title}
                             </p>
                         </div>
@@ -608,21 +612,21 @@ export default function PromotePropertyPage() {
                         <form onSubmit={handleSubmit} className="px-5 py-7 sm:px-8 sm:py-9">
                             {/* campaign reference */}
                             {campaignInfo && (
-                                <div className="mb-8 flex items-start gap-3 rounded-2xl border border-[#2b5d94]/20 bg-[#eef4fb] p-4 sm:p-5">
-                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#2b5d94]">
+                                <div className="mb-8 flex items-start gap-3 rounded-2xl border border-[#B8924A]/20 bg-[#F5EFE3] p-4 sm:p-5">
+                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#B8924A]">
                                         <Check size={20} />
                                     </span>
                                     <div className="min-w-0">
-                                        <p className="text-xs font-semibold text-[#4a5a6e]">
+                                        <p className="text-xs font-semibold text-[#5F5A50]">
                                             Selected campaign reference
                                         </p>
-                                        <p className="mt-1 font-display text-lg text-[#1f2d3d]">
+                                        <p className="mt-1 font-display text-lg text-[#1C1C1C]">
                                             {campaignInfo.title}
                                         </p>
-                                        <p className="mt-1 text-sm text-[#4a5a6e]">
+                                        <p className="mt-1 text-sm text-[#5F5A50]">
                                             {campaignInfo.category} · {campaignInfo.location}
                                         </p>
-                                        <p className="mt-2 text-xs leading-6 text-[#4a5a6e]">
+                                        <p className="mt-2 text-xs leading-6 text-[#5F5A50]">
                                             You selected this sample campaign as your inspiration. Our
                                             team will review whether a similar approach is suitable
                                             for your property.
@@ -642,12 +646,12 @@ export default function PromotePropertyPage() {
                                     transition={{ duration: reduceMotion ? 0.01 : 0.35, ease: EASE }}
                                 >
                                     <div className="mb-7">
-                                        <h2 className="font-display text-2xl text-[#1f2d3d] sm:text-3xl">
+                                        <h2 className="font-display text-2xl text-[#1C1C1C] sm:text-3xl">
                                             {step === 0 && "Tell us how to reach you"}
                                             {step === 1 && "Tell us about your property"}
                                             {step === 2 && "Select a marketing package"}
                                         </h2>
-                                        <p className="mt-2 text-sm leading-6 text-[#4a5a6e]">
+                                        <p className="mt-2 text-sm leading-6 text-[#5F5A50]">
                                             {step === 0 && "We will use these details to contact you about your enquiry."}
                                             {step === 1 && "The more we know, the better we can plan your campaign."}
                                             {step === 2 && "Our team will discuss the package and pricing with you."}
@@ -671,7 +675,7 @@ export default function PromotePropertyPage() {
 
                                             <Field label="Phone number" required>
                                                 <div className="relative">
-                                                    <Phone className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6f7d8f]" />
+                                                    <Phone className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#81796C]" />
                                                     <input
                                                         required
                                                         type="tel"
@@ -775,7 +779,7 @@ export default function PromotePropertyPage() {
 
                                             <Field label="Expected price">
                                                 <div className="relative">
-                                                    <IndianRupee className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6f7d8f]" />
+                                                    <IndianRupee className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#81796C]" />
                                                     <input
                                                         name="expectedPrice"
                                                         value={form.expectedPrice}
@@ -819,28 +823,30 @@ export default function PromotePropertyPage() {
                                                         whileHover={reduceMotion ? undefined : { y: -3 }}
                                                         whileTap={{ scale: 0.99 }}
                                                         transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                                                        className={`relative rounded-2xl border-2 p-5 text-left transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 ${selected
-                                                            ? "border-[#2b5d94] bg-[#e4eef8]"
-                                                            : "border-[#1f2d3d]/10 bg-white hover:border-[#2b5d94]/50 hover:bg-[#f4f8fc]"
-                                                            }`}
+                                                        className={`relative rounded-2xl border-2 p-5 text-left transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 ${
+                                                            selected
+                                                                ? "border-[#B8924A] bg-[#EFE5D2]"
+                                                                : "border-[#1C1C1C]/10 bg-white hover:border-[#B8924A]/50 hover:bg-[#F8F6F1]"
+                                                        }`}
                                                     >
                                                         <div className="flex items-start justify-between gap-3">
                                                             <div className="flex flex-wrap items-center gap-3">
-                                                                <h3 className="font-display text-xl text-[#1f2d3d]">
+                                                                <h3 className="font-display text-xl text-[#1C1C1C]">
                                                                     {pkg.name}
                                                                 </h3>
                                                                 {pkg.popular && (
-                                                                    <span className="rounded-full bg-[#e9a55a] px-3 py-1 text-xs font-bold text-[#1f2d3d]">
+                                                                    <span className="rounded-full bg-[#B8924A] px-3 py-1 text-xs font-bold text-white">
                                                                         Popular
                                                                     </span>
                                                                 )}
                                                             </div>
 
                                                             <span
-                                                                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-300 ${selected
-                                                                    ? "border-[#2b5d94] bg-[#2b5d94]"
-                                                                    : "border-[#1f2d3d]/25 bg-white"
-                                                                    }`}
+                                                                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-300 ${
+                                                                    selected
+                                                                        ? "border-[#B8924A] bg-[#B8924A]"
+                                                                        : "border-[#1C1C1C]/25 bg-white"
+                                                                }`}
                                                             >
                                                                 <AnimatePresence>
                                                                     {selected && (
@@ -857,7 +863,7 @@ export default function PromotePropertyPage() {
                                                             </span>
                                                         </div>
 
-                                                        <p className="mt-2 text-sm leading-6 text-[#4a5a6e]">
+                                                        <p className="mt-2 text-sm leading-6 text-[#5F5A50]">
                                                             {pkg.description}
                                                         </p>
 
@@ -865,7 +871,7 @@ export default function PromotePropertyPage() {
                                                             {pkg.features.map((feature) => (
                                                                 <span
                                                                     key={feature}
-                                                                    className="rounded-full border border-[#1f2d3d]/10 bg-white px-3 py-1.5 text-xs font-medium text-[#1f2d3d]"
+                                                                    className="rounded-full border border-[#1C1C1C]/10 bg-white px-3 py-1.5 text-xs font-medium text-[#1C1C1C]"
                                                                 >
                                                                     {feature}
                                                                 </span>
@@ -875,8 +881,8 @@ export default function PromotePropertyPage() {
                                                 );
                                             })}
 
-                                            <p className="mt-2 flex items-start gap-3 rounded-2xl bg-[#eef4fb] p-4 text-sm leading-6 text-[#4a5a6e]">
-                                                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#2b5d94]" />
+                                            <p className="mt-2 flex items-start gap-3 rounded-2xl bg-[#F5EFE3] p-4 text-sm leading-6 text-[#5F5A50]">
+                                                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#B8924A]" />
                                                 Submitting this form does not require immediate payment.
                                                 Our team will review your details and share the next
                                                 steps with you.
@@ -892,7 +898,7 @@ export default function PromotePropertyPage() {
                                     <button
                                         type="button"
                                         onClick={() => goTo(step - 1)}
-                                        className="group inline-flex h-14 items-center justify-center rounded-full border border-[#1f2d3d]/25 bg-white px-8 text-sm font-semibold text-[#1f2d3d] transition duration-300 hover:border-[#2b5d94] hover:bg-[#e4eef8] hover:text-[#1f2d3d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                                        className="group inline-flex h-14 items-center justify-center rounded-full border border-[#1C1C1C]/25 bg-white px-8 text-sm font-semibold text-[#1C1C1C] transition duration-300 hover:border-[#B8924A] hover:bg-[#EFE5D2] hover:text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
                                     >
                                         <ArrowLeft className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
                                         Back
@@ -903,7 +909,7 @@ export default function PromotePropertyPage() {
 
                                 <button
                                     type="submit"
-                                    className="group inline-flex h-14 items-center justify-center rounded-full bg-[#2b5d94] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:text-white hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                                    className="group inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#9F7C3D] hover:text-white hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
                                 >
                                     {step < formSteps.length - 1
                                         ? "Continue"
@@ -920,10 +926,10 @@ export default function PromotePropertyPage() {
                             initial={reduceMotion ? false : { opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.45, ease: EASE }}
-                            className="rounded-3xl border border-[#2b5d94]/15 bg-gradient-to-br from-[#e4eef8] to-[#dcebf5] p-6 sm:p-7"
+                            className="rounded-3xl border border-[#B8924A]/15 bg-gradient-to-br from-[#EFE5D2] to-[#F5EFE3] p-6 sm:p-7"
                         >
-                            <p className="text-sm font-semibold text-[#2b5d94]">Your enquiry</p>
-                            <h3 className="mt-1 font-display text-2xl text-[#1f2d3d]">
+                            <p className="text-sm font-semibold text-[#9F7C3D]">Your enquiry</p>
+                            <h3 className="mt-1 font-display text-2xl text-[#1C1C1C]">
                                 Summary
                             </h3>
 
@@ -938,19 +944,19 @@ export default function PromotePropertyPage() {
                             initial={reduceMotion ? false : { opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.6, ease: EASE }}
-                            className="rounded-3xl border border-[#1f2d3d]/10 bg-white p-6 shadow-sm sm:p-7"
+                            className="rounded-3xl border border-[#1C1C1C]/10 bg-white p-6 shadow-sm sm:p-7"
                         >
-                            <h3 className="font-display text-xl text-[#1f2d3d]">
+                            <h3 className="font-display text-xl text-[#1C1C1C]">
                                 What happens next
                             </h3>
 
                             <ol className="mt-5 space-y-4">
                                 {nextSteps.map((item, index) => (
                                     <li key={item} className="flex items-center gap-3">
-                                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#e4eef8] text-xs font-bold text-[#2b5d94]">
+                                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#EFE5D2] text-xs font-bold text-[#9F7C3D]">
                                             {index + 1}
                                         </span>
-                                        <span className="text-sm font-medium text-[#1f2d3d]">
+                                        <span className="text-sm font-medium text-[#1C1C1C]">
                                             {item}
                                         </span>
                                     </li>
@@ -962,16 +968,16 @@ export default function PromotePropertyPage() {
                             initial={reduceMotion ? false : { opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.75, ease: EASE }}
-                            className="flex items-start gap-4 rounded-3xl border border-[#1f2d3d]/10 bg-white p-6 shadow-sm sm:p-7"
+                            className="flex items-start gap-4 rounded-3xl border border-[#1C1C1C]/10 bg-white p-6 shadow-sm sm:p-7"
                         >
-                            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#f8ecd9] text-[#7d4e17]">
+                            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F5EFE3] text-[#7A6033]">
                                 <MapPin size={20} />
                             </span>
                             <div>
-                                <h3 className="font-display text-lg text-[#1f2d3d]">
+                                <h3 className="font-display text-lg text-[#1C1C1C]">
                                     Across Kerala
                                 </h3>
-                                <p className="mt-1 text-sm leading-6 text-[#4a5a6e]">
+                                <p className="mt-1 text-sm leading-6 text-[#5F5A50]">
                                     From Thiruvananthapuram to Kasaragod, tell us where your
                                     property is located.
                                 </p>

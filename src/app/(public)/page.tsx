@@ -1,785 +1,1204 @@
 
 "use client";
 
+import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import {
     ArrowRight,
     ArrowUpRight,
-    Check,
-    Camera,
-    Megaphone,
-    ShieldCheck,
-    Sparkles,
+    BadgeCheck,
+    BarChart3,
+    CheckCircle2,
+    ChevronRight,
+    Eye,
     MapPin,
-    Users,
+    ShieldCheck,
     Target,
-    Handshake,
-    Play,
+    TrendingUp,
 } from "lucide-react";
-import Navbar from "@/components/layout/navbar";
 
-/* Minimal palette: warm off-white, white, soft blue and one amber accent. */
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+/* =========================================================
+   PER-CENT KERALA — V2 DESIGN SYSTEM
+
+   Gold:             #B8924A
+   Gold Hover:       #9F7C3D
+   Charcoal:         #1C1C1C
+   Warm Background:  #F8F6F1
+   Light Neutral:    #F5EFE3
+   White:            #FFFFFF
+========================================================= */
 
 const categories = [
     {
         number: "01",
         title: "Houses & Villas",
-        description: "Family homes and luxury villas.",
-        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1000",
+        description:
+            "From independent homes to premium villas, we create focused campaigns that connect your property with the right audience.",
+        image: "/images/kerala-house-villa.jpg",
     },
     {
         number: "02",
         title: "Land & Estates",
-        description: "Plots, farms and plantations.",
-        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1000",
+        description:
+            "Give residential plots, agricultural land and estate properties the visibility they deserve.",
+        image: "/images/kerala-land-estates.png",
     },
     {
         number: "03",
         title: "Apartments",
-        description: "Modern flats and residential spaces.",
-        image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1000",
+        description:
+            "Position apartments and residential developments in front of buyers exploring the right location and lifestyle.",
+        image: "/images/kerala-apartments.png",
     },
     {
         number: "04",
-        title: "Commercial",
-        description: "Shops and business properties.",
-        image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1000",
-    },
-];
-
-const campaigns = [
-    {
-        title: "A Home Above the Ordinary",
-        location: "Kochi, Ernakulam",
-        type: "Residential",
-        image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1000",
-    },
-    {
-        title: "A Landscape of Possibilities",
-        location: "Munnar, Idukki",
-        type: "Land & Estate",
-        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1000",
-    },
-    {
-        title: "Designed for Modern Living",
-        location: "Kozhikode, Kerala",
-        type: "Residential",
-        image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1000",
-    },
-];
-
-const steps = [
-    {
-        number: "01",
-        title: "Tell us about your property",
+        title: "Commercial Properties",
         description:
-            "Share your property details, location, expectations and marketing goals.",
-        icon: MapPin,
-        tint: "bg-[#eef4fb]",
-    },
-    {
-        number: "02",
-        title: "Choose your campaign",
-        description:
-            "We discuss your requirements and help you select a suitable marketing package.",
-        icon: Target,
-        tint: "bg-[#eef4fb]",
-    },
-    {
-        number: "03",
-        title: "We market your property",
-        description:
-            "Our team prepares the campaign, creates content and promotes your property.",
-        icon: Megaphone,
-        tint: "bg-[#eef4fb]",
-    },
-    {
-        number: "04",
-        title: "Connect with potential buyers",
-        description:
-            "Receive enquiries and, depending on your package, get support through the sales process.",
-        icon: Handshake,
-        tint: "bg-[#eef4fb]",
+            "Connect commercial spaces with businesses, investors and potential buyers through targeted marketing.",
+        image: "/images/kerala-commercial.png",
     },
 ];
 
 const packages = [
     {
         name: "Basic",
-        eyebrow: "Start with enquiries",
-        description:
-            "A simple property promotion approach focused on generating property enquiries.",
-        promise: "Property promotion",
-        promiseDescription: "A focused starting point",
+        description: "A focused starting point for property promotion.",
         features: [
-            "Property promotion",
-            "Basic audience reach",
-            "Enquiry details shared with owner",
-            "Owner manages the sale",
+            "Property presentation",
+            "Marketing campaign planning",
+            "Digital promotion",
+            "Lead enquiry coordination",
         ],
-        popular: false,
-        card: "bg-white border-[#e5eaf0]",
-        promiseBox: "bg-[#eef4fb]",
-        icon: Users,
     },
     {
         name: "Premium",
-        eyebrow: "Reach a wider audience",
-        description:
-            "A paid advertising campaign designed to give your property more visibility.",
-        promise: "Paid ads",
-        promiseDescription: "Facebook & Instagram",
+        description: "More visibility with a broader marketing approach.",
         features: [
             "Everything in Basic",
-            "Facebook advertising",
-            "Instagram advertising",
-            "Targeted audience campaigns",
-            "Professional campaign creatives",
-            "Enquiry generation and sharing",
+            "Enhanced property creatives",
+            "Expanded campaign approach",
+            "Campaign performance reporting",
         ],
-        popular: true,
-        card: "bg-white border-[#2b5d94] border-2",
-        promiseBox: "bg-[#eef4fb]",
-        icon: Megaphone,
+        featured: true,
     },
     {
         name: "Diamond",
-        eyebrow: "Additional sales support",
         description:
-            "A fuller property marketing service with buyer enquiry coordination and agreed follow-up support.",
-        promise: "More support",
-        promiseDescription: "Marketing and buyer coordination",
+            "A more involved marketing and sales coordination experience.",
         features: [
             "Everything in Premium",
-            "Complete digital marketing",
-            "Multi-channel advertising",
-            "Buyer enquiry coordination",
-            "Follow-up and sales coordination",
+            "Dedicated sales coordination",
+            "Buyer follow-up support",
+            "Enhanced campaign monitoring",
         ],
-        popular: false,
-        card: "bg-white border-[#e5eaf0]",
-        promiseBox: "bg-[#eef4fb]",
-        icon: Sparkles,
     },
 ];
 
-const reasons = [
+const steps = [
     {
-        icon: Camera,
-        title: "Creative presentation",
+        number: "01",
+        title: "Submit Your Property",
         description:
-            "Professional visual content that presents your property with care.",
-        tint: "bg-[#eef4fb]",
+            "Share your property details, location, asking price and contact information.",
+        icon: Eye,
     },
     {
+        number: "02",
+        title: "Property Verification",
+        description:
+            "Our team reviews ownership details, property information and supporting documents.",
+        icon: ShieldCheck,
+    },
+    {
+        number: "03",
+        title: "Get Your Recommendation",
+        description:
+            "We assess your property and recommend a suitable marketing package and campaign approach.",
         icon: Target,
-        title: "Targeted promotion",
-        description:
-            "Campaigns planned around the audience your property needs to reach.",
-        tint: "bg-[#eef4fb]",
     },
     {
-        icon: Users,
-        title: "Personal communication",
+        number: "04",
+        title: "Launch Your Campaign",
         description:
-            "A team that understands your requirements before starting the campaign.",
-        tint: "bg-[#eef4fb]",
+            "Once the scope and payment are agreed, your campaign moves into execution.",
+        icon: TrendingUp,
     },
 ];
 
-const EASE = [0.22, 1, 0.36, 1] as const;
+const campaigns = [
+    {
+        title: "Premium Home in Kochi",
+        location: "Kochi, Kerala",
+        category: "Residential",
+        image: "/images/sample-kochi-home.png",
+        description:
+            "An illustrative campaign showcasing how a premium home can be presented to a targeted audience.",
+    },
+    {
+        title: "Residential Property in Kozhikode",
+        location: "Kozhikode, Kerala",
+        category: "Apartment",
+        image: "/images/sample-kozhikode-apartment.png",
+        description:
+            "An illustrative campaign concept focused on property presentation and audience reach.",
+    },
+    {
+        title: "Estate Property in Munnar",
+        location: "Munnar, Kerala",
+        category: "Land & Estate",
+        image: "/images/sample-munnar-estate.png",
+        description:
+            "An illustrative marketing concept for estate and land properties.",
+    },
+];
 
-function Reveal({
-    children,
-    delay = 0,
-    className = "",
-}: {
-    children: React.ReactNode;
-    delay?: number;
-    className?: string;
-}) {
-    const reduceMotion = useReducedMotion();
+const commitments = [
+    {
+        icon: BadgeCheck,
+        title: "Verified Owners",
+        description: "Property verification before campaign activation.",
+    },
+    {
+        icon: BarChart3,
+        title: "Campaign Reporting",
+        description: "Clear updates on campaign activity and enquiries.",
+    },
+    {
+        icon: CheckCircle2,
+        title: "Zero Brokerage",
+        description: "A marketing service model, not a brokerage listing.",
+    },
+];
 
+/* =========================================================
+   SMALL COMPONENTS
+========================================================= */
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
     return (
-        <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.12 }}
-            transition={{
-                duration: reduceMotion ? 0 : 0.7,
-                delay: reduceMotion ? 0 : delay,
-                ease: EASE,
-            }}
-            className={className}
-        >
+        <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#9F7C3D]">
+            <span className="h-px w-7 bg-[#B8924A]" />
             {children}
-        </motion.div>
+        </span>
     );
 }
 
-const heroItem = {
-    hidden: { opacity: 0, y: 22 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.7, ease: EASE },
-    },
-};
+/* =========================================================
+   HOME PAGE
+========================================================= */
 
 export default function Home() {
-    return (
-        <main className="overflow-x-hidden bg-[#fbf9f4] text-[#1f2d3d] antialiased">
-            <Navbar />
+    const mainRef = useRef<HTMLElement>(null);
+    const categorySectionRef = useRef<HTMLElement>(null);
 
-            {/* HERO */}
-            <section className="relative overflow-hidden bg-[#eef4fb]">
-                <div className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-[#dcebf5] blur-3xl" />
-                <div className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-[#dcebf5] blur-3xl" />
+    useGSAP(
+        () => {
+            const mm = gsap.matchMedia();
 
-                <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-5 pb-16 pt-28 sm:px-6 sm:pt-32 lg:grid-cols-2 lg:gap-16 lg:pb-24 lg:pt-36">
-                    <motion.div
-                        initial="hidden"
-                        animate="visible"
-                        variants={{
-                            hidden: {},
-                            visible: {
-                                transition: { staggerChildren: 0.12 },
+            const reducedMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+            ).matches;
+
+            if (reducedMotion) {
+                return () => mm.revert();
+            }
+
+            /* ---------------------------------------------
+               FAST HERO TEXT ANIMATION
+
+               Starts immediately.
+               Short duration, no long stagger.
+            --------------------------------------------- */
+
+            const heroTimeline = gsap.timeline({
+                defaults: {
+                    ease: "power3.out",
+                },
+            });
+
+            heroTimeline
+                .from(".hero-label", {
+                    y: 14,
+                    opacity: 0,
+                    duration: 0.4,
+                })
+                .from(
+                    ".hero-heading",
+                    {
+                        y: 22,
+                        opacity: 0,
+                        duration: 0.55,
+                    },
+                    "-=0.25"
+                )
+                .from(
+                    ".hero-description",
+                    {
+                        y: 14,
+                        opacity: 0,
+                        duration: 0.45,
+                    },
+                    "-=0.3"
+                )
+                .from(
+                    ".hero-buttons",
+                    {
+                        y: 12,
+                        opacity: 0,
+                        duration: 0.4,
+                    },
+                    "-=0.25"
+                )
+                .from(
+                    ".hero-proof",
+                    {
+                        y: 10,
+                        opacity: 0,
+                        duration: 0.35,
+                    },
+                    "-=0.2"
+                );
+
+            /* ---------------------------------------------
+               QUICK SECTION TEXT REVEALS
+
+               Trigger early.
+               Small movement.
+               Short duration.
+               No noticeable waiting.
+            --------------------------------------------- */
+
+            gsap.utils
+                .toArray<HTMLElement>(".text-reveal")
+                .forEach((element) => {
+                    gsap.fromTo(
+                        element,
+                        {
+                            y: 18,
+                            opacity: 0,
+                        },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.55,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: element,
+                                start: "top 96%",
+                                once: true,
                             },
-                        }}
-                        className="text-center lg:text-left"
+                        }
+                    );
+                });
+
+            /* ---------------------------------------------
+               QUICK STAGGER FOR CARD GROUPS
+
+               Maximum 0.08s between cards.
+            --------------------------------------------- */
+
+            gsap.utils
+                .toArray<HTMLElement>(".text-stagger")
+                .forEach((group) => {
+                    const items = group.querySelectorAll(
+                        ".text-stagger-item"
+                    );
+
+                    gsap.fromTo(
+                        items,
+                        {
+                            y: 16,
+                            opacity: 0,
+                        },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.5,
+                            stagger: 0.08,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: group,
+                                start: "top 96%",
+                                once: true,
+                            },
+                        }
+                    );
+                });
+
+            /* ---------------------------------------------
+               HERO VIDEO PARALLAX
+            --------------------------------------------- */
+
+            gsap.fromTo(
+                ".hero-video",
+                {
+                    scale: 1.12,
+                },
+                {
+                    scale: 1,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ".hero-section",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: 1.5,
+                    },
+                }
+            );
+
+            gsap.to(".hero-background-content", {
+                yPercent: 12,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".hero-section",
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: 1.5,
+                },
+            });
+
+            /* ---------------------------------------------
+               STICKY CATEGORY STACK
+
+               One pinned stage.
+               One scroll-linked timeline.
+               No individual card pins.
+            --------------------------------------------- */
+
+            mm.add("(min-width: 768px)", () => {
+                const section = categorySectionRef.current;
+
+                const stage = section?.querySelector<HTMLElement>(
+                    ".category-stack-stage"
+                );
+
+                if (!section || !stage) return;
+
+                const cards = gsap.utils.toArray<HTMLElement>(
+                    stage.querySelectorAll(".category-stack-card")
+                );
+
+                if (!cards.length) return;
+
+                gsap.set(cards, {
+                    position: "absolute",
+                    inset: 0,
+                    yPercent: 105,
+                    scale: 0.96,
+                    opacity: 1,
+                    transformOrigin: "center center",
+                    force3D: true,
+                });
+
+                gsap.set(cards[0], {
+                    yPercent: 0,
+                    scale: 1,
+                    zIndex: 1,
+                });
+
+                cards.forEach((card, index) => {
+                    gsap.set(card, {
+                        zIndex: index + 1,
+                    });
+                });
+
+                const stackTimeline = gsap.timeline({
+                    defaults: {
+                        ease: "none",
+                    },
+                    scrollTrigger: {
+                        trigger: stage,
+                        start: "top top+=100",
+                        end: () =>
+                            `+=${window.innerHeight * (cards.length - 1)}`,
+                        scrub: 1.4,
+                        pin: true,
+                        pinSpacing: true,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true,
+                    },
+                });
+
+                cards.forEach((card, index) => {
+                    if (index === 0) return;
+
+                    const previousCard = cards[index - 1];
+
+                    stackTimeline.to(
+                        previousCard,
+                        {
+                            scale: 0.93,
+                            y: -30,
+                            opacity: 0.5,
+                            duration: 1,
+                        },
+                        index - 1
+                    );
+
+                    stackTimeline.to(
+                        card,
+                        {
+                            yPercent: 0,
+                            scale: 1,
+                            duration: 1,
+                        },
+                        index - 1
+                    );
+                });
+
+                return () => {
+                    stackTimeline.scrollTrigger?.kill();
+                    stackTimeline.kill();
+                };
+            });
+
+            /* ---------------------------------------------
+               MOBILE CATEGORY CARDS
+
+               Natural document flow.
+               No sticky pinning.
+            --------------------------------------------- */
+
+            mm.add("(max-width: 767px)", () => {
+                const cards = gsap.utils.toArray<HTMLElement>(
+                    ".category-stack-card"
+                );
+
+                cards.forEach((card) => {
+                    gsap.set(card, {
+                        clearProps: "all",
+                    });
+                });
+            });
+
+            /* ---------------------------------------------
+               CAMPAIGN IMAGE PARALLAX
+            --------------------------------------------- */
+
+            gsap.utils
+                .toArray<HTMLElement>(".campaign-image-wrap")
+                .forEach((image) => {
+                    const imageElement =
+                        image.querySelector<HTMLElement>(".campaign-image");
+
+                    if (!imageElement) return;
+
+                    gsap.fromTo(
+                        imageElement,
+                        {
+                            scale: 1.12,
+                        },
+                        {
+                            scale: 1,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: image,
+                                start: "top bottom",
+                                end: "bottom top",
+                                scrub: 1.5,
+                            },
+                        }
+                    );
+                });
+
+            /* ---------------------------------------------
+               IMAGE REVEAL
+            --------------------------------------------- */
+
+            gsap.utils
+                .toArray<HTMLElement>(".gsap-image-reveal")
+                .forEach((element) => {
+                    gsap.fromTo(
+                        element,
+                        {
+                            clipPath: "inset(0 0 100% 0)",
+                        },
+                        {
+                            clipPath: "inset(0 0 0% 0)",
+                            duration: 0.9,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                                trigger: element,
+                                start: "top 94%",
+                                once: true,
+                            },
+                        }
+                    );
+                });
+
+            /* ---------------------------------------------
+               REFRESH SCROLL TRIGGERS
+            --------------------------------------------- */
+
+            const refreshTimer = window.setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 500);
+
+            return () => {
+                window.clearTimeout(refreshTimer);
+                mm.revert();
+            };
+        },
+        {
+            scope: mainRef,
+            dependencies: [],
+            revertOnUpdate: true,
+        }
+    );
+
+    return (
+        <main
+            ref={mainRef}
+            className="overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C]"
+        >
+            {/* =================================================
+                HERO
+            ================================================= */}
+
+            <section className="hero-section relative flex min-h-[760px] items-center overflow-hidden bg-[#1C1C1C] pt-28 sm:min-h-[820px]">
+                <div className="absolute inset-0">
+                    <video
+                        className="hero-video h-full w-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        poster="/images/kerala-house-villa.jpg"
                     >
-                        <motion.div
-                            variants={heroItem}
-                            className="mb-6 flex items-center justify-center gap-3 lg:justify-start"
-                        >
-                            <span className="h-px w-10 bg-[#e9a55a]" />
-                            <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#9a6226]">
-                                Property marketing · Kerala
+                        <source
+                            src="/videos/hero-kerala-villa.mp4"
+                            type="video/mp4"
+                        />
+                    </video>
+
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#1C1C1C]/90 via-[#1C1C1C]/65 to-[#1C1C1C]/20" />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1C]/65 via-transparent to-[#1C1C1C]/15" />
+
+                    <div className="pointer-events-none absolute right-[12%] top-[25%] h-40 w-40 rounded-full border border-white/20" />
+
+                    <div className="pointer-events-none absolute bottom-[18%] right-[30%] h-24 w-24 rounded-full bg-[#B8924A]/15 blur-2xl" />
+
+                    <div className="pointer-events-none absolute bottom-[30%] right-[8%] h-3 w-3 rounded-full bg-[#B8924A]" />
+                </div>
+
+                <div className="hero-background-content relative z-10 mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 lg:px-10">
+                    <div className="max-w-3xl">
+                        <div className="hero-label mb-7 inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md">
+                            <span className="h-2 w-2 rounded-full bg-[#B8924A]" />
+                            Premium Property Marketing · Kerala
+                        </div>
+
+                        <h1 className="hero-heading font-display text-5xl leading-[1.08] text-white sm:text-6xl lg:text-7xl">
+                            We don't list your property.
+                            <span className="mt-3 block text-[#D8BB82]">
+                                We market it to the right buyers.
                             </span>
-                        </motion.div>
+                        </h1>
 
-                        <motion.h1
-                            variants={heroItem}
-                            className="font-display text-4xl leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl"
-                        >
-                            Your property.
-                            <br />
-                            <span className="italic text-[#2b5d94]">
-                                The right audience.
-                            </span>
-                        </motion.h1>
+                        <p className="hero-description mt-7 max-w-2xl text-base leading-8 text-white/80 sm:text-lg">
+                            Your property deserves more than a listing.
+                            We build focused marketing campaigns that
+                            connect verified properties with the right audience.
+                        </p>
 
-                        <motion.p
-                            variants={heroItem}
-                            className="mx-auto mt-6 max-w-xl text-base leading-8 text-[#55657a] sm:text-lg lg:mx-0"
-                        >
-                            We bring property presentation, digital advertising and buyer
-                            coordination together to help property owners across Kerala reach
-                            their next opportunity.
-                        </motion.p>
-
-                        <motion.div
-                            variants={heroItem}
-                            className="mt-9 flex flex-col items-stretch gap-4 sm:flex-row sm:justify-center lg:justify-start"
-                        >
+                        <div className="hero-buttons mt-10 flex flex-col gap-4 sm:flex-row">
                             <Link
                                 href="/promote-property"
-                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#2b5d94] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                                className="inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-1 hover:bg-[#9F7C3D]"
                             >
                                 Promote My Property
-                                <ArrowUpRight className="ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                <ArrowUpRight className="ml-2 h-5 w-5" />
                             </Link>
 
                             <Link
                                 href="/campaigns"
-                                className="group inline-flex h-14 items-center justify-center rounded-full border border-[#2b5d94]/40 bg-white/80 px-8 text-sm font-semibold text-[#1f2d3d] transition duration-300 hover:-translate-y-0.5 hover:border-[#2b5d94] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                                className="inline-flex h-14 items-center justify-center rounded-full border border-white/50 bg-white/10 px-8 text-sm font-semibold text-white backdrop-blur-sm transition duration-300 hover:bg-white/20"
                             >
-                                Explore Campaigns
-                                <Play className="ml-3 h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                                See Campaign Examples
+                                <ArrowRight className="ml-2 h-4 w-4" />
                             </Link>
-                        </motion.div>
-
-                        <motion.div
-                            variants={heroItem}
-                            className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 border-t border-[#1f2d3d]/15 pt-6 text-xs text-[#55657a] lg:justify-start"
-                        >
-                            <span className="flex items-center gap-2">
-                                <ShieldCheck size={16} className="text-[#2b5d94]" />
-                                Owner-focused service
-                            </span>
-                            <span className="flex items-center gap-2">
-                                <Camera size={16} className="text-[#2b5d94]" />
-                                Creative presentation
-                            </span>
-                            <span className="flex items-center gap-2">
-                                <Megaphone size={16} className="text-[#2b5d94]" />
-                                Digital promotion
-                            </span>
-                        </motion.div>
-                    </motion.div>
-
-                    {/* HERO IMAGE */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.9, delay: 0.25, ease: EASE }}
-                        className="relative mx-auto w-full max-w-[380px] sm:max-w-[430px] lg:ml-auto lg:mr-0 lg:max-w-[470px]"
-                    >
-                        <div className="group overflow-hidden rounded-t-[999px] rounded-b-3xl border border-[#1f2d3d]/15 bg-white p-3">
-                            <img
-                                src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1000"
-                                alt="Beautiful modern property"
-                                loading="eager"
-                                className="h-[360px] w-full rounded-t-[999px] rounded-b-2xl object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] sm:h-[440px] lg:h-[510px]"
-                            />
                         </div>
 
-                        <div className="absolute -bottom-6 left-1/2 w-[85%] max-w-[260px] -translate-x-1/2 rounded-2xl bg-white p-5 shadow-xl sm:left-auto sm:-left-8 sm:w-auto sm:translate-x-0 lg:-left-12">
-                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#9a6226]">
-                                Our approach
-                            </p>
-                            <p className="mt-2 font-display text-xl leading-snug sm:text-2xl">
-                                More than a listing. A marketing campaign.
-                            </p>
+                        <div className="hero-proof mt-14 flex flex-wrap gap-x-8 gap-y-4 text-sm font-medium text-white/85">
+                            <span className="flex items-center gap-2">
+                                <ShieldCheck className="h-4 w-4 text-[#B8924A]" />
+                                Verified Owners
+                            </span>
+
+                            <span className="flex items-center gap-2">
+                                <BarChart3 className="h-4 w-4 text-[#B8924A]" />
+                                Campaign Reporting
+                            </span>
+
+                            <span className="flex items-center gap-2">
+                                <CheckCircle2 className="h-4 w-4 text-[#B8924A]" />
+                                Zero Brokerage
+                            </span>
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
-            {/* INTRO STRIP */}
-            <section className="border-y border-[#e8e5dc] bg-[#fbf9f4]">
-                <div className="mx-auto grid max-w-7xl gap-6 px-5 py-10 sm:grid-cols-3 sm:px-6">
-                    {[
-                        ["01", "You share your property"],
-                        ["02", "We build your campaign"],
-                        ["03", "You receive enquiries"],
-                    ].map(([number, label], index) => (
-                        <Reveal key={number} delay={index * 0.1}>
-                            <div className="flex items-center justify-center gap-4 sm:justify-start sm:gap-5">
-                                <span className="font-display text-4xl text-[#e9a55a]">
-                                    {number}
-                                </span>
-                                <span className="text-sm font-semibold">{label}</span>
+            {/* =================================================
+                COMMITMENTS
+            ================================================= */}
+
+            <section className="border-b border-[#1C1C1C]/10 bg-white px-5 py-12 sm:px-8 lg:px-10">
+                <div className="text-stagger mx-auto grid max-w-7xl gap-9 md:grid-cols-3">
+                    {commitments.map((item) => {
+                        const Icon = item.icon;
+
+                        return (
+                            <div
+                                key={item.title}
+                                className="text-stagger-item flex items-start gap-4"
+                            >
+                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F5EFE3] text-[#9F7C3D]">
+                                    <Icon className="h-6 w-6" />
+                                </div>
+
+                                <div>
+                                    <h3 className="font-display text-xl text-[#1C1C1C]">
+                                        {item.title}
+                                    </h3>
+
+                                    <p className="mt-2 text-sm leading-6 text-[#5F5A50]">
+                                        {item.description}
+                                    </p>
+                                </div>
                             </div>
-                        </Reveal>
-                    ))}
+                        );
+                    })}
                 </div>
             </section>
 
-            {/* PROPERTY CATEGORIES */}
-            <section className="bg-[#fbf9f4] py-20 sm:py-28">
-                <div className="mx-auto max-w-7xl px-5 sm:px-6">
-                    <Reveal className="mb-12 max-w-2xl">
-                        <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9a6226]">
-                            What we promote
-                        </p>
-                        <h2 className="mt-4 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-                            Every property has its own character.
+            {/* =================================================
+                WHY DIFFERENT
+            ================================================= */}
+
+            <section className="px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
+                <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:items-center">
+                    <div className="text-reveal">
+                        <SectionLabel>Why Per-Cent Kerala</SectionLabel>
+
+                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
+                            More than a listing.
+                            <span className="block text-[#B8924A]">
+                                A planned marketing approach.
+                            </span>
                         </h2>
-                        <p className="mt-4 max-w-xl text-sm leading-7 text-[#55657a] sm:text-base">
-                            From family homes to expansive land, we help bring out what makes
-                            your property worth discovering.
+
+                        <p className="mt-7 max-w-xl text-base leading-8 text-[#5F5A50]">
+                            Traditional property listings give your property
+                            a place to appear. We take a service-led approach:
+                            verify the property, plan the campaign, reach
+                            relevant audiences and report enquiries.
                         </p>
-                    </Reveal>
 
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                        {categories.map((item, index) => (
-                            <Reveal key={item.number} delay={index * 0.08}>
-                                <Link
-                                    href="/promote-property"
-                                    className="group relative block h-[320px] overflow-hidden rounded-2xl transition-transform duration-500 ease-out hover:-translate-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 sm:h-[360px]"
-                                >
-                                    <img
-                                        src={item.image}
-                                        alt={item.title}
-                                        loading="lazy"
-                                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                                    />
+                        <Link
+                            href="/how-it-works"
+                            className="mt-9 inline-flex items-center gap-2 text-sm font-bold text-[#9F7C3D] transition-all duration-300 hover:gap-4"
+                        >
+                            Discover how it works
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    </div>
 
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#16283d]/85 via-[#16283d]/20 to-transparent" />
+                    <div className="text-stagger space-y-4">
+                        {[
+                            {
+                                title: "Property verification",
+                                description:
+                                    "Ownership and property details are reviewed before campaign activation.",
+                            },
+                            {
+                                title: "A suitable marketing plan",
+                                description:
+                                    "Recommendations consider property type, location and asking price.",
+                            },
+                            {
+                                title: "Campaign visibility",
+                                description:
+                                    "Understand campaign activity and enquiries through reporting.",
+                            },
+                        ].map((item, index) => (
+                            <div
+                                key={item.title}
+                                className="text-stagger-item rounded-2xl border border-[#1C1C1C]/10 bg-white p-7 shadow-sm transition duration-500 hover:-translate-y-1 hover:border-[#B8924A]/40 hover:shadow-lg"
+                            >
+                                <span className="text-xs font-bold tracking-widest text-[#B8924A]">
+                                    0{index + 1}
+                                </span>
 
-                                    <span className="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[#1f2d3d]">
-                                        {item.number}
-                                    </span>
+                                <h3 className="mt-3 font-display text-2xl text-[#1C1C1C]">
+                                    {item.title}
+                                </h3>
 
-                                    <span className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1f2d3d] transition-transform duration-500 group-hover:rotate-45">
-                                        <ArrowUpRight size={19} />
-                                    </span>
-
-                                    <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                                        <h3 className="font-display text-2xl">
-                                            {item.title}
-                                        </h3>
-                                        <p className="mt-2 text-sm leading-6 text-white/90">
-                                            {item.description}
-                                        </p>
-                                    </div>
-                                </Link>
-                            </Reveal>
+                                <p className="mt-3 text-sm leading-7 text-[#5F5A50]">
+                                    {item.description}
+                                </p>
+                            </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* HOW IT WORKS */}
-            <section
-                id="how-it-works"
-                className="bg-[#eef4fb] py-20 sm:py-28"
-            >
-                <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-                    <Reveal className="lg:sticky lg:top-28 lg:self-start">
-                        <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9a6226]">
-                            How it works
-                        </p>
-                        <h2 className="mt-4 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-                            From your property to the right audience.
-                        </h2>
-                        <p className="mt-5 max-w-md text-sm leading-7 text-[#55657a] sm:text-base">
-                            Start with a conversation. Our team will understand your
-                            requirements, discuss the right package and plan your campaign.
-                        </p>
-                        <Link
-                            href="/promote-property"
-                            className="group mt-8 inline-flex items-center gap-3 text-sm font-bold text-[#2b5d94]"
-                        >
-                            Start a conversation
-                            <ArrowRight
-                                className="transition-transform duration-300 group-hover:translate-x-2"
-                                size={18}
-                            />
-                        </Link>
-                    </Reveal>
+            {/* =================================================
+                HOW IT WORKS
+            ================================================= */}
 
-                    <div className="space-y-4">
-                        {steps.map((step, index) => {
+            <section className="bg-[#F5EFE3] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
+                <div className="mx-auto max-w-7xl">
+                    <div className="text-reveal mx-auto mb-16 max-w-2xl text-center">
+                        <SectionLabel>Our Process</SectionLabel>
+
+                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
+                            From property enquiry
+                            <span className="block text-[#B8924A]">
+                                to campaign launch.
+                            </span>
+                        </h2>
+
+                        <p className="mt-5 text-base leading-8 text-[#5F5A50]">
+                            A clear process designed to keep property owners
+                            informed at every stage.
+                        </p>
+                    </div>
+
+                    <div className="text-stagger grid gap-7 md:grid-cols-2 lg:grid-cols-4">
+                        {steps.map((step) => {
                             const Icon = step.icon;
 
                             return (
-                                <Reveal key={step.number} delay={index * 0.08}>
-                                    <div className="group flex items-start gap-4 rounded-2xl border border-[#1f2d3d]/5 bg-white p-5 shadow-[0_1px_0_rgba(31,45,61,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-md sm:gap-6 sm:p-6">
-                                        <span
-                                            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${step.tint} text-[#2b5d94]`}
-                                        >
-                                            <Icon className="h-5 w-5" />
+                                <div
+                                    key={step.number}
+                                    className="text-stagger-item rounded-3xl border border-white bg-white p-7 shadow-sm transition duration-500 hover:-translate-y-2 hover:shadow-xl"
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-display text-3xl text-[#B8924A]">
+                                            {step.number}
                                         </span>
 
-                                        <div className="min-w-0 flex-1">
-                                            <div className="flex items-baseline justify-between gap-4">
-                                                <h3 className="font-display text-xl sm:text-2xl">
-                                                    {step.title}
-                                                </h3>
-                                                <span className="font-display text-xl text-[#2b5d94]/50">
-                                                    {step.number}
-                                                </span>
-                                            </div>
-                                            <p className="mt-2 max-w-lg text-sm leading-7 text-[#55657a]">
-                                                {step.description}
-                                            </p>
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F5EFE3] text-[#9F7C3D]">
+                                            <Icon className="h-6 w-6" />
                                         </div>
                                     </div>
-                                </Reveal>
+
+                                    <h3 className="mt-8 font-display text-xl text-[#1C1C1C]">
+                                        {step.title}
+                                    </h3>
+
+                                    <p className="mt-4 text-sm leading-7 text-[#5F5A50]">
+                                        {step.description}
+                                    </p>
+                                </div>
                             );
                         })}
                     </div>
                 </div>
             </section>
 
-            {/* CAMPAIGN EXAMPLES */}
-            <section className="bg-[#fbf9f4] py-20 sm:py-28">
-                <div className="mx-auto max-w-7xl px-5 sm:px-6">
-                    <Reveal className="mb-12 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-                        <div>
-                            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9a6226]">
-                                Campaign inspiration
-                            </p>
-                            <h2 className="mt-4 max-w-2xl font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-                                See how your property could be presented.
+            {/* =================================================
+                PROPERTY CATEGORIES — STICKY STACK
+            ================================================= */}
+
+            <section
+                ref={categorySectionRef}
+                className="relative bg-[#F8F6F1] px-5 py-24 sm:px-8 lg:px-10 lg:py-32"
+            >
+                <div className="mx-auto max-w-7xl">
+                    <div className="text-reveal mb-16 max-w-2xl">
+                        <SectionLabel>Property Categories</SectionLabel>
+
+                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
+                            Every property has
+                            <span className="block text-[#B8924A]">
+                                a story to tell.
+                            </span>
+                        </h2>
+
+                        <p className="mt-5 text-base leading-8 text-[#5F5A50]">
+                            Different properties need different marketing
+                            approaches. Explore the categories we work with.
+                        </p>
+                    </div>
+
+                    <div className="category-stack-stage relative h-auto space-y-6 md:h-[520px] md:space-y-0">
+                        {categories.map((category, index) => (
+                            <article
+                                key={category.number}
+                                className="category-stack-card relative grid min-h-[480px] overflow-hidden rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-[0_20px_60px_rgba(28,28,28,0.12)] md:absolute md:inset-0 md:min-h-0 md:grid-cols-2"
+                                style={{ zIndex: index + 1 }}
+                            >
+                                <div className="relative min-h-[260px] overflow-hidden md:order-2 md:min-h-full">
+                                    <Image
+                                        src={category.image}
+                                        alt={category.title}
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                        className="object-cover transition-transform duration-700 hover:scale-105"
+                                    />
+                                </div>
+
+                                <div className="flex flex-col justify-center p-8 sm:p-12 md:order-1 lg:p-16">
+                                    <span className="text-sm font-semibold tracking-widest text-[#B8924A]">
+                                        {category.number} / 04
+                                    </span>
+
+                                    <h3 className="mt-6 font-display text-4xl leading-tight text-[#1C1C1C] sm:text-5xl">
+                                        {category.title}
+                                    </h3>
+
+                                    <p className="mt-6 max-w-md text-base leading-8 text-[#5F5A50]">
+                                        {category.description}
+                                    </p>
+
+                                    <Link
+                                        href="/promote-property"
+                                        className="mt-9 inline-flex w-fit items-center gap-2 rounded-full bg-[#B8924A] px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-[#9F7C3D]"
+                                    >
+                                        Promote Your Property
+                                        <ArrowUpRight className="h-4 w-4" />
+                                    </Link>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* =================================================
+                PACKAGES
+            ================================================= */}
+
+            <section className="bg-white px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
+                <div className="mx-auto max-w-7xl">
+                    <div className="text-reveal mx-auto mb-16 max-w-2xl text-center">
+                        <SectionLabel>Marketing Packages</SectionLabel>
+
+                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
+                            The right plan for
+                            <span className="block text-[#B8924A]">
+                                your property.
+                            </span>
+                        </h2>
+
+                        <p className="mt-5 text-base leading-8 text-[#5F5A50]">
+                            Choose a service level based on your property
+                            and marketing requirements. Final scope and
+                            pricing are discussed with our team.
+                        </p>
+                    </div>
+
+                    <div className="text-stagger grid gap-7 lg:grid-cols-3">
+                        {packages.map((pkg) => (
+                            <div
+                                key={pkg.name}
+                                className={`text-stagger-item relative isolate flex flex-col rounded-3xl border p-8 transition duration-500 hover:-translate-y-2 hover:shadow-xl ${
+                                    pkg.featured
+                                        ? "border-[#B8924A] bg-[#F5EFE3] shadow-lg"
+                                        : "border-[#1C1C1C]/10 bg-[#F8F6F1]"
+                                }`}
+                            >
+                                <div className="relative z-10 flex flex-1 flex-col">
+                                    {pkg.featured && (
+                                        <span className="mb-5 inline-flex w-fit rounded-full bg-[#B8924A] px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white">
+                                            Popular choice
+                                        </span>
+                                    )}
+
+                                    <h3 className="font-display text-3xl text-[#1C1C1C]">
+                                        {pkg.name}
+                                    </h3>
+
+                                    <p className="mt-4 min-h-14 text-sm leading-7 text-[#5F5A50]">
+                                        {pkg.description}
+                                    </p>
+
+                                    <div className="my-7 h-px bg-[#1C1C1C]/10" />
+
+                                    <ul className="flex-1 space-y-4">
+                                        {pkg.features.map((feature) => (
+                                            <li
+                                                key={feature}
+                                                className="flex items-start gap-3 text-sm text-[#5F5A50]"
+                                            >
+                                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#B8924A]" />
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <Link
+                                        href="/packages"
+                                        className="mt-9 inline-flex h-12 items-center justify-center rounded-full border border-[#B8924A] px-6 text-sm font-bold text-[#9F7C3D] transition duration-300 hover:bg-[#B8924A] hover:text-white"
+                                    >
+                                        Explore Package
+                                        <ArrowUpRight className="ml-2 h-4 w-4" />
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* =================================================
+                CAMPAIGN EXAMPLES
+            ================================================= */}
+
+            <section className="bg-[#F8F6F1] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
+                <div className="mx-auto max-w-7xl">
+                    <div className="text-reveal mb-14 flex flex-col justify-between gap-7 md:flex-row md:items-end">
+                        <div className="max-w-2xl">
+                            <SectionLabel>Campaign Examples</SectionLabel>
+
+                            <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
+                                See how property
+                                <span className="block text-[#B8924A]">
+                                    marketing comes together.
+                                </span>
                             </h2>
-                            <p className="mt-4 max-w-xl text-sm leading-7 text-[#55657a] sm:text-base">
-                                Explore sample campaigns that show the possibilities of
-                                creative property marketing.
+
+                            <p className="mt-5 text-base leading-8 text-[#5F5A50]">
+                                Explore illustrative campaign concepts
+                                created for different property types.
                             </p>
                         </div>
 
                         <Link
                             href="/campaigns"
-                            className="group inline-flex shrink-0 items-center gap-2 text-sm font-bold text-[#2b5d94]"
+                            className="inline-flex items-center gap-2 text-sm font-bold text-[#9F7C3D] transition-all duration-300 hover:gap-4"
                         >
                             View all examples
-                            <ArrowUpRight
-                                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                                size={18}
-                            />
+                            <ArrowRight className="h-4 w-4" />
                         </Link>
-                    </Reveal>
+                    </div>
 
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {campaigns.map((item, index) => (
-                            <Reveal key={item.title} delay={index * 0.1}>
-                                <Link
-                                    href="/campaigns"
-                                    className="group relative block h-[340px] overflow-hidden rounded-2xl transition-transform duration-500 ease-out hover:-translate-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 sm:h-[380px]"
-                                >
-                                    <img
-                                        src={item.image}
-                                        alt={item.title}
-                                        loading="lazy"
-                                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    <div className="campaign-grid text-stagger grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                        {campaigns.map((campaign) => (
+                            <article
+                                key={campaign.title}
+                                className="text-stagger-item campaign-card group overflow-hidden rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-sm transition duration-500 hover:-translate-y-2 hover:shadow-xl"
+                            >
+                                <div className="campaign-image-wrap relative h-64 overflow-hidden">
+                                    <Image
+                                        src={campaign.image}
+                                        alt={campaign.title}
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, 33vw"
+                                        className="campaign-image object-cover"
                                     />
 
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#16283d]/85 via-[#16283d]/15 to-transparent" />
-
-                                    <span className="absolute left-5 top-5 rounded-full bg-white/95 px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-[#1f2d3d]">
-                                        Sample campaign
+                                    <span className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[#9F7C3D] backdrop-blur">
+                                        Illustrative concept
                                     </span>
+                                </div>
 
-                                    <div className="absolute inset-x-0 bottom-0 p-6 pr-20 text-white">
-                                        <p className="flex items-center gap-2 text-xs text-white/90">
-                                            <MapPin size={13} />
-                                            {item.location}
-                                        </p>
-                                        <h3 className="mt-3 font-display text-2xl leading-snug">
-                                            {item.title}
-                                        </h3>
-                                        <p className="mt-2 text-xs text-white/85">
-                                            {item.type}
-                                        </p>
+                                <div className="p-7">
+                                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#9F7C3D]">
+                                        <MapPin className="h-3.5 w-3.5" />
+                                        {campaign.location}
                                     </div>
 
-                                    <span className="absolute bottom-6 right-6 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1f2d3d] transition-transform duration-500 group-hover:rotate-45">
-                                        <ArrowUpRight size={19} />
+                                    <h3 className="mt-4 font-display text-2xl text-[#1C1C1C]">
+                                        {campaign.title}
+                                    </h3>
+
+                                    <p className="mt-4 text-sm leading-7 text-[#5F5A50]">
+                                        {campaign.description}
+                                    </p>
+
+                                    <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-[#9F7C3D]">
+                                        {campaign.category}
+                                        <ChevronRight className="h-4 w-4" />
                                     </span>
-                                </Link>
-                            </Reveal>
+                                </div>
+                            </article>
                         ))}
                     </div>
-
-                    <p className="mt-7 text-center text-xs text-[#55657a]">
-                        These are illustrative campaign concepts, not active property listings.
-                    </p>
                 </div>
             </section>
 
-            {/* PACKAGES */}
-            <section
-                id="packages"
-                className="relative overflow-hidden bg-[#fbf9f4] py-20 sm:py-28"
-            >
-                <div className="pointer-events-none absolute -right-40 -top-40 h-[480px] w-[480px] rounded-full border border-[#1f2d3d]/5" />
-                <div className="pointer-events-none absolute -right-20 -top-20 h-[330px] w-[330px] rounded-full border border-[#1f2d3d]/5" />
+            {/* =================================================
+                CAMPAIGN REPORT
+            ================================================= */}
 
-                <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6">
-                    <Reveal className="mx-auto mb-14 max-w-2xl text-center">
-                        <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9a6226]">
-                            Choose your campaign
-                        </p>
-                        <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl">
-                            Three ways to move your property forward.
+            <section className="bg-[#1C1C1C] px-5 py-24 text-white sm:px-8 lg:px-10 lg:py-32">
+                <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:items-center">
+                    <div className="text-reveal">
+                        <SectionLabel>Campaign Transparency</SectionLabel>
+
+                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
+                            Understand where
+                            <span className="block text-[#D8BB82]">
+                                your campaign stands.
+                            </span>
                         </h2>
-                        <p className="mt-4 text-sm leading-7 text-[#55657a] sm:text-base">
-                            Whether you need a few enquiries, a wider advertising campaign or
-                            additional sales support, choose the level of service that matches
-                            your goal.
+
+                        <p className="mt-7 max-w-xl text-base leading-8 text-white/65">
+                            Campaign reporting helps property owners
+                            understand activity, enquiries and marketing
+                            performance without relying on guesswork.
                         </p>
-                    </Reveal>
 
-                    <div className="grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {packages.map((plan, index) => {
-                            const Icon = plan.icon;
-
-                            return (
-                                <Reveal
-                                    key={plan.name}
-                                    delay={index * 0.1}
-                                    className={`h-full ${
-                                        index === 2
-                                            ? "md:col-span-2 lg:col-span-1"
-                                            : ""
-                                    }`}
-                                >
-                                    <div
-                                        className={`group relative flex h-full flex-col rounded-3xl border p-7 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-lg sm:p-8 ${plan.card}`}
-                                    >
-                                        {plan.popular && (
-                                            <span className="absolute right-6 top-0 rounded-b-lg bg-[#2b5d94] px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-white">
-                                                Most popular
-                                            </span>
-                                        )}
-
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#55657a]">
-                                                {plan.name}
-                                            </span>
-                                            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#eef4fb] text-[#2b5d94]">
-                                                <Icon size={18} />
-                                            </span>
-                                        </div>
-
-                                        <p className="mt-6 text-xs font-semibold uppercase tracking-wider text-[#2b5d94]">
-                                            {plan.eyebrow}
-                                        </p>
-
-                                        <h3 className="mt-2 font-display text-4xl">
-                                            {plan.name}
-                                        </h3>
-
-                                        <p className="mt-3 text-sm leading-7 text-[#55657a] lg:min-h-[84px]">
-                                            {plan.description}
-                                        </p>
-
-                                        <div className={`my-6 rounded-2xl p-5 ${plan.promiseBox}`}>
-                                            <p className="font-display text-2xl">
-                                                {plan.promise}
-                                            </p>
-                                            <p className="mt-1 text-xs text-[#55657a]">
-                                                {plan.promiseDescription}
-                                            </p>
-                                        </div>
-
-                                        <div className="border-t border-[#1f2d3d]/10 pt-6">
-                                            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#55657a]">
-                                                What's included
-                                            </p>
-
-                                            <ul className="space-y-3.5">
-                                                {plan.features.map((feature) => (
-                                                    <li
-                                                        key={feature}
-                                                        className="flex gap-3 text-sm leading-6"
-                                                    >
-                                                        <Check
-                                                            size={17}
-                                                            className="mt-0.5 shrink-0 text-[#2b5d94]"
-                                                        />
-                                                        <span>{feature}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-
-                                        <Link
-                                            href={`/promote-property?package=${plan.name.toLowerCase()}`}
-                                            className={`mt-auto flex items-center justify-center rounded-full px-5 py-3.5 text-sm font-bold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 ${
-                                                plan.popular
-                                                    ? "bg-[#2b5d94] text-white hover:bg-[#3a70ab]"
-                                                    : "border border-[#2b5d94]/40 text-[#1f2d3d] hover:bg-[#2b5d94] hover:text-white"
-                                            }`}
-                                            style={{ marginTop: "2rem" }}
-                                        >
-                                            Choose {plan.name}
-                                            <ArrowUpRight className="ml-2 h-4 w-4" />
-                                        </Link>
-                                    </div>
-                                </Reveal>
-                            );
-                        })}
+                        <div className="mt-9 flex items-center gap-3 text-sm text-white/80">
+                            <ShieldCheck className="h-5 w-5 text-[#B8924A]" />
+                            Clear campaign updates
+                        </div>
                     </div>
 
-                    <p className="mt-9 text-center text-xs leading-6 text-[#55657a]">
-                        Final pricing, campaign scope and terms will be discussed and
-                        confirmed by our team before payment.
-                    </p>
-                </div>
-            </section>
+                    <div className="text-reveal rounded-3xl border border-white/15 bg-white/10 p-7 backdrop-blur-xl sm:p-10">
+                        <div className="flex items-center justify-between border-b border-white/15 pb-6">
+                            <div>
+                                <p className="text-xs font-bold uppercase tracking-widest text-[#D8BB82]">
+                                    Sample Campaign Report
+                                </p>
 
-            {/* WHY US */}
-            <section className="bg-[#fbf9f4] py-20 sm:py-28">
-                <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-6 lg:grid-cols-2 lg:gap-16">
-                    <Reveal>
-                        <div className="group relative overflow-hidden rounded-2xl">
-                            <img
-                                src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1200"
-                                alt="Contemporary property interior"
-                                loading="lazy"
-                                className="h-[360px] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 sm:h-[480px] lg:h-[560px]"
-                            />
-                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#16283d]/80 to-transparent p-7 pt-24 text-white">
-                                <p className="font-display text-2xl sm:text-3xl">
-                                    Presented with care.
-                                </p>
-                                <p className="mt-2 text-sm text-white/90">
-                                    Promoted with purpose.
-                                </p>
+                                <h3 className="mt-2 font-display text-2xl">
+                                    Campaign Overview
+                                </h3>
                             </div>
+
+                            <BarChart3 className="h-8 w-8 text-[#D8BB82]" />
                         </div>
-                    </Reveal>
 
-                    <Reveal delay={0.1}>
-                        <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9a6226]">
-                            Why Per-Cent Kerala
-                        </p>
-                        <h2 className="mt-4 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-                            More than promotion. A team behind your property.
-                        </h2>
-                        <p className="mt-5 text-sm leading-7 text-[#55657a] sm:text-base">
-                            Every property has its own value and story. We combine creative
-                            presentation, digital advertising and personal coordination to help
-                            property owners move towards their goals.
-                        </p>
+                        <div className="grid grid-cols-2 gap-4 py-7">
+                            {[
+                                {
+                                    label: "Ad Spend",
+                                    value: "₹15,000",
+                                },
+                                {
+                                    label: "Enquiries",
+                                    value: "42",
+                                },
+                                {
+                                    label: "Campaign Reach",
+                                    value: "18,500",
+                                },
+                                {
+                                    label: "Best Creative",
+                                    value: "Villa Tour",
+                                },
+                            ].map((item) => (
+                                <div
+                                    key={item.label}
+                                    className="rounded-2xl border border-white/10 bg-white/5 p-5"
+                                >
+                                    <p className="text-xs text-white/55">
+                                        {item.label}
+                                    </p>
 
-                        <div className="mt-8 space-y-6">
-                            {reasons.map((reason, index) => {
-                                const Icon = reason.icon;
-
-                                return (
-                                    <motion.div
-                                        key={reason.title}
-                                        initial={{ opacity: 0, x: 24 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true, amount: 0.3 }}
-                                        transition={{
-                                            delay: index * 0.1,
-                                            duration: 0.6,
-                                            ease: EASE,
-                                        }}
-                                        className="flex gap-4"
-                                    >
-                                        <div
-                                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${reason.tint} text-[#2b5d94]`}
-                                        >
-                                            <Icon size={19} />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-sm font-bold sm:text-base">
-                                                {reason.title}
-                                            </h3>
-                                            <p className="mt-1.5 text-sm leading-7 text-[#55657a]">
-                                                {reason.description}
-                                            </p>
-                                        </div>
-                                    </motion.div>
-                                );
-                            })}
+                                    <p className="mt-3 font-display text-xl text-[#D8BB82]">
+                                        {item.value}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
-                    </Reveal>
+
+                        <p className="text-xs leading-6 text-white/45">
+                            Illustrative sample figures only. These are
+                            not actual Per-Cent Kerala campaign results.
+                            Replace them with verified campaign data later.
+                        </p>
+                    </div>
                 </div>
             </section>
 
-            {/* FINAL CTA */}
-            <section className="relative overflow-hidden bg-[#eef4fb] py-20 sm:py-28">
-                <div className="pointer-events-none absolute -right-32 -top-40 h-[420px] w-[420px] rounded-full border border-[#1f2d3d]/10" />
-                <div className="pointer-events-none absolute -right-16 -top-24 h-[300px] w-[300px] rounded-full border border-[#1f2d3d]/10" />
+            {/* =================================================
+                TRUST SECTION
+            ================================================= */}
 
-                <Reveal className="relative z-10 mx-auto max-w-4xl px-5 text-center sm:px-6">
-                    <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#9a6226]">
-                        Your next step starts here
-                    </p>
-                    <h2 className="mt-5 font-display text-3xl leading-tight sm:text-5xl lg:text-6xl">
-                        Let's give your property the attention it deserves.
+            <section className="px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
+                <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:items-center">
+                    <div className="gsap-image-reveal relative min-h-[430px] overflow-hidden rounded-3xl">
+                        <Image
+                            src="/images/kerala-luxury-interior.png"
+                            alt="Premium Kerala property interior"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover"
+                        />
+                    </div>
+
+                    <div className="text-reveal">
+                        <SectionLabel>Built Around Trust</SectionLabel>
+
+                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
+                            Your property.
+                            <span className="block text-[#B8924A]">
+                                Our focused attention.
+                            </span>
+                        </h2>
+
+                        <p className="mt-7 text-base leading-8 text-[#5F5A50]">
+                            We believe property marketing should be
+                            transparent, structured and accountable.
+                            Every campaign starts with understanding
+                            the property and agreeing on the right approach.
+                        </p>
+
+                        <ul className="mt-8 space-y-5">
+                            {[
+                                "Property details reviewed before promotion",
+                                "Marketing scope discussed before activation",
+                                "Campaign activity and enquiries reported",
+                                "No brokerage-based listing model",
+                            ].map((item) => (
+                                <li
+                                    key={item}
+                                    className="flex items-start gap-3 text-sm leading-7 text-[#5F5A50]"
+                                >
+                                    <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-[#B8924A]" />
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            {/* =================================================
+                FINAL CTA
+            ================================================= */}
+
+            <section className="relative overflow-hidden bg-[#F5EFE3] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
+                <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full border border-[#B8924A]/25" />
+
+                <div className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full border border-[#B8924A]/20" />
+
+                <div className="text-reveal relative mx-auto max-w-4xl text-center">
+                    <SectionLabel>Start Your Campaign</SectionLabel>
+
+                    <h2 className="mt-7 font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
+                        Ready to give your property
+                        <span className="block text-[#B8924A]">
+                            the attention it deserves?
+                        </span>
                     </h2>
-                    <p className="mx-auto mt-6 max-w-xl text-sm leading-7 text-[#55657a] sm:text-base">
-                        Tell us about your property. Our team will get in touch to understand
-                        your requirements and discuss the right campaign.
+
+                    <p className="mx-auto mt-7 max-w-2xl text-base leading-8 text-[#5F5A50]">
+                        Tell us about your property. Our team will review
+                        the details and help identify a suitable marketing approach.
                     </p>
+
                     <Link
                         href="/promote-property"
-                        className="group mt-9 inline-flex h-14 items-center justify-center rounded-full bg-[#2b5d94] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 sm:px-9"
+                        className="mt-10 inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-9 text-sm font-bold text-white shadow-lg transition duration-300 hover:-translate-y-1 hover:bg-[#9F7C3D]"
                     >
-                        Start your property campaign
-                        <ArrowUpRight className="ml-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        Promote My Property
+                        <ArrowUpRight className="ml-2 h-5 w-5" />
                     </Link>
-                </Reveal>
+                </div>
             </section>
         </main>
     );

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import {
     ArrowRight,
@@ -17,10 +17,23 @@ import {
     useScroll,
     useSpring,
 } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { animate, stagger } from "animejs";
 import Navbar from "@/components/layout/navbar";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const container = "mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8";
+
+/* ---------- BRAND COLORS ---------- */
+/*
+   White:       #FFFFFF
+   Charcoal:    #1C1C1C
+   Gold:        #B8924A
+   Warm neutral:#F8F6F1
+*/
 
 const steps = [
     {
@@ -36,7 +49,7 @@ const steps = [
         ],
         image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200",
         imageAlt: "Property documents and planning",
-        tint: "bg-[#e4eef8]",
+        tint: "bg-[#F5EFE3]",
     },
     {
         number: "02",
@@ -51,7 +64,7 @@ const steps = [
         ],
         image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200",
         imageAlt: "Business consultation meeting",
-        tint: "bg-[#f8ecd9]",
+        tint: "bg-[#F3EBDD]",
     },
     {
         number: "03",
@@ -66,7 +79,7 @@ const steps = [
         ],
         image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200",
         imageAlt: "Digital marketing campaign analytics",
-        tint: "bg-[#f9e6dc]",
+        tint: "bg-[#F6EDE1]",
     },
     {
         number: "04",
@@ -81,9 +94,11 @@ const steps = [
         ],
         image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=1200",
         imageAlt: "Real estate agent speaking with a buyer",
-        tint: "bg-[#dcebf5]",
+        tint: "bg-[#F5EFE3]",
     },
 ];
+
+/* ---------- REVEAL ---------- */
 
 function Reveal({
     children,
@@ -113,6 +128,8 @@ function Reveal({
     );
 }
 
+/* ---------- SECTION HEADING ---------- */
+
 function SectionHeading({
     label,
     title,
@@ -124,11 +141,11 @@ function SectionHeading({
 }) {
     return (
         <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold text-[#2b5d94]">
+            <p className="text-sm font-semibold tracking-wide text-[#B8924A]">
                 {label}
             </p>
 
-            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#1f2d3d] sm:text-4xl lg:text-[2.75rem]">
+            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#1C1C1C] sm:text-4xl lg:text-[2.75rem]">
                 {title}
             </h2>
 
@@ -138,17 +155,19 @@ function SectionHeading({
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-                className="mx-auto mt-4 block h-1 w-16 origin-center rounded-full bg-[#e9a55a]"
+                className="mx-auto mt-4 block h-1 w-16 origin-center rounded-full bg-[#B8924A]"
             />
 
             {text && (
-                <p className="mt-5 text-base leading-7 text-[#4a5a6e]">
+                <p className="mt-5 text-base leading-7 text-[#66615A]">
                     {text}
                 </p>
             )}
         </div>
     );
 }
+
+/* ---------- PAGE ---------- */
 
 export default function HowItWorksPage() {
     const reduceMotion = useReducedMotion();
@@ -172,21 +191,240 @@ export default function HowItWorksPage() {
         damping: 26,
     });
 
+    /* ---------- GSAP + ANIME.JS ---------- */
+
+    useEffect(() => {
+        if (reduceMotion) return;
+
+        const ctx = gsap.context(() => {
+            /* Hero title entrance */
+            gsap.fromTo(
+                ".how-hero-title",
+                {
+                    opacity: 0,
+                    y: 55,
+                    filter: "blur(10px)",
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                    duration: 1.1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".how-hero-title",
+                        start: "top 90%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* Step cards stagger entrance */
+            gsap.fromTo(
+                ".gsap-step-card",
+                {
+                    opacity: 0,
+                    y: 90,
+                    scale: 0.96,
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 1,
+                    stagger: 0.2,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".gsap-steps-list",
+                        start: "top 85%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* Step images reveal */
+            gsap.utils.toArray<HTMLElement>(".gsap-step-image").forEach(
+                (image) => {
+                    gsap.fromTo(
+                        image,
+                        {
+                            scale: 1.2,
+                            clipPath: "inset(8% 8% 8% 8%)",
+                        },
+                        {
+                            scale: 1,
+                            clipPath: "inset(0% 0% 0% 0%)",
+                            duration: 1.3,
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: image,
+                                start: "top 90%",
+                                once: true,
+                            },
+                        }
+                    );
+                }
+            );
+
+            /* Step number entrance */
+            gsap.fromTo(
+                ".gsap-step-number",
+                {
+                    scale: 0,
+                    rotate: -30,
+                },
+                {
+                    scale: 1,
+                    rotate: 0,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: "back.out(1.7)",
+                    scrollTrigger: {
+                        trigger: ".gsap-steps-list",
+                        start: "top 80%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* Final CTA entrance */
+            gsap.fromTo(
+                ".gsap-how-cta",
+                {
+                    opacity: 0,
+                    y: 70,
+                    scale: 0.96,
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 1,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: ".gsap-how-cta",
+                        start: "top 88%",
+                        once: true,
+                    },
+                }
+            );
+
+            /* CTA decorative movement */
+            gsap.to(".gsap-cta-decoration", {
+                rotate: 360,
+                duration: 35,
+                repeat: -1,
+                ease: "none",
+            });
+        });
+
+        /* Anime.js: step icons */
+        const iconObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+
+                    animate(entry.target, {
+                        scale: [0.5, 1.18, 1],
+                        rotate: ["-20deg", "8deg", "0deg"],
+                        opacity: [0, 1],
+                        duration: 900,
+                        ease: "outElastic(1, .65)",
+                    });
+
+                    iconObserver.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.5 }
+        );
+
+        document
+            .querySelectorAll("[data-anime-icon]")
+            .forEach((icon) => iconObserver.observe(icon));
+
+        /* Anime.js: checklist stagger */
+        const pointObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+
+                    const points = entry.target.querySelectorAll(
+                        "[data-anime-point]"
+                    );
+
+                    animate(points, {
+                        opacity: [0, 1],
+                        translateX: [-18, 0],
+                        delay: stagger(100),
+                        duration: 650,
+                        ease: "outQuad",
+                    });
+
+                    pointObserver.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.3 }
+        );
+
+        document
+            .querySelectorAll("[data-anime-points]")
+            .forEach((list) => pointObserver.observe(list));
+
+        /* Anime.js: button hover */
+        const buttons = document.querySelectorAll("[data-anime-button]");
+        const buttonCleanups: (() => void)[] = [];
+
+        buttons.forEach((button) => {
+            const enter = () => {
+                animate(button, {
+                    scale: 1.04,
+                    duration: 220,
+                    ease: "outQuad",
+                });
+            };
+
+            const leave = () => {
+                animate(button, {
+                    scale: 1,
+                    duration: 350,
+                    ease: "outElastic(1, .7)",
+                });
+            };
+
+            button.addEventListener("mouseenter", enter);
+            button.addEventListener("mouseleave", leave);
+
+            buttonCleanups.push(() => {
+                button.removeEventListener("mouseenter", enter);
+                button.removeEventListener("mouseleave", leave);
+            });
+        });
+
+        return () => {
+            ctx.revert();
+            iconObserver.disconnect();
+            pointObserver.disconnect();
+            buttonCleanups.forEach((cleanup) => cleanup());
+        };
+    }, [reduceMotion]);
+
     return (
-        <main className="min-h-screen overflow-x-clip bg-[#fbf9f4] text-[#1f2d3d] antialiased">
+        <main className="min-h-screen overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C] antialiased">
             {/* PAGE SCROLL PROGRESS */}
+
             {!reduceMotion && (
                 <motion.div
                     aria-hidden
                     style={{ scaleX: pageProgress }}
-                    className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-[#e9a55a]"
+                    className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-[#B8924A]"
                 />
             )}
 
             <Navbar />
 
             {/* HERO */}
-            <section className="relative overflow-hidden bg-gradient-to-b from-[#e4eef8] to-[#fbf9f4]">
+
+            <section className="relative overflow-hidden bg-gradient-to-b from-[#F5EFE3] to-[#F8F6F1]">
                 <motion.div
                     aria-hidden
                     animate={
@@ -199,7 +437,7 @@ export default function HowItWorksPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#dcebf5] blur-2xl sm:h-80 sm:w-80"
+                    className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#E9DFC9] blur-2xl sm:h-80 sm:w-80"
                 />
 
                 <motion.div
@@ -212,26 +450,24 @@ export default function HowItWorksPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#f8ecd9] blur-2xl sm:h-72 sm:w-72"
+                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#E8D9BC] blur-2xl sm:h-72 sm:w-72"
                 />
 
-                <div
-                    className={`${container} relative py-24 sm:py-28 lg:py-32`}
-                >
+                <div className={`${container} relative py-24 sm:py-28 lg:py-32`}>
                     <Reveal className="mx-auto max-w-3xl text-center">
-                        <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#2b5d94] shadow-sm">
-                            <span className="h-2 w-2 rounded-full bg-[#e9a55a]" />
+                        <div className="inline-flex items-center gap-2 rounded-full border border-[#B8924A]/20 bg-white px-4 py-2 text-sm font-semibold text-[#8B6B35] shadow-sm">
+                            <span className="h-2 w-2 rounded-full bg-[#B8924A]" />
                             Simple. Clear. Structured.
                         </div>
 
-                        <h1 className="mt-7 font-display text-4xl leading-tight tracking-tight text-[#1f2d3d] sm:text-5xl lg:text-6xl">
+                        <h1 className="how-hero-title mt-7 font-display text-4xl leading-tight tracking-tight text-[#1C1C1C] sm:text-5xl lg:text-6xl">
                             How It{" "}
-                            <span className="text-[#2b5d94]">
+                            <span className="text-[#B8924A]">
                                 Works
                             </span>
                         </h1>
 
-                        <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#4a5a6e] sm:text-lg">
+                        <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#66615A] sm:text-lg">
                             Promoting your property doesn't have to be
                             complicated. We follow a simple process from
                             your first enquiry to campaign launch and
@@ -241,7 +477,8 @@ export default function HowItWorksPage() {
                         <div className="mt-8 flex justify-center">
                             <Link
                                 href="/promote-property"
-                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#2b5d94] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2"
+                                data-anime-button
+                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
                             >
                                 Promote your property
 
@@ -253,14 +490,15 @@ export default function HowItWorksPage() {
             </section>
 
             {/* FOUR PROCESS STEPS */}
+
             <section
                 id="steps"
-                className="scroll-mt-24 bg-[#eef4fb] py-20 sm:py-24"
+                className="scroll-mt-24 bg-[#F3F0E9] py-20 sm:py-24"
             >
                 <div className={container}>
                     <Reveal>
                         <SectionHeading
-                            label="Our process"
+                            label="OUR PROCESS"
                             title="Four simple steps."
                             text="Here's how we work together to promote your property across Kerala."
                         />
@@ -268,18 +506,19 @@ export default function HowItWorksPage() {
 
                     <ol
                         ref={listRef}
-                        className="relative mx-auto mt-14 max-w-xl space-y-8 sm:space-y-10 lg:max-w-none"
+                        className="gsap-steps-list relative mx-auto mt-14 max-w-xl space-y-8 sm:space-y-10 lg:max-w-none"
                     >
                         {/* TIMELINE LINE */}
+
                         <div
                             aria-hidden
-                            className="pointer-events-none absolute bottom-6 left-6 top-6 hidden w-0.5 bg-[#2b5d94]/15 lg:block"
+                            className="pointer-events-none absolute bottom-6 left-6 top-6 hidden w-0.5 bg-[#B8924A]/20 lg:block"
                         >
                             <motion.div
                                 style={{
                                     scaleY: reduceMotion ? 1 : railFill,
                                 }}
-                                className="h-full w-full origin-top bg-[#2b5d94]"
+                                className="h-full w-full origin-top bg-[#B8924A]"
                             />
                         </div>
 
@@ -294,6 +533,7 @@ export default function HowItWorksPage() {
                                     className="scroll-mt-28 lg:grid lg:grid-cols-[3rem_1fr] lg:gap-8"
                                 >
                                     {/* DESKTOP STEP NUMBER */}
+
                                     <div className="relative z-10 hidden self-start lg:sticky lg:top-28 lg:block">
                                         <motion.span
                                             initial={
@@ -311,34 +551,17 @@ export default function HowItWorksPage() {
                                                 stiffness: 320,
                                                 damping: 18,
                                             }}
-                                            className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#2b5d94] bg-white font-display text-base font-bold text-[#2b5d94] shadow-sm"
+                                            className="gsap-step-number flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#B8924A] bg-white font-display text-base font-bold text-[#8B6B35] shadow-sm"
                                         >
                                             {step.number}
                                         </motion.span>
                                     </div>
 
                                     {/* STEP CARD */}
-                                    <motion.article
-                                        initial={
-                                            reduceMotion
-                                                ? false
-                                                : { opacity: 0, y: 30 }
-                                        }
-                                        whileInView={{
-                                            opacity: 1,
-                                            y: 0,
-                                        }}
-                                        viewport={{
-                                            once: true,
-                                            amount: 0.15,
-                                        }}
-                                        transition={{
-                                            duration: 0.65,
-                                            ease: EASE,
-                                        }}
-                                        className="group grid min-w-0 overflow-hidden rounded-3xl border border-[#1f2d3d]/10 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg lg:grid-cols-2"
-                                    >
+
+                                    <motion.article className="gsap-step-card group grid min-w-0 overflow-hidden rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-sm transition-shadow duration-300 hover:shadow-[0_20px_55px_rgba(28,28,28,0.10)] lg:grid-cols-2">
                                         {/* STEP IMAGE */}
+
                                         <div
                                             className={`relative min-h-[230px] overflow-hidden sm:min-h-[300px] lg:min-h-[340px] ${reverse ? "lg:order-2" : ""
                                                 }`}
@@ -347,15 +570,16 @@ export default function HowItWorksPage() {
                                                 src={step.image}
                                                 alt={step.imageAlt}
                                                 loading="lazy"
-                                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                                className="gsap-step-image absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                                             />
 
-                                            <div className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white font-display text-lg font-semibold text-[#2b5d94] shadow-md sm:left-7 sm:top-7 lg:hidden">
+                                            <div className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#B8924A]/20 bg-white font-display text-lg font-semibold text-[#8B6B35] shadow-md sm:left-7 sm:top-7 lg:hidden">
                                                 {step.number}
                                             </div>
                                         </div>
 
                                         {/* STEP CONTENT */}
+
                                         <div className="flex min-w-0 flex-col justify-center p-6 sm:p-9 lg:p-10">
                                             <motion.div
                                                 whileHover={
@@ -371,65 +595,43 @@ export default function HowItWorksPage() {
                                                     stiffness: 300,
                                                     damping: 15,
                                                 }}
-                                                className={`flex h-12 w-12 items-center justify-center rounded-xl text-[#2b5d94] ${step.tint}`}
+                                                data-anime-icon
+                                                className={`flex h-12 w-12 items-center justify-center rounded-xl text-[#8B6B35] ${step.tint}`}
                                             >
                                                 <Icon size={23} />
                                             </motion.div>
 
-                                            <p className="mt-5 text-sm font-semibold text-[#9a6226]">
-                                                Step {step.number}
+                                            <p className="mt-5 text-sm font-semibold tracking-wide text-[#B8924A]">
+                                                STEP {step.number}
                                             </p>
 
-                                            <h3 className="mt-2 font-display text-2xl leading-tight text-[#1f2d3d] sm:text-3xl">
+                                            <h3 className="mt-2 font-display text-2xl leading-tight text-[#1C1C1C] sm:text-3xl">
                                                 {step.title}
                                             </h3>
 
-                                            <p className="mt-4 text-sm leading-7 text-[#4a5a6e] sm:text-base">
+                                            <p className="mt-4 text-sm leading-7 text-[#66615A] sm:text-base">
                                                 {step.description}
                                             </p>
 
-                                            <ul className="mt-6 space-y-3">
-                                                {step.points.map(
-                                                    (point, pi) => (
-                                                        <motion.li
-                                                            key={point}
-                                                            initial={
-                                                                reduceMotion
-                                                                    ? false
-                                                                    : {
-                                                                        opacity: 0,
-                                                                        x: -12,
-                                                                    }
-                                                            }
-                                                            whileInView={{
-                                                                opacity: 1,
-                                                                x: 0,
-                                                            }}
-                                                            viewport={{
-                                                                once: true,
-                                                                amount: 0.8,
-                                                            }}
-                                                            transition={{
-                                                                duration: 0.4,
-                                                                delay:
-                                                                    0.15 +
-                                                                    pi * 0.07,
-                                                                ease: EASE,
-                                                            }}
-                                                            className="flex min-w-0 items-start gap-3"
-                                                        >
-                                                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#e4eef8] text-[#2b5d94]">
-                                                                <Check
-                                                                    size={13}
-                                                                />
-                                                            </span>
+                                            <ul
+                                                data-anime-points
+                                                className="mt-6 space-y-3"
+                                            >
+                                                {step.points.map((point) => (
+                                                    <li
+                                                        key={point}
+                                                        data-anime-point
+                                                        className="flex min-w-0 items-start gap-3"
+                                                    >
+                                                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F5EFE3] text-[#9F7C3D]">
+                                                            <Check size={13} />
+                                                        </span>
 
-                                                            <span className="text-sm leading-6 text-[#1f2d3d]">
-                                                                {point}
-                                                            </span>
-                                                        </motion.li>
-                                                    )
-                                                )}
+                                                        <span className="text-sm leading-6 text-[#1C1C1C]">
+                                                            {point}
+                                                        </span>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </motion.article>
@@ -441,9 +643,10 @@ export default function HowItWorksPage() {
             </section>
 
             {/* FINAL CTA */}
+
             <section className="px-5 py-16 sm:px-6 sm:py-20 lg:px-8">
                 <Reveal>
-                    <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-gradient-to-br from-[#e4eef8] via-[#dcebf5] to-[#f8ecd9] px-6 py-12 text-[#1f2d3d] shadow-sm ring-1 ring-[#2b5d94]/15 sm:px-12 sm:py-16">
+                    <div className="gsap-how-cta relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-[#B8924A]/20 bg-gradient-to-br from-[#F5EFE3] via-[#EFE5D2] to-[#E8D9BC] px-6 py-12 text-[#1C1C1C] shadow-sm sm:px-12 sm:py-16">
                         <motion.div
                             aria-hidden
                             animate={
@@ -459,7 +662,7 @@ export default function HowItWorksPage() {
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
-                            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/50"
+                            className="gsap-cta-decoration pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#B8924A]/20 bg-white/30"
                         />
 
                         <motion.div
@@ -474,20 +677,20 @@ export default function HowItWorksPage() {
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
-                            className="pointer-events-none absolute -bottom-32 right-24 h-64 w-64 rounded-full bg-white/40"
+                            className="pointer-events-none absolute -bottom-32 right-24 h-64 w-64 rounded-full bg-white/30"
                         />
 
                         <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
                             <div>
-                                <p className="text-sm font-semibold text-[#7d4e17]">
-                                    Your property journey starts here
+                                <p className="text-sm font-semibold tracking-wide text-[#8B6B35]">
+                                    YOUR PROPERTY JOURNEY STARTS HERE
                                 </p>
 
-                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#1f2d3d] sm:text-4xl lg:text-5xl">
+                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#1C1C1C] sm:text-4xl lg:text-5xl">
                                     Ready to promote your property?
                                 </h2>
 
-                                <p className="mt-4 max-w-xl text-base leading-7 text-[#4a5a6e]">
+                                <p className="mt-4 max-w-xl text-base leading-7 text-[#66615A]">
                                     Share your property details. Our team
                                     will review your requirements and
                                     discuss the next steps with you.
@@ -497,7 +700,8 @@ export default function HowItWorksPage() {
                             <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row lg:justify-self-end">
                                 <Link
                                     href="/promote-property"
-                                    className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#2b5d94] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3a70ab] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2b5d94] focus-visible:ring-offset-2 sm:w-auto"
+                                    data-anime-button
+                                    className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:w-auto"
                                 >
                                     Promote your property
 
@@ -506,7 +710,8 @@ export default function HowItWorksPage() {
 
                                 <Link
                                     href="/packages"
-                                    className="inline-flex h-14 w-full items-center justify-center rounded-full border border-[#2b5d94]/40 bg-white px-8 text-sm font-semibold text-[#1f2d3d] transition duration-300 hover:-translate-y-0.5 hover:border-[#2b5d94] hover:bg-[#e4eef8] sm:w-auto"
+                                    data-anime-button
+                                    className="inline-flex h-14 w-full items-center justify-center rounded-full border border-[#B8924A]/50 bg-white px-8 text-sm font-semibold text-[#1C1C1C] transition duration-300 hover:border-[#B8924A] hover:bg-[#F5EFE3] sm:w-auto"
                                 >
                                     Explore packages
                                 </Link>
