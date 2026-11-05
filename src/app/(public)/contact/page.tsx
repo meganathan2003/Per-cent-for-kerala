@@ -25,6 +25,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { animate } from "animejs";
+import { submitPublicForm } from "@/lib/api";
 import Navbar from "@/components/layout/navbar";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -320,6 +321,9 @@ export default function ContactPage() {
     const [form, setForm] = useState(initialForm);
     const [sending, setSending] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [consent, setConsent] = useState(false);
+    const [submitError, setSubmitError] = useState("");
+    const [honeypot, setHoneypot] = useState("");
 
     /* ---------- GSAP ANIMATIONS ---------- */
 
@@ -511,22 +515,27 @@ export default function ContactPage() {
         }));
     }
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         if (sending) return;
 
         setSending(true);
-
-        // Demo submission until backend API integration.
-        window.setTimeout(() => {
-            setSending(false);
+        setSubmitError("");
+        try {
+            await submitPublicForm("contact", { ...form, consent, honeypot });
             setSubmitted(true);
-        }, 900);
+        } catch (error) {
+            setSubmitError(error instanceof Error ? error.message : "We could not send your enquiry. Please try again.");
+        } finally {
+            setSending(false);
+        }
     }
 
     function resetForm() {
         setForm(initialForm);
+        setConsent(false);
+        setSubmitError("");
         setSubmitted(false);
     }
 
@@ -969,6 +978,10 @@ export default function ContactPage() {
                                         onSubmit={handleSubmit}
                                         className="space-y-5"
                                     >
+                                        <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+                                            <label htmlFor="contact-website">Leave this field blank</label>
+                                            <input id="contact-website" name="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
+                                        </div>
                                         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                                             <FormField
                                                 id="name"
@@ -1100,12 +1113,24 @@ export default function ContactPage() {
                                             )}
                                         </button>
 
-                                        <p className="text-xs leading-5 text-[#625D53]">
-                                            By submitting this form, you
-                                            are expressing interest in
-                                            contacting Per-Cent Kerala
-                                            about its services.
-                                        </p>
+                                        {submitError && (
+                                            <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                                                {submitError}
+                                            </p>
+                                        )}
+
+                                        <label className="flex items-start gap-3 text-xs leading-5 text-[#625D53]">
+                                            <input
+                                                type="checkbox"
+                                                required
+                                                checked={consent}
+                                                onChange={(event) => setConsent(event.target.checked)}
+                                                className="mt-1 h-4 w-4 shrink-0 accent-[#B8924A]"
+                                            />
+                                            <span>
+                                                I agree that Per-Cent Kerala may use my details to respond to this enquiry.
+                                            </span>
+                                        </label>
                                     </form>
                                 </>
                             )}

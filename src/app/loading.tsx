@@ -13,7 +13,7 @@ export default function Loading() {
                     <div className="absolute h-36 w-36 animate-ping rounded-full bg-[#173D32]/5" />
 
                     <Image
-                        src="/images/app-logo.png"
+                        src="/images/logo.png"
                         alt="Per-Cent Kerala"
                         width={420}
                         height={320}

@@ -1,10 +1,6 @@
-
 import type { Metadata } from "next";
 import { DM_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
-
-import Navbar from "@/components/layout/navbar";
-import Footer from "@/components/layout/footer";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -19,11 +15,16 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-
-  // add favicon it inside the public and imags folder
   icons: {
-    icon: [{ url: "/images/favicon.png", sizes: "512x512", type: "image/png" }],
+    icon: [
+      {
+        url: "/images/favicon.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
   },
+
   title: {
     default: "Per-Cent Kerala | Property Marketing",
     template: "%s | Per-Cent Kerala",
@@ -43,9 +44,7 @@ export default function RootLayout({
       <body
         className={`${dmSans.variable} ${playfair.variable} min-h-screen bg-[#f8f7f2] antialiased`}
       >
-        <Navbar />
         {children}
-        <Footer />
       </body>
     </html>
   );
