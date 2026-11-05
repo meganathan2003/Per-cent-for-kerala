@@ -24,6 +24,11 @@ interface CurrentAdminResponse {
     };
 }
 
+interface LogoutResponse {
+    success: boolean;
+    message: string;
+}
+
 export const loginAdmin = async (
     credentials: LoginCredentials
 ): Promise<LoginResponse["data"]> => {
@@ -32,27 +37,40 @@ export const loginAdmin = async (
         credentials
     );
 
-    const result = response.data?.data;
+    const body = response.data;
 
-    if (!response.data?.success || !result?.user) {
-        throw new Error("Invalid login response from server");
+    if (
+        body?.success !== true ||
+        !body?.data?.user?.id ||
+        !body?.data?.user?.role
+    ) {
+        console.error("Unexpected login response:", body);
+
+        throw new Error(
+            "Invalid login response from server"
+        );
     }
 
-    return result;
+    return body.data;
 };
 
 export const getCurrentAdmin = async (): Promise<AdminUser> => {
-    const response = await api.get<CurrentAdminResponse>("/auth/me");
+    const response = await api.get<CurrentAdminResponse>(
+        "/auth/me"
+    );
 
-    const user = response.data?.data?.user;
+    const body = response.data;
 
-    if (!response.data?.success || !user) {
+    if (
+        body?.success !== true ||
+        !body?.data?.user?.id
+    ) {
         throw new Error("Invalid admin session");
     }
 
-    return user;
+    return body.data.user;
 };
 
 export const logoutAdmin = async (): Promise<void> => {
-    await api.post("/auth/logout");
+    await api.post<LogoutResponse>("/auth/logout");
 };

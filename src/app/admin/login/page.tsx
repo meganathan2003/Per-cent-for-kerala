@@ -3,6 +3,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
 import {
   LockKeyhole,
   Mail,
@@ -63,14 +64,19 @@ export default function AdminLoginPage() {
         setError("This account does not have admin portal access.");
       }
     } catch (err) {
-      setError(getApiErrorMessage(err, "Unable to sign in."));
+      setError(
+        getApiErrorMessage(err, "Unable to sign in.")
+      );
     }
   }
 
   if (!isInitialized) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#F5F7F9]">
-        <Loader2 className="animate-spin text-[#172B35]" size={30} />
+        <Loader2
+          className="animate-spin text-[#172B35]"
+          size={30}
+        />
       </main>
     );
   }
@@ -78,6 +84,7 @@ export default function AdminLoginPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F5F7F9] px-4 py-10">
       <div className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-[#D8B779]/10 blur-3xl" />
+
       <div className="pointer-events-none absolute -bottom-32 -right-32 h-80 w-80 rounded-full bg-[#172B35]/10 blur-3xl" />
 
       <div className="relative w-full max-w-[420px]">
@@ -87,7 +94,10 @@ export default function AdminLoginPage() {
         >
           <div className="text-center">
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#172B35] shadow-lg shadow-[#172B35]/15">
-              <ShieldCheck className="text-[#D8B779]" size={32} />
+              <ShieldCheck
+                className="text-[#D8B779]"
+                size={32}
+              />
             </div>
 
             <h1 className="text-2xl font-bold tracking-tight text-[#172B35]">
@@ -163,7 +173,11 @@ export default function AdminLoginPage() {
                 aria-label={showPassword ? "Hide password" : "Show password"}
                 className="shrink-0 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-[#172B35]"
               >
-                {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                {showPassword ? (
+                  <EyeOff size={19} />
+                ) : (
+                  <Eye size={19} />
+                )}
               </button>
             </div>
           </div>

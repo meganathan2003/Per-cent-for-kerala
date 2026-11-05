@@ -35,15 +35,24 @@ api.interceptors.response.use(
     (error) => {
         if (typeof window !== "undefined") {
             const status = error.response?.status;
-            const isLoginPage = window.location.pathname === "/admin/login";
-            const isLoginRequest = error.config?.url?.includes("/auth/login");
-            const isMeRequest = error.config?.url?.includes("/auth/me");
+            const isLoginPage =
+                window.location.pathname === "/admin/login";
+
+            const isLoginRequest =
+                error.config?.url?.includes("/auth/login");
+
+            const isMeRequest =
+                error.config?.url?.includes("/auth/me");
+
+            const isLogoutRequest =
+                error.config?.url?.includes("/auth/logout");
 
             if (
                 status === 401 &&
                 !isLoginPage &&
                 !isLoginRequest &&
-                !isMeRequest
+                !isMeRequest &&
+                !isLogoutRequest
             ) {
                 window.location.href = "/admin/login";
             }

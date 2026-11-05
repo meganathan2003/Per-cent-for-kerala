@@ -2,6 +2,7 @@
 import { create } from "zustand";
 
 import type { AdminUser } from "@/types/admin";
+
 import {
     loginAdmin,
     logoutAdmin,
@@ -26,7 +27,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     isInitialized: false,
 
     login: async (email, password) => {
-        set({ isLoading: true });
+        set({
+            isLoading: true,
+        });
 
         try {
             const result = await loginAdmin({
@@ -41,7 +44,9 @@ export const useAuthStore = create<AuthState>((set) => ({
                 !user.id ||
                 !["SUPER_ADMIN", "OPERATIONS"].includes(user.role)
             ) {
-                throw new Error("Invalid admin user");
+                throw new Error(
+                    "This account does not have admin portal access."
+                );
             }
 
             set({
@@ -63,12 +68,14 @@ export const useAuthStore = create<AuthState>((set) => ({
     },
 
     logout: async () => {
-        set({ isLoading: true });
+        set({
+            isLoading: true,
+        });
 
         try {
             await logoutAdmin();
         } catch (error) {
-            console.error("Logout failed:", error);
+            console.error("Logout API failed:", error);
         } finally {
             set({
                 user: null,
@@ -84,7 +91,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     },
 
     initializeAuth: async () => {
-        set({ isLoading: true });
+        set({
+            isLoading: true,
+        });
 
         try {
             const user = await getCurrentAdmin();
