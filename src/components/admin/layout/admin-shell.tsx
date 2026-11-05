@@ -23,7 +23,9 @@ const pageTitles: Record<string, string> = {
     "/admin/settings/payment": "Payment Settings",
 };
 
-export default function AdminShell({ children }: AdminShellProps) {
+export default function AdminShell({
+    children,
+}: AdminShellProps) {
     const pathname = usePathname();
     const router = useRouter();
 
@@ -34,44 +36,77 @@ export default function AdminShell({ children }: AdminShellProps) {
         (state) => state.initializeAuth
     );
 
-    // Login page does not require authentication.
     const isLoginPage = pathname === "/admin/login";
 
     useEffect(() => {
-        if (isLoginPage) {
-            setIsCheckingAuth(false);
-            return;
-        }
+        let active = true;
 
-        initializeAuth();
+        const checkAuthentication = async () => {
+            if (isLoginPage) {
+                setIsCheckingAuth(false);
+                return;
+            }
 
-        // initializeAuth updates Zustand synchronously.
-        const authState = useAuthStore.getState();
+            setIsCheckingAuth(true);
 
-        if (!authState.isAuthenticated || !authState.token) {
-            router.replace("/admin/login");
-            return;
-        }
+            try {
+                const currentState = useAuthStore.getState();
 
-        setIsCheckingAuth(false);
+                // Restore session after browser refresh.
+                if (!currentState.isInitialized) {
+                    await initializeAuth();
+                }
+
+                if (!active) return;
+
+                // Read the latest Zustand state after initialization.
+                const authState = useAuthStore.getState();
+
+                if (
+                    !authState.isAuthenticated ||
+                    !authState.user
+                ) {
+                    router.replace("/admin/login");
+                    return;
+                }
+
+                setIsCheckingAuth(false);
+            } catch (error) {
+                console.error(
+                    "Admin authentication check failed:",
+                    error
+                );
+
+                if (active) {
+                    router.replace("/admin/login");
+                }
+            }
+        };
+
+        void checkAuthentication();
+
+        return () => {
+            active = false;
+        };
     }, [isLoginPage, initializeAuth, router]);
 
-    // Reset sidebar when navigating between admin pages.
+    // Reset sidebar when navigating.
     useEffect(() => {
         setSidebarOpen(false);
     }, [pathname]);
 
-    // Standalone login layout.
+    // Login page does not need the admin shell.
     if (isLoginPage) {
         return <>{children}</>;
     }
 
-    // Prevent protected page content from flashing before auth check.
+    // Prevent protected content from flashing before auth verification.
     if (isCheckingAuth) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-[#F7F8FA]">
                 <div className="flex flex-col items-center gap-3">
                     <div className="h-9 w-9 animate-spin rounded-full border-4 border-[#172B35]/15 border-t-[#172B35]" />
+
                     <p className="text-sm text-gray-500">
                         Checking authentication...
                     </p>
