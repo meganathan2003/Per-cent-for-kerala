@@ -30,13 +30,24 @@ export default function SuperAdminLayout({
   const pathname = usePathname();
   const router = useRouter();
 
-  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  const initializeAuth = useAuthStore(
+    (state) => state.initializeAuth
+  );
+
   const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore(
+    (state) => state.isAuthenticated
+  );
+  const isInitialized = useAuthStore(
+    (state) => state.isInitialized
+  );
+
   const logout = useAuthStore((state) => state.logout);
 
   const [checking, setChecking] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Restore session and validate Super Admin role.
   useEffect(() => {
     let active = true;
 
@@ -59,16 +70,22 @@ export default function SuperAdminLayout({
 
         if (state.user.role !== "SUPER_ADMIN") {
           if (state.user.role === "OPERATIONS") {
-            router.replace("/admin/operations/dashboard");
+            router.replace(
+              "/admin/operations/dashboard"
+            );
           } else {
             router.replace("/admin/login");
           }
+
           return;
         }
 
         setChecking(false);
       } catch (error) {
-        console.error("Super admin auth check failed:", error);
+        console.error(
+          "Super Admin authentication failed:",
+          error
+        );
 
         if (active) {
           router.replace("/admin/login");
@@ -83,6 +100,7 @@ export default function SuperAdminLayout({
     };
   }, [initializeAuth, router]);
 
+  // Close mobile sidebar after navigation.
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
@@ -91,7 +109,12 @@ export default function SuperAdminLayout({
     await logout();
   };
 
-  if (checking || user?.role !== "SUPER_ADMIN") {
+  if (
+    checking ||
+    !isInitialized ||
+    !isAuthenticated ||
+    user?.role !== "SUPER_ADMIN"
+  ) {
     return (
       <div className="flex min-h-screen items-center justify-center text-sm text-gray-500">
         Checking access...
@@ -118,7 +141,9 @@ export default function SuperAdminLayout({
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col bg-[#172B35] text-white transition-transform lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col bg-[#172B35] text-white transition-transform lg:translate-x-0 ${sidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full"
           }`}
       >
         <div className="flex h-[76px] items-center justify-between border-b border-white/10 px-6">
@@ -127,7 +152,9 @@ export default function SuperAdminLayout({
             className="font-bold tracking-widest"
           >
             PER-CENT{" "}
-            <span className="text-[#D8B779]">KERALA</span>
+            <span className="text-[#D8B779]">
+              KERALA
+            </span>
           </Link>
 
           <button
@@ -153,7 +180,9 @@ export default function SuperAdminLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                aria-current={active ? "page" : undefined}
+                aria-current={
+                  active ? "page" : undefined
+                }
                 className={`block rounded-lg px-3 py-3 text-sm transition-colors ${active
                     ? "bg-[#D8B779] font-semibold text-[#172B35]"
                     : "text-white/75 hover:bg-white/10"

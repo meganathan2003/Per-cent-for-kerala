@@ -9,6 +9,11 @@ import {
     getCurrentAdmin,
 } from "@/services/auth.service";
 
+
+let initializationPromise: Promise<void> | null = null;
+
+
+
 interface AuthState {
     user: AdminUser | null;
     isAuthenticated: boolean;
@@ -20,16 +25,17 @@ interface AuthState {
     initializeAuth: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+const ALLOWED_ROLES = ["SUPER_ADMIN", "OPERATIONS"];
+
+export const useAuthStore = create<AuthState>((set, get) => ({
     user: null,
     isAuthenticated: false,
     isLoading: false,
     isInitialized: false,
 
+    // Login using the backend API.
     login: async (email, password) => {
-        set({
-            isLoading: true,
-        });
+        set({ isLoading: true });
 
         try {
             const result = await loginAdmin({
@@ -40,15 +46,16 @@ export const useAuthStore = create<AuthState>((set) => ({
             const user = result.user;
 
             if (
-                !user ||
-                !user.id ||
-                !["SUPER_ADMIN", "OPERATIONS"].includes(user.role)
+                !user?.id ||
+                !ALLOWED_ROLES.includes(user.role)
             ) {
                 throw new Error(
                     "This account does not have admin portal access."
                 );
             }
 
+            // Login API already returned the authenticated user.
+            // No need to call /auth/me immediately after login.
             set({
                 user,
                 isAuthenticated: true,
@@ -67,10 +74,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         }
     },
 
+    // Logout and clear the server-side cookie.
     logout: async () => {
-        set({
-            isLoading: true,
-        });
+        set({ isLoading: true });
 
         try {
             await logoutAdmin();
@@ -85,40 +91,52 @@ export const useAuthStore = create<AuthState>((set) => ({
             });
 
             if (typeof window !== "undefined") {
-                window.location.href = "/admin/login";
+                window.location.replace("/admin/login");
             }
         }
     },
 
-    initializeAuth: async () => {
-        set({
-            isLoading: true,
-        });
+    // Restore the session after a page refresh.
 
-        try {
-            const user = await getCurrentAdmin();
-
-            if (
-                !user ||
-                !user.id ||
-                !["SUPER_ADMIN", "OPERATIONS"].includes(user.role)
-            ) {
-                throw new Error("Invalid admin session");
-            }
-
-            set({
-                user,
-                isAuthenticated: true,
-                isLoading: false,
-                isInitialized: true,
-            });
-        } catch {
-            set({
-                user: null,
-                isAuthenticated: false,
-                isLoading: false,
-                isInitialized: true,
-            });
+    initializeAuth: () => {
+        if (initializationPromise) {
+            return initializationPromise;
         }
+
+        initializationPromise = (async () => {
+            set({ isLoading: true });
+
+            try {
+                const user = await getCurrentAdmin();
+
+                if (
+                    !user?.id ||
+                    !["SUPER_ADMIN", "OPERATIONS"].includes(user.role)
+                ) {
+                    throw new Error("Invalid admin session");
+                }
+
+                set({
+                    user,
+                    isAuthenticated: true,
+                    isLoading: false,
+                    isInitialized: true,
+                });
+            } catch (error) {
+                console.error("Session initialization failed:", error);
+
+                set({
+                    user: null,
+                    isAuthenticated: false,
+                    isLoading: false,
+                    isInitialized: true,
+                });
+            } finally {
+                initializationPromise = null;
+            }
+        })();
+
+        return initializationPromise;
     },
+
 }));

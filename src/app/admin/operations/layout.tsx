@@ -25,7 +25,10 @@ export default function RoleLayout({
   const pathname = usePathname();
   const router = useRouter();
 
-  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  const initializeAuth = useAuthStore(
+    (state) => state.initializeAuth
+  );
+
   const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore(
     (state) => state.isAuthenticated
@@ -33,12 +36,14 @@ export default function RoleLayout({
   const isInitialized = useAuthStore(
     (state) => state.isInitialized
   );
+
   const logout = useAuthStore((state) => state.logout);
 
   const [checking, setChecking] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
+  // Authentication and role verification.
   useEffect(() => {
     let active = true;
 
@@ -46,7 +51,8 @@ export default function RoleLayout({
       try {
         const currentState = useAuthStore.getState();
 
-        // Only verify the session when not already initialized.
+        // On page refresh, Zustand starts uninitialized.
+        // Restore the session using the HttpOnly cookie.
         if (!currentState.isInitialized) {
           await initializeAuth();
         }
@@ -62,16 +68,22 @@ export default function RoleLayout({
 
         if (state.user.role !== "OPERATIONS") {
           if (state.user.role === "SUPER_ADMIN") {
-            router.replace("/admin/super-admin/dashboard");
+            router.replace(
+              "/admin/super-admin/dashboard"
+            );
           } else {
             router.replace("/admin/login");
           }
+
           return;
         }
 
         setChecking(false);
       } catch (error) {
-        console.error("Operations auth check failed:", error);
+        console.error(
+          "Operations authentication failed:",
+          error
+        );
 
         if (active) {
           router.replace("/admin/login");
@@ -86,6 +98,7 @@ export default function RoleLayout({
     };
   }, [initializeAuth, router]);
 
+  // Close mobile sidebar when navigating.
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
@@ -94,11 +107,15 @@ export default function RoleLayout({
     if (loggingOut) return;
 
     setLoggingOut(true);
-
     await logout();
   };
 
-  if (checking || user?.role !== "OPERATIONS") {
+  if (
+    checking ||
+    !isInitialized ||
+    !isAuthenticated ||
+    user?.role !== "OPERATIONS"
+  ) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#F7F8FA]">
         <span className="h-8 w-8 animate-spin rounded-full border-2 border-[#8A6A32] border-t-transparent" />
@@ -125,7 +142,10 @@ export default function RoleLayout({
           href="/admin/operations/dashboard"
           className="font-bold tracking-widest"
         >
-          PER-CENT <span className="text-[#D8B779]">KERALA</span>
+          PER-CENT{" "}
+          <span className="text-[#D8B779]">
+            KERALA
+          </span>
         </Link>
 
         <button
