@@ -4,39 +4,36 @@ import axios, {
     InternalAxiosRequestConfig,
 } from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "");
+// Select API URL based on environment
+const BASE_URL = (
+    process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_API_URL_PROD
+        : process.env.NEXT_PUBLIC_API_URL_LOCAL
+)?.replace(/\/+$/, "");
 
 if (!BASE_URL) {
-    throw new Error("NEXT_PUBLIC_API_URL is not configured");
+    throw new Error(
+        "API URL is not configured. Check NEXT_PUBLIC_API_URL_LOCAL or NEXT_PUBLIC_API_URL_PROD"
+    );
 }
 
 const api = axios.create({
     baseURL: BASE_URL,
     timeout: 15000,
+
+    // Required for HttpOnly cookie authentication
+    withCredentials: true,
+
     headers: {
         Accept: "application/json",
     },
 });
 
-// Attach JWT and configure request headers
+// Configure request headers
 api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-        if (typeof window !== "undefined") {
-            const isLoginRequest = config.url?.includes("/auth/login");
 
-            if (!isLoginRequest) {
-                const token = localStorage.getItem("admin_token");
-
-                if (token) {
-                    config.headers.set(
-                        "Authorization",
-                        `Bearer ${token}`
-                    );
-                }
-            }
-        }
-
-        // Let browser set multipart boundary for FormData.
+        // Let browser set multipart boundary for FormData
         if (
             typeof FormData !== "undefined" &&
             config.data instanceof FormData
@@ -73,6 +70,7 @@ api.interceptors.response.use(
                 !isLoginPage &&
                 !isLoginRequest
             ) {
+                // Remove old localStorage authentication data
                 localStorage.removeItem("admin_token");
                 localStorage.removeItem("admin_user");
 
