@@ -2,116 +2,113 @@
 import { create } from "zustand";
 
 import type { AdminUser } from "@/types/admin";
-import { loginAdmin, logoutAdmin } from "@/services/auth.service";
+import {
+    loginAdmin,
+    logoutAdmin,
+    getCurrentAdmin,
+} from "@/services/auth.service";
 
 interface AuthState {
     user: AdminUser | null;
-    token: string | null;
     isAuthenticated: boolean;
     isLoading: boolean;
+    isInitialized: boolean;
 
     login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
-    initializeAuth: () => void;
+    initializeAuth: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
     user: null,
-    token: null,
     isAuthenticated: false,
     isLoading: false,
+    isInitialized: false,
 
     login: async (email, password) => {
         set({ isLoading: true });
 
         try {
-            const result = await loginAdmin({ email, password });
+            const result = await loginAdmin({
+                email,
+                password,
+            });
 
-            localStorage.setItem("admin_token", result.token);
-            localStorage.setItem(
-                "admin_user",
-                JSON.stringify(result.user)
-            );
+            const user = result.user;
+
+            if (
+                !user ||
+                !user.id ||
+                !["SUPER_ADMIN", "OPERATIONS"].includes(user.role)
+            ) {
+                throw new Error("Invalid admin user");
+            }
 
             set({
-                user: result.user,
-                token: result.token,
+                user,
                 isAuthenticated: true,
                 isLoading: false,
+                isInitialized: true,
             });
         } catch (error) {
-            set({ isLoading: false });
+            set({
+                user: null,
+                isAuthenticated: false,
+                isLoading: false,
+                isInitialized: true,
+            });
+
             throw error;
         }
     },
 
     logout: async () => {
+        set({ isLoading: true });
+
         try {
             await logoutAdmin();
+        } catch (error) {
+            console.error("Logout failed:", error);
         } finally {
-            localStorage.removeItem("admin_token");
-            localStorage.removeItem("admin_user");
-
             set({
                 user: null,
-                token: null,
                 isAuthenticated: false,
                 isLoading: false,
+                isInitialized: true,
             });
 
-            window.location.href = "/admin/login";
+            if (typeof window !== "undefined") {
+                window.location.href = "/admin/login";
+            }
         }
     },
 
-    initializeAuth: () => {
-        const token = localStorage.getItem("admin_token");
-        const storedUser = localStorage.getItem("admin_user");
-
-        if (!token || !storedUser) {
-            localStorage.removeItem("admin_token");
-            localStorage.removeItem("admin_user");
-
-            set({
-                user: null,
-                token: null,
-                isAuthenticated: false,
-            });
-
-            return;
-        }
+    initializeAuth: async () => {
+        set({ isLoading: true });
 
         try {
-            const user = JSON.parse(storedUser) as AdminUser;
+            const user = await getCurrentAdmin();
 
             if (
                 !user ||
-                typeof user !== "object" ||
                 !user.id ||
-                !user.role
+                !["SUPER_ADMIN", "OPERATIONS"].includes(user.role)
             ) {
-                throw new Error("Invalid stored admin user");
-            }
-
-            if (
-                user.role !== "SUPER_ADMIN" &&
-                user.role !== "OPERATIONS"
-            ) {
-                throw new Error("Invalid admin role");
+                throw new Error("Invalid admin session");
             }
 
             set({
                 user,
-                token,
                 isAuthenticated: true,
+                isLoading: false,
+                isInitialized: true,
             });
         } catch {
-            localStorage.removeItem("admin_token");
-            localStorage.removeItem("admin_user");
-
             set({
                 user: null,
-                token: null,
                 isAuthenticated: false,
+                isLoading: false,
+                isInitialized: true,
             });
         }
     },

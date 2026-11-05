@@ -1,47 +1,58 @@
-import api from "../lib/api";
-import type {
-    AdminUser,
-    LoginCredentials,
-    LoginResponse,
-} from "@/types/admin";
 
-interface BackendLoginResponse {
+import api from "@/lib/api";
+import type { AdminUser } from "@/types/admin";
+
+interface LoginCredentials {
+    email: string;
+    password: string;
+}
+
+interface LoginResponse {
     success: boolean;
-    message?: string;
+    message: string;
     data: {
-        token?: string;
-        accessToken?: string;
-        user?: AdminUser;
-        admin?: AdminUser;
+        user: AdminUser;
+        expiresIn: string;
     };
 }
 
-export async function loginAdmin(
+interface CurrentAdminResponse {
+    success: boolean;
+    message: string;
+    data: {
+        user: AdminUser;
+    };
+}
+
+export const loginAdmin = async (
     credentials: LoginCredentials
-): Promise<LoginResponse> {
-    const response = await api.post<BackendLoginResponse>(
+): Promise<LoginResponse["data"]> => {
+    const response = await api.post<LoginResponse>(
         "/auth/login",
         credentials
     );
 
-    // Handle backend response here
-    const result = response.data.data;
+    const result = response.data?.data;
 
-    const token = result.token ?? result.accessToken;
-    const user = result.user ?? result.admin;
-
-    if (!token || !user) {
+    if (!response.data?.success || !result?.user) {
         throw new Error("Invalid login response from server");
     }
 
-    return {
-        token,
-        user,
-    };
-}
-export async function logoutAdmin() {
-    // Current backend has no logout endpoint.
-    // Remove the locally stored session.
-    localStorage.removeItem("admin_token");
-    localStorage.removeItem("admin_user");
-}
+    return result;
+};
+
+export const getCurrentAdmin = async (): Promise<AdminUser> => {
+    const response = await api.get<CurrentAdminResponse>("/auth/me");
+
+    const user = response.data?.data?.user;
+
+    if (!response.data?.success || !user) {
+        throw new Error("Invalid admin session");
+    }
+
+    return user;
+};
+
+export const logoutAdmin = async (): Promise<void> => {
+    await api.post("/auth/logout");
+};

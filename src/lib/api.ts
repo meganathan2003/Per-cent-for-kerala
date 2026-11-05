@@ -1,10 +1,6 @@
 
-import axios, {
-    AxiosError,
-    InternalAxiosRequestConfig,
-} from "axios";
+import axios from "axios";
 
-// Select API URL based on environment
 const BASE_URL = (
     process.env.NODE_ENV === "production"
         ? process.env.NEXT_PUBLIC_API_URL_PROD
@@ -12,68 +8,43 @@ const BASE_URL = (
 )?.replace(/\/+$/, "");
 
 if (!BASE_URL) {
-    throw new Error(
-        "API URL is not configured. Check NEXT_PUBLIC_API_URL_LOCAL or NEXT_PUBLIC_API_URL_PROD"
-    );
+    throw new Error("API URL is not configured");
 }
 
 const api = axios.create({
     baseURL: BASE_URL,
     timeout: 15000,
-
-    // Required for HttpOnly cookie authentication
     withCredentials: true,
-
     headers: {
         Accept: "application/json",
     },
 });
 
-// Configure request headers
-api.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
+api.interceptors.request.use((config) => {
+    if (config.data instanceof FormData) {
+        config.headers.delete("Content-Type");
+    } else if (config.data !== undefined) {
+        config.headers.set("Content-Type", "application/json");
+    }
 
-        // Let browser set multipart boundary for FormData
-        if (
-            typeof FormData !== "undefined" &&
-            config.data instanceof FormData
-        ) {
-            config.headers.delete("Content-Type");
-        } else if (config.data !== undefined) {
-            config.headers.set(
-                "Content-Type",
-                "application/json"
-            );
-        }
+    return config;
+});
 
-        return config;
-    },
-    (error: AxiosError) => Promise.reject(error)
-);
-
-// Handle API responses and errors
 api.interceptors.response.use(
     (response) => response,
-
-    (error: AxiosError) => {
+    (error) => {
         if (typeof window !== "undefined") {
             const status = error.response?.status;
-
-            const isLoginPage =
-                window.location.pathname.includes("/admin/login");
-
-            const isLoginRequest =
-                error.config?.url?.includes("/auth/login");
+            const isLoginPage = window.location.pathname === "/admin/login";
+            const isLoginRequest = error.config?.url?.includes("/auth/login");
+            const isMeRequest = error.config?.url?.includes("/auth/me");
 
             if (
                 status === 401 &&
                 !isLoginPage &&
-                !isLoginRequest
+                !isLoginRequest &&
+                !isMeRequest
             ) {
-                // Remove old localStorage authentication data
-                localStorage.removeItem("admin_token");
-                localStorage.removeItem("admin_user");
-
                 window.location.href = "/admin/login";
             }
         }
@@ -82,13 +53,11 @@ api.interceptors.response.use(
     }
 );
 
-// Public form submission
 export const submitPublicForm = async (
     endpoint: string,
     data: unknown
 ) => {
     const response = await api.post(`/${endpoint}`, data);
-
     return response.data;
 };
 

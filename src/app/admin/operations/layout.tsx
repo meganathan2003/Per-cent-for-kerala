@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
+
 import { useAuthStore } from "@/stores/auth.store";
 import AdminHeader from "@/components/admin/layout/admin-header";
 
@@ -26,6 +27,12 @@ export default function RoleLayout({
 
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
   const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore(
+    (state) => state.isAuthenticated
+  );
+  const isInitialized = useAuthStore(
+    (state) => state.isInitialized
+  );
   const logout = useAuthStore((state) => state.logout);
 
   const [checking, setChecking] = useState(true);
@@ -33,25 +40,50 @@ export default function RoleLayout({
   const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
-    initializeAuth();
+    let active = true;
 
-    const state = useAuthStore.getState();
+    const checkAuthentication = async () => {
+      try {
+        const currentState = useAuthStore.getState();
 
-    if (!state.isAuthenticated || !state.token) {
-      router.replace("/admin/login");
-      return;
-    }
+        // Only verify the session when not already initialized.
+        if (!currentState.isInitialized) {
+          await initializeAuth();
+        }
 
-    if (state.user?.role !== "OPERATIONS") {
-      router.replace(
-        state.user?.role === "SUPER_ADMIN"
-          ? "/admin/super-admin/dashboard"
-          : "/admin/login"
-      );
-      return;
-    }
+        if (!active) return;
 
-    setChecking(false);
+        const state = useAuthStore.getState();
+
+        if (!state.isAuthenticated || !state.user) {
+          router.replace("/admin/login");
+          return;
+        }
+
+        if (state.user.role !== "OPERATIONS") {
+          if (state.user.role === "SUPER_ADMIN") {
+            router.replace("/admin/super-admin/dashboard");
+          } else {
+            router.replace("/admin/login");
+          }
+          return;
+        }
+
+        setChecking(false);
+      } catch (error) {
+        console.error("Operations auth check failed:", error);
+
+        if (active) {
+          router.replace("/admin/login");
+        }
+      }
+    };
+
+    void checkAuthentication();
+
+    return () => {
+      active = false;
+    };
   }, [initializeAuth, router]);
 
   useEffect(() => {
@@ -63,17 +95,14 @@ export default function RoleLayout({
 
     setLoggingOut(true);
 
-    try {
-      await logout();
-    } catch {
-      setLoggingOut(false);
-    }
+    await logout();
   };
 
   if (checking || user?.role !== "OPERATIONS") {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#F7F8FA]">
         <span className="h-8 w-8 animate-spin rounded-full border-2 border-[#8A6A32] border-t-transparent" />
+
         <p className="text-sm font-medium text-gray-500">
           Checking access...
         </p>
@@ -151,6 +180,7 @@ export default function RoleLayout({
           {loggingOut && (
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
           )}
+
           {loggingOut ? "Signing out..." : "Logout"}
         </button>
       </div>
@@ -159,7 +189,6 @@ export default function RoleLayout({
 
   return (
     <div className="min-h-screen bg-[#F7F8FA]">
-      {/* Mobile Overlay */}
       {sidebarOpen && (
         <button
           aria-label="Close sidebar"
@@ -168,12 +197,10 @@ export default function RoleLayout({
         />
       )}
 
-      {/* Desktop Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-[260px] flex-col bg-[#172B35] text-white lg:flex">
         <SidebarContent />
       </aside>
 
-      {/* Mobile Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col bg-[#172B35] text-white transition-transform duration-300 lg:hidden ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
@@ -181,9 +208,7 @@ export default function RoleLayout({
         <SidebarContent />
       </aside>
 
-      {/* Main Content */}
       <div className="min-h-screen lg:pl-[260px]">
-        {/* Mobile Header */}
         <div className="flex items-center gap-3 border-b border-gray-200 bg-white px-4 lg:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
@@ -198,7 +223,6 @@ export default function RoleLayout({
           </span>
         </div>
 
-        {/* Desktop Header */}
         <div className="hidden lg:block">
           <AdminHeader
             title={pageTitle}
@@ -206,7 +230,6 @@ export default function RoleLayout({
           />
         </div>
 
-        {/* Page Content */}
         <main className="p-4 sm:p-6 lg:p-8">
           <div className="mx-auto w-full max-w-[1600px]">
             {children}
