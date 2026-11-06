@@ -15,6 +15,8 @@ import {
     MessageCircle,
     ShieldCheck,
     Target,
+    Check,
+    Sparkles,
 } from "lucide-react";
 
 import "lenis/dist/lenis.css";
@@ -111,6 +113,52 @@ const ownerBenefits = [
 ];
 
 /* =========================================================
+   PACKAGES
+========================================================= */
+
+const packages = [
+    {
+        number: "01",
+        name: "Basic",
+        description:
+            "A simple starting point for property owners looking to establish their property's online presence.",
+        features: [
+            "Essential property presentation",
+            "Digital property listing",
+            "Campaign coordination",
+            "Owner communication",
+        ],
+        featured: false,
+    },
+    {
+        number: "02",
+        name: "Premium",
+        description:
+            "A more comprehensive promotional approach for owners looking to give their property greater visibility.",
+        features: [
+            "Enhanced property presentation",
+            "Focused digital promotion",
+            "Campaign coordination",
+            "Enquiry follow-up support",
+        ],
+        featured: true,
+    },
+    {
+        number: "03",
+        name: "Diamond",
+        description:
+            "A more extensive marketing approach for owners seeking a tailored promotional experience.",
+        features: [
+            "Premium property presentation",
+            "Expanded promotional approach",
+            "Dedicated campaign coordination",
+            "Enquiry communication support",
+        ],
+        featured: false,
+    },
+];
+
+/* =========================================================
    REUSABLE COMPONENTS
 ========================================================= */
 
@@ -133,7 +181,7 @@ function PrimaryButton({
     return (
         <Link
             href={href}
-            className="group inline-flex min-h-[54px] items-center justify-center gap-3 rounded-md bg-[#167D78] px-7 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#11645F]"
+            className="group inline-flex min-h-[54px] items-center justify-center gap-3 rounded-full bg-[#167D78] px-7 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#0D2027]"
         >
             {children}
 
@@ -199,10 +247,9 @@ export default function Home() {
             if (reduceMotion) return;
 
             // Hero animation
-            gsap
-                .timeline({
-                    defaults: { ease: "power3.out" },
-                })
+            gsap.timeline({
+                defaults: { ease: "power3.out" },
+            })
                 .from(".hero-kicker", {
                     y: 18,
                     opacity: 0,
@@ -402,8 +449,8 @@ export default function Home() {
             style={{ fontFamily: "var(--font-jakarta), sans-serif" }}
         >
             {/* =====================================================
-          01 — HERO SECTION
-      ===================================================== */}
+                01 — HERO SECTION
+            ===================================================== */}
 
             <section className="hero-section relative flex min-h-[720px] items-center justify-center overflow-hidden bg-[#0D2027] px-5 py-28 text-center sm:min-h-[780px] lg:min-h-[850px]">
                 <div className="absolute inset-0">
@@ -426,8 +473,8 @@ export default function Home() {
                 </div>
 
                 <div className="relative z-10 mx-auto w-full max-w-[1100px] py-16">
-                    <div className="hero-kicker mx-auto inline-flex items-center gap-3 border border-white/25 bg-white/10 px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md sm:text-xs">
-                        <span className="h-2 w-2 bg-[#5BC1B5]" />
+                    <div className="hero-kicker mx-auto inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md sm:text-xs">
+                        <span className="h-2 w-2 rounded-full bg-[#83D4CA]" />
                         Property marketing across Kerala
                     </div>
 
@@ -451,7 +498,7 @@ export default function Home() {
 
                         <Link
                             href="/contact"
-                            className="inline-flex min-h-[54px] items-center justify-center gap-3 border border-white/50 bg-white/10 px-7 text-sm font-semibold text-white backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-white/20"
+                            className="inline-flex min-h-[54px] items-center justify-center gap-3 rounded-full border border-white/50 bg-white/10 px-7 text-sm font-semibold text-white backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-white/20"
                         >
                             Talk to our team
                             <ArrowRight className="h-4 w-4" />
@@ -485,8 +532,8 @@ export default function Home() {
             </section>
 
             {/* =====================================================
-          02 — PROPERTY SHOWCASE
-      ===================================================== */}
+                02 — PROPERTY SHOWCASE
+            ===================================================== */}
 
             <section
                 ref={categorySectionRef}
@@ -515,7 +562,7 @@ export default function Home() {
                         {categories.map((category, index) => (
                             <article
                                 key={category.number}
-                                className="category-card relative grid min-h-[540px] overflow-hidden border border-[#DFE7E7] bg-white shadow-[0_16px_50px_rgba(20,45,53,0.08)] md:min-h-0 md:h-full md:grid-cols-2"
+                                className="category-card relative grid min-h-[540px] overflow-hidden rounded-[28px] border border-[#DFE7E7] bg-white shadow-[0_16px_50px_rgba(20,45,53,0.08)] md:min-h-0 md:h-full md:grid-cols-2"
                                 style={{ zIndex: index + 1 }}
                             >
                                 <div className="category-image-wrap relative min-h-[280px] overflow-hidden bg-[#DFE7E7] md:order-2 md:min-h-full">
@@ -530,7 +577,7 @@ export default function Home() {
 
                                     <div className="absolute inset-0 bg-gradient-to-t from-[#0D2027]/55 via-transparent to-transparent" />
 
-                                    <span className="absolute bottom-6 left-6 border border-white/40 bg-[#0D2027]/70 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-white backdrop-blur-md">
+                                    <span className="absolute bottom-6 left-6 rounded-full border border-white/40 bg-[#0D2027]/70 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-white backdrop-blur-md">
                                         {category.label}
                                     </span>
                                 </div>
@@ -558,7 +605,7 @@ export default function Home() {
 
                                     <Link
                                         href="/promote-property"
-                                        className="group mt-9 inline-flex min-h-[50px] w-fit items-center gap-3 bg-[#142D35] px-6 text-xs font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#167D78]"
+                                        className="group mt-9 inline-flex min-h-[50px] w-fit items-center gap-3 rounded-full bg-[#142D35] px-6 text-xs font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#167D78]"
                                     >
                                         Promote this property
                                         <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -575,8 +622,8 @@ export default function Home() {
             </section>
 
             {/* =====================================================
-          03 — CUSTOMER EXPERIENCE
-      ===================================================== */}
+                03 — CUSTOMER EXPERIENCE
+            ===================================================== */}
 
             <section className="border-y border-[#DFE7E7] bg-white px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
                 <div className="mx-auto grid max-w-[1240px] gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20">
@@ -602,7 +649,7 @@ export default function Home() {
                         >
                             Understand how it works
 
-                            <span className="flex h-10 w-10 items-center justify-center border border-[#DFE7E7] transition duration-300 group-hover:border-[#167D78] group-hover:bg-[#167D78] group-hover:text-white">
+                            <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#DFE7E7] transition duration-300 group-hover:border-[#167D78] group-hover:bg-[#167D78] group-hover:text-white">
                                 <ArrowUpRight className="h-4 w-4" />
                             </span>
                         </Link>
@@ -615,10 +662,10 @@ export default function Home() {
                             return (
                                 <article
                                     key={benefit.number}
-                                    className="reveal-item border border-[#DFE7E7] bg-[#F8FAFA] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#167D78]/50 hover:bg-white hover:shadow-[0_14px_40px_rgba(20,45,53,0.07)] sm:p-8"
+                                    className="reveal-item rounded-2xl border border-[#DFE7E7] bg-[#F8FAFA] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#167D78]/50 hover:bg-white hover:shadow-[0_14px_40px_rgba(20,45,53,0.07)] sm:p-8"
                                 >
                                     <div className="flex items-start gap-5">
-                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-[#E8F4F2] text-[#167D78]">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#E8F4F2] text-[#167D78]">
                                             <Icon className="h-5 w-5" />
                                         </div>
 
@@ -644,10 +691,163 @@ export default function Home() {
             </section>
 
             {/* =====================================================
-          04 — CONTACT CTA
-      ===================================================== */}
+                04 — PACKAGES SECTION
+            ===================================================== */}
 
-            <section className="relative overflow-hidden bg-[#142D35] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
+            <section className="relative overflow-hidden bg-[#F5F7F7] px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
+                {/* Decorative background shapes */}
+                <div className="pointer-events-none absolute -right-32 top-20 h-80 w-80 rounded-full bg-[#E8F4F2]/70 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-20 -left-32 h-80 w-80 rounded-full bg-[#83D4CA]/10 blur-3xl" />
+
+                <div className="relative mx-auto max-w-[1240px]">
+
+                    {/* SECTION HEADING */}
+                    <div className="reveal-item mx-auto mb-16 max-w-[760px] text-center">
+                        <Eyebrow>Our packages</Eyebrow>
+
+                        <h2 className="mt-6 text-4xl font-bold leading-[1.1] tracking-[-0.05em] text-[#142D35] sm:text-5xl lg:text-[60px]">
+                            The right approach
+                            <span className="block text-[#167D78]">
+                                for your property.
+                            </span>
+                        </h2>
+
+                        <p className="mx-auto mt-6 max-w-[620px] text-sm leading-8 text-[#52666B] sm:text-base">
+                            Every property has different marketing needs. Explore our
+                            packages to find an approach that matches your property's
+                            requirements and promotional goals.
+                        </p>
+                    </div>
+
+                    {/* PACKAGE CARDS */}
+                    <div className="grid items-stretch gap-7 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                        {packages.map((pkg) => (
+                            <article
+                                key={pkg.number}
+                                className={`reveal-item group relative flex h-full flex-col overflow-hidden rounded-[28px] border p-7 transition-all duration-500 sm:p-8 ${
+                                    pkg.featured
+                                        ? "border-[#167D78]/50 bg-white shadow-[0_24px_65px_rgba(22,125,120,0.14)] lg:-translate-y-3 lg:scale-[1.025] lg:hover:-translate-y-5"
+                                        : "border-[#DFE7E7] bg-white/90 shadow-[0_16px_45px_rgba(20,45,53,0.06)] hover:-translate-y-2 hover:border-[#167D78]/40 hover:shadow-[0_24px_55px_rgba(20,45,53,0.10)]"
+                                }`}
+                            >
+                                {/* Featured top accent */}
+                                <div
+                                    className={`absolute inset-x-0 top-0 h-1.5 ${
+                                        pkg.featured
+                                            ? "bg-[#167D78]"
+                                            : "bg-[#E8F4F2]"
+                                    }`}
+                                />
+
+                                {pkg.featured && (
+                                    <div className="absolute right-6 top-6 inline-flex items-center gap-1.5 rounded-full bg-[#E8F4F2] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#167D78]">
+                                        <Sparkles className="h-3.5 w-3.5" />
+                                        Popular choice
+                                    </div>
+                                )}
+
+                                {/* CARD HEADER */}
+                                <div className="mt-3 flex items-center justify-between">
+                                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F5F7F7] text-[11px] font-bold tracking-wider text-[#167D78]">
+                                        {pkg.number}
+                                    </span>
+
+                                    <div
+                                        className={`flex h-14 w-14 items-center justify-center rounded-full transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110 ${
+                                            pkg.featured
+                                                ? "bg-[#167D78] text-white shadow-lg shadow-[#167D78]/20"
+                                                : "bg-[#E8F4F2] text-[#167D78]"
+                                        }`}
+                                    >
+                                        {pkg.featured ? (
+                                            <Sparkles className="h-6 w-6" />
+                                        ) : (
+                                            <ShieldCheck className="h-6 w-6" />
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* PACKAGE TITLE */}
+                                <div className="mt-7">
+                                    <h3 className="text-3xl font-bold tracking-[-0.045em] text-[#142D35] sm:text-[34px]">
+                                        {pkg.name}
+                                    </h3>
+
+                                    <p className="mt-3 min-h-[84px] max-w-[340px] text-sm leading-7 text-[#52666B]">
+                                        {pkg.description}
+                                    </p>
+                                </div>
+
+                                {/* DIVIDER */}
+                                <div className="my-7 flex items-center gap-2">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-[#167D78]" />
+                                    <span className="h-px flex-1 bg-[#DFE7E7]" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-[#DFE7E7]" />
+                                </div>
+
+                                {/* FEATURES */}
+                                <div className="flex-1">
+                                    <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.16em] text-[#718084]">
+                                        Package highlights
+                                    </p>
+
+                                    <ul className="space-y-5">
+                                        {pkg.features.map((feature) => (
+                                            <li
+                                                key={feature}
+                                                className="flex items-center gap-3 text-sm leading-6 text-[#34464B]"
+                                            >
+                                                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#E8F4F2] text-[#167D78]">
+                                                    <Check className="h-3.5 w-3.5" />
+                                                </span>
+
+                                                <span>{feature}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                {/* PACKAGE CTA */}
+                                <Link
+                                    href="/packages"
+                                    className={`group/button mt-9 flex min-h-[52px] w-full items-center justify-center gap-3 rounded-full px-5 text-sm font-bold transition-all duration-300 ${
+                                        pkg.featured
+                                            ? "bg-[#167D78] text-white shadow-lg shadow-[#167D78]/15 hover:-translate-y-0.5 hover:bg-[#0D2027]"
+                                            : "border border-[#DFE7E7] bg-[#F8FAFA] text-[#142D35] hover:-translate-y-0.5 hover:border-[#167D78] hover:bg-[#E8F4F2] hover:text-[#167D78]"
+                                    }`}
+                                >
+                                    Explore Package
+
+                                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/button:-translate-y-0.5 group-hover/button:translate-x-0.5" />
+                                </Link>
+                            </article>
+                        ))}
+                    </div>
+
+                    {/* EXPLORE ALL PACKAGES */}
+                    <div className="reveal-item mt-16 flex flex-col items-center justify-center gap-5 text-center">
+                        <p className="max-w-[520px] text-sm leading-7 text-[#718084]">
+                            Want to compare all the package details and find the right
+                            promotional option for your property?
+                        </p>
+
+                        <Link
+                            href="/packages"
+                            className="group inline-flex min-h-[54px] items-center justify-center gap-3 rounded-full bg-[#142D35] px-8 text-sm font-bold text-white shadow-[0_10px_25px_rgba(20,45,53,0.12)] transition duration-300 hover:-translate-y-1 hover:bg-[#167D78]"
+                        >
+                            Explore All Packages
+
+                            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* =====================================================
+                05 — CONTACT CTA
+            ===================================================== */}
+
+            <section className="relative overflow-hidden rounded-t-[36px] bg-[#142D35] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
                 <div className="pointer-events-none absolute -right-32 -top-40 h-[480px] w-[480px] rounded-full border border-white/10" />
 
                 <div className="pointer-events-none absolute -bottom-64 -left-24 h-[520px] w-[520px] rounded-full border border-[#83D4CA]/20" />
@@ -675,7 +875,7 @@ export default function Home() {
 
                         <Link
                             href="/contact"
-                            className="inline-flex min-h-[54px] items-center justify-center gap-3 border border-white/35 bg-white/5 px-7 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+                            className="inline-flex min-h-[54px] items-center justify-center gap-3 rounded-full border border-white/35 bg-white/5 px-7 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-white/15"
                         >
                             Contact us
                             <ArrowRight className="h-4 w-4" />

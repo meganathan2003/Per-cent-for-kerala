@@ -145,33 +145,6 @@ export default function Footer() {
                 </div>
             </div>
 
-            {/* CONTACT STRIP */}
-            <div className="border-y border-white/10 bg-[#0D2027]">
-                <div className="mx-auto flex max-w-[1240px] flex-col gap-5 px-5 py-8 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
-
-                    <div>
-                        <h3 className="text-lg font-semibold text-white">
-                            Have a property to promote?
-                        </h3>
-
-                        <p className="mt-1 text-sm text-white/55">
-                            Let's discuss the right marketing approach for your property.
-                        </p>
-                    </div>
-
-                    <Link
-                        href="/promote-property"
-                        className="group inline-flex min-h-[48px] w-fit items-center gap-3 bg-[#167D78] px-6 text-xs font-bold text-white transition duration-300 hover:bg-[#11645F]"
-                    >
-                        Promote your property
-
-                        <ArrowRight
-                            size={15}
-                            className="transition-transform duration-300 group-hover:translate-x-1"
-                        />
-                    </Link>
-                </div>
-            </div>
 
             {/* BOTTOM BAR */}
             <div className="bg-[#0D2027]">

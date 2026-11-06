@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,9 +7,7 @@ import { motion } from "framer-motion";
 import {
     ArrowUpRight,
     Menu,
-    X,
     ShieldCheck,
-    ChevronDown,
 } from "lucide-react";
 
 import {
@@ -56,25 +53,31 @@ export default function Navbar() {
                 duration: 0.45,
                 ease: [0.22, 1, 0.36, 1],
             }}
-            className={`fixed inset-x-0 top-0 z-50 bg-white transition-all duration-300 ${scrolled
-                    ? "shadow-[0_4px_20px_rgba(21,50,75,0.09)]"
-                    : "shadow-sm"
+            className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${scrolled
+                ? "border-[#DFE7E7]/60 bg-white/50 shadow-[0_8px_30px_rgba(20,45,53,0.06)] backdrop-blur-2xl"
+                : "border-white/10 bg-white/40 shadow-[0_2px_15px_rgba(20,45,53,0.03)] backdrop-blur-2xl"
                 }`}
         >
             {/* TOP TRUST BAR */}
-            <div className="hidden border-b border-gray-100 bg-[#F4F7FA] sm:block">
+            <div
+                className={`hidden border-b transition-colors duration-300 sm:block ${scrolled
+                    ? "border-[#DFE7E7]/70 bg-[#F5F7F7]/55"
+                    : "border-white/20 bg-white/25"
+                    }`}
+            >
                 <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-5 text-[11px] sm:px-8 lg:px-10">
-                    <div className="flex items-center gap-2 text-[#526579]">
+                    <div className="flex items-center gap-2 text-[#52666B]">
                         <ShieldCheck
                             size={14}
-                            className="text-[#12A89D]"
+                            className="text-[#167D78]"
                         />
+
                         <span>
                             Property marketing made simpler across Kerala
                         </span>
                     </div>
 
-                    <span className="font-medium text-[#526579]">
+                    <span className="font-medium text-[#52666B]">
                         Your Property. More Visibility. Better Reach.
                     </span>
                 </div>
@@ -105,11 +108,11 @@ export default function Navbar() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className="group relative flex h-[78px] items-center whitespace-nowrap text-[13px] font-semibold text-[#35495D] transition-colors duration-200 hover:text-[#12A89D]"
+                            className="group relative flex h-[78px] items-center whitespace-nowrap text-[13px] font-semibold text-[#34464B] transition-colors duration-200 hover:text-[#167D78]"
                         >
                             {link.label}
 
-                            <span className="absolute bottom-0 left-0 h-[3px] w-full origin-left scale-x-0 rounded-t-full bg-[#12A89D] transition-transform duration-200 group-hover:scale-x-100" />
+                            <span className="absolute bottom-0 left-0 h-[3px] w-full origin-left scale-x-0 rounded-t-full bg-[#167D78] transition-transform duration-200 group-hover:scale-x-100" />
                         </Link>
                     ))}
                 </div>
@@ -118,7 +121,7 @@ export default function Navbar() {
                 <div className="hidden items-center lg:flex">
                     <Link
                         href="/promote-property"
-                        className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[#12A89D] px-5 text-[13px] font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0D938A] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#12A89D] focus-visible:ring-offset-2"
+                        className="group inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[#167D78] px-5 text-[13px] font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0D2027] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                     >
                         Post Property
 
@@ -137,17 +140,17 @@ export default function Navbar() {
                     >
                         <SheetTrigger
                             aria-label="Open navigation menu"
-                            className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 bg-white text-[#15324B] transition-colors hover:bg-[#F4F7FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#12A89D]"
+                            className="flex h-10 w-10 items-center justify-center rounded-md border border-[#DFE7E7] bg-white/70 text-[#142D35] backdrop-blur-md transition-colors hover:bg-[#E8F4F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78]"
                         >
                             <Menu size={21} />
                         </SheetTrigger>
 
                         <SheetContent
                             side="right"
-                            className="flex w-[85%] flex-col border-l border-gray-100 bg-white p-0 sm:max-w-sm"
+                            className="flex w-[85%] flex-col border-l border-[#DFE7E7] bg-white p-0 sm:max-w-sm"
                         >
                             {/* MOBILE HEADER */}
-                            <div className="flex h-[76px] items-center justify-between border-b border-gray-100 px-6">
+                            <div className="flex h-[76px] items-center justify-between border-b border-[#DFE7E7] px-6">
                                 <Link
                                     href="/"
                                     onClick={() => setMenuOpen(false)}
@@ -167,20 +170,20 @@ export default function Navbar() {
                             </div>
 
                             {/* MOBILE TRUST INFO */}
-                            <div className="mx-5 mt-6 flex items-center gap-2 rounded-lg bg-[#EAF7F5] p-3">
+                            <div className="mx-5 mt-6 flex items-center gap-2 rounded-lg bg-[#E8F4F2] p-3">
                                 <ShieldCheck
                                     size={19}
-                                    className="shrink-0 text-[#12A89D]"
+                                    className="shrink-0 text-[#167D78]"
                                 />
 
-                                <p className="text-xs font-medium leading-5 text-[#34576A]">
+                                <p className="text-xs font-medium leading-5 text-[#34464B]">
                                     Discover better ways to promote your property.
                                 </p>
                             </div>
 
                             {/* MOBILE LINKS */}
                             <div className="mt-5 flex flex-col px-5">
-                                <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400">
+                                <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#718084]">
                                     Explore Per-Cent
                                 </p>
 
@@ -203,13 +206,13 @@ export default function Navbar() {
                                         <Link
                                             href={link.href}
                                             onClick={() => setMenuOpen(false)}
-                                            className="group flex min-h-[54px] items-center justify-between border-b border-gray-100 px-2 text-[14px] font-semibold text-[#35495D] transition-colors hover:text-[#12A89D]"
+                                            className="group flex min-h-[54px] items-center justify-between border-b border-[#DFE7E7] px-2 text-[14px] font-semibold text-[#34464B] transition-colors hover:text-[#167D78]"
                                         >
                                             {link.label}
 
                                             <ArrowUpRight
                                                 size={17}
-                                                className="text-gray-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#12A89D]"
+                                                className="text-[#718084] transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#167D78]"
                                             />
                                         </Link>
                                     </motion.div>
@@ -221,14 +224,14 @@ export default function Navbar() {
                                 <Link
                                     href="/promote-property"
                                     onClick={() => setMenuOpen(false)}
-                                    className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#12A89D] text-sm font-bold text-white transition-colors hover:bg-[#0D938A]"
+                                    className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#167D78] text-sm font-bold text-white transition-colors hover:bg-[#0D2027]"
                                 >
                                     Post Your Property
 
                                     <ArrowUpRight size={17} />
                                 </Link>
 
-                                <p className="mt-4 text-center text-[11px] leading-5 text-gray-400">
+                                <p className="mt-4 text-center text-[11px] leading-5 text-[#718084]">
                                     Helping property owners reach more people across Kerala.
                                 </p>
                             </div>

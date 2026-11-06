@@ -10,7 +10,6 @@ import {
     ChevronDown,
     FileCheck,
     Megaphone,
-    Minus,
     ShieldCheck,
     Target,
     Users,
@@ -122,49 +121,55 @@ const packages = [
 ];
 
 const comparison = [
+    { feature: "Property campaign planning", values: ["Included", "Dedicated strategy", "Dedicated campaign"] },
+    { feature: "Audience targeting", values: ["Local audience targeting", "Not listed", "Targeted digital advertising"] },
+    { feature: "Ad set structure", values: ["Shared where suitable", "Dedicated plan", "Dedicated plan"] },
+    { feature: "Facebook & Instagram advertising", values: ["Not listed", "Included", "Not listed"] },
+    { feature: "Creative presentation", values: ["Not listed", "Creative assets as agreed", "Premium presentation"] },
+    { feature: "Advertising budget planning", values: ["Not listed", "Planned with you", "Not listed"] },
+    { feature: "Performance updates", values: ["Not listed", "As agreed", "Not listed"] },
+    { feature: "Buyer enquiry coordination", values: ["Not listed", "Not listed", "Included"] },
+    { feature: "Sales assistance", values: ["Not listed", "Not listed", "Discussed during consultation"] },
+];
+
+const packageShowcases = [
     {
-        feature: "Photo assets",
-        values: ["To be confirmed", "To be confirmed", "To be confirmed"],
-    },
-    {
-        feature: "Video",
-        values: ["To be confirmed", "To be confirmed", "To be confirmed"],
-    },
-    {
-        feature: "Ad platforms",
-        values: [
-            "To be confirmed",
-            "Facebook & Instagram",
-            "To be confirmed",
+        name: "Basic",
+        eyebrow: "LOCAL PROPERTY VISIBILITY",
+        title: "A clear introduction to your property.",
+        description: "For a Basic campaign, we focus on presenting the property to a relevant local audience. Properties in the same area may share ad sets, with local audience targeting and property campaign planning.",
+        points: ["Local audience targeting", "Property campaign planning", "Shared ad sets where suitable"],
+        images: [
+            { src: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1100&auto=format&fit=crop", alt: "Open green land for a property listing", shape: "large" },
+            { src: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&auto=format&fit=crop", alt: "Residential home surrounded by greenery", shape: "small" },
         ],
+        note: "Illustrative property visuals — the actual campaign creative is planned around your property.",
     },
     {
-        feature: "Ad set structure",
-        values: ["Shared where suitable", "Dedicated plan", "Dedicated plan"],
-    },
-    {
-        feature: "Lead reporting",
-        values: [
-            "To be confirmed",
-            "To be confirmed",
-            "To be confirmed",
+        name: "Premium",
+        eyebrow: "CREATIVE-LED DIGITAL PROMOTION",
+        title: "Give the property a stronger presentation.",
+        description: "Premium adds a dedicated campaign strategy with Facebook and Instagram advertising. Creative assets, advertising budget and performance updates are agreed with you as part of the campaign plan.",
+        points: ["Dedicated campaign strategy", "Facebook and Instagram advertising", "Creative assets and updates as agreed"],
+        images: [
+            { src: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1100&auto=format&fit=crop", alt: "Contemporary villa exterior", shape: "large" },
+            { src: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800&auto=format&fit=crop", alt: "Bright modern property interior", shape: "small" },
+            { src: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&auto=format&fit=crop", alt: "Modern living space with natural light", shape: "small" },
         ],
+        note: "Creative examples are illustrative. Final assets and advertising scope are agreed before launch.",
     },
     {
-        feature: "Campaign summary",
-        values: [
-            "To be confirmed",
-            "To be confirmed",
-            "To be confirmed",
+        name: "Diamond",
+        eyebrow: "PREMIUM PROPERTY CAMPAIGN",
+        title: "Present the property with a more complete campaign.",
+        description: "Diamond is designed for owners looking for a dedicated marketing campaign, premium creative presentation and targeted digital advertising, with buyer enquiry coordination and sales assistance details discussed during consultation.",
+        points: ["Dedicated marketing campaign", "Premium creative presentation", "Targeted digital advertising", "Buyer enquiry coordination"],
+        images: [
+            { src: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1100&auto=format&fit=crop", alt: "Premium residential property exterior", shape: "large" },
+            { src: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&auto=format&fit=crop", alt: "Premium home living room", shape: "small" },
+            { src: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&auto=format&fit=crop", alt: "Elegant property interior", shape: "small" },
         ],
-    },
-    {
-        feature: "Buyer enquiry coordination",
-        values: [
-            "To be discussed",
-            "To be discussed",
-            "To be discussed",
-        ],
+        note: "Buyer enquiry coordination is included in the package outline. Sales assistance details are discussed during consultation.",
     },
 ];
 
@@ -327,8 +332,9 @@ function SectionHeading({
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.25, ease: EASE }}
-                className={`mt-4 block h-1 w-16 rounded-full bg-[#167D78] ${center ? "mx-auto origin-center" : "origin-left"
-                    }`}
+                className={`mt-4 block h-1 w-16 rounded-full bg-[#167D78] ${
+                    center ? "mx-auto origin-center" : "origin-left"
+                }`}
             />
 
             {text && (
@@ -341,41 +347,18 @@ function SectionHeading({
 }
 
 function CellValue({ value }: { value: string }) {
-    if (value === "yes") {
-        return (
-            <motion.span
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{
-                    type: "spring",
-                    stiffness: 380,
-                    damping: 18,
-                }}
-                className="mx-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#167D78]"
-            >
-                <Check className="h-4 w-4 text-white" aria-label="Included" />
-            </motion.span>
-        );
-    }
+    const included = value === "Included";
+    const notListed = value === "Not listed";
+    const consultation = value.toLowerCase().includes("discussed") || value.toLowerCase().includes("as agreed");
 
-    if (value === "no") {
-        return (
-            <Minus
-                className="mx-auto h-5 w-5 text-[#718084]"
-                aria-label="Not included"
-            />
-        );
-    }
-
-    if (
-        value.toLowerCase().includes("to be confirmed") ||
-        value.toLowerCase().includes("to be discussed")
-    ) {
-        return <span className="text-[#718084]">{value}</span>;
-    }
-
-    return <span className="text-[#142D35]">{value}</span>;
+    return (
+        <span className={`inline-flex max-w-full items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ${
+            included ? "bg-[#E8F4F2] text-[#167D78]" : notListed ? "bg-[#F5F7F7] text-[#718084]" : consultation ? "bg-[#E8F4F2] text-[#34464B]" : "bg-[#F5F7F7] text-[#34464B]"
+        }`}>
+            {included && <Check className="h-3.5 w-3.5 shrink-0" />}
+            {value}
+        </span>
+    );
 }
 
 function FloatChip({
@@ -465,25 +448,6 @@ export default function PackagesPage() {
                     scrollTrigger: {
                         trigger: ".packages-gsap-heading",
                         start: "top 90%",
-                        once: true,
-                    },
-                }
-            );
-
-            /* Package cards entrance */
-            gsap.fromTo(
-                ".gsap-package-card",
-                { opacity: 0, y: 75, rotateX: 8 },
-                {
-                    opacity: 1,
-                    y: 0,
-                    rotateX: 0,
-                    duration: 0.9,
-                    stagger: 0.18,
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: ".gsap-package-grid",
-                        start: "top 85%",
                         once: true,
                     },
                 }
@@ -925,11 +889,13 @@ export default function PackagesPage() {
                             const featured = plan.popular;
 
                             return (
-                                <Reveal
+                                <motion.div
                                     key={plan.name}
-                                    delay={index * 0.1}
-                                    className={`gsap-package-card h-full ${featured ? "" : "lg:mt-8"
-                                        }`}
+                                    initial={reduceMotion ? false : { opacity: 0, x: index === 0 ? -75 : index === 2 ? 75 : 0, y: index === 1 ? 55 : 24 }}
+                                    whileInView={{ opacity: 1, x: 0, y: 0 }}
+                                    viewport={{ once: true, amount: 0.18 }}
+                                    transition={{ duration: 0.8, delay: reduceMotion ? 0 : index * 0.16, ease: EASE }}
+                                    className={`gsap-package-card h-full ${featured ? "" : "lg:mt-8"}`}
                                 >
                                     <motion.article
                                         whileHover={
@@ -942,10 +908,11 @@ export default function PackagesPage() {
                                             stiffness: 260,
                                             damping: 20,
                                         }}
-                                        className={`group relative flex h-full flex-col overflow-hidden rounded-3xl text-[#142D35] ${featured
+                                        className={`group relative flex h-full flex-col overflow-hidden rounded-3xl text-[#142D35] ${
+                                            featured
                                                 ? "border-2 border-[#167D78]/60 bg-gradient-to-b from-[#E8F4F2] to-[#E8F4F2] shadow-[0_18px_40px_rgba(184,146,74,0.16)]"
                                                 : "border border-[#142D35]/10 bg-white shadow-sm"
-                                            }`}
+                                        }`}
                                     >
                                         {featured && (
                                             <motion.span
@@ -953,12 +920,12 @@ export default function PackagesPage() {
                                                     reduceMotion
                                                         ? undefined
                                                         : {
-                                                            scale: [
-                                                                1,
-                                                                1.06,
-                                                                1,
-                                                            ],
-                                                        }
+                                                              scale: [
+                                                                  1,
+                                                                  1.06,
+                                                                  1,
+                                                              ],
+                                                          }
                                                 }
                                                 transition={{
                                                     duration: 2.4,
@@ -1017,10 +984,11 @@ export default function PackagesPage() {
                                             </ul>
 
                                             <div
-                                                className={`mt-7 rounded-2xl p-4 ${featured
+                                                className={`mt-7 rounded-2xl p-4 ${
+                                                    featured
                                                         ? "bg-white/80"
                                                         : "bg-[#F5F7F7]"
-                                                    }`}
+                                                }`}
                                             >
                                                 <p className="text-xs font-semibold text-[#718084]">
                                                     Best suited for
@@ -1034,17 +1002,18 @@ export default function PackagesPage() {
                                             <Link
                                                 href={`/promote-property?package=${plan.name.toLowerCase()}`}
                                                 data-anime-button
-                                                className={`group/btn mt-6 flex h-12 items-center justify-center rounded-full px-5 text-sm font-bold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 ${featured
+                                                className={`group/btn mt-6 flex h-12 items-center justify-center rounded-full px-5 text-sm font-bold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 ${
+                                                    featured
                                                         ? "bg-[#167D78] text-white hover:bg-[#0D2027]"
                                                         : "border border-[#167D78]/60 bg-white text-[#142D35] hover:border-[#167D78] hover:bg-[#E8F4F2]"
-                                                    }`}
+                                                }`}
                                             >
                                                 Enquire about {plan.name}
                                                 <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5" />
                                             </Link>
                                         </div>
                                     </motion.article>
-                                </Reveal>
+                                </motion.div>
                             );
                         })}
                     </div>
@@ -1055,6 +1024,66 @@ export default function PackagesPage() {
                         payment. Enquiry outcomes depend on campaign
                         conditions.
                     </p>
+                </div>
+            </section>
+
+            {/* PACKAGE VISUAL BREAKDOWN */}
+
+            <section id="package-examples" className="overflow-hidden bg-white py-20 sm:py-28">
+                <div className={container}>
+                    <Reveal>
+                        <SectionHeading
+                            label="SEE THE CAMPAIGN DIRECTION"
+                            title="How we approach each package."
+                            text="Here are illustrative property visuals and the type of campaign approach behind each plan. The actual creative is tailored to your property and agreed campaign scope."
+                        />
+                    </Reveal>
+
+                    <div className="mt-14 space-y-20 sm:space-y-28">
+                        {packageShowcases.map((item, index) => (
+                            <motion.article
+                                key={item.name}
+                                initial={reduceMotion ? false : { opacity: 0, x: index % 2 === 0 ? -85 : 85, y: 18 }}
+                                whileInView={{ opacity: 1, x: 0, y: 0 }}
+                                viewport={{ once: true, amount: 0.18 }}
+                                transition={{ duration: 0.85, ease: EASE }}
+                                className={`grid items-center gap-8 lg:grid-cols-2 lg:gap-14 ${index % 2 === 1 ? "lg:[&>div:first-child]:order-2" : ""}`}
+                            >
+                                <div className="relative">
+                                    <div className="grid grid-cols-[1.25fr_0.75fr] gap-3 sm:gap-4">
+                                        <motion.div whileHover={reduceMotion ? undefined : { y: -5 }} className="relative row-span-2 min-h-[270px] overflow-hidden rounded-[28px] bg-[#E8F4F2] shadow-[0_16px_40px_rgba(20,45,53,0.10)] sm:min-h-[390px]">
+                                            <img src={item.images[0].src} alt={item.images[0].alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+                                        </motion.div>
+                                        {item.images.slice(1).map((image) => (
+                                            <motion.div key={image.src} whileHover={reduceMotion ? undefined : { y: -5 }} className="relative min-h-[130px] overflow-hidden rounded-[24px] bg-[#E8F4F2] shadow-[0_12px_30px_rgba(20,45,53,0.08)] sm:min-h-[185px]">
+                                                <img src={image.src} alt={image.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105" />
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                    <span className="absolute -bottom-4 left-5 rounded-full border border-[#167D78]/15 bg-white px-4 py-2 text-xs font-semibold text-[#167D78] shadow-md sm:left-8">{item.name} campaign example</span>
+                                </div>
+
+                                <div className="pt-3 lg:pt-0">
+                                    <p className="text-xs font-bold tracking-[0.18em] text-[#167D78]">{item.eyebrow}</p>
+                                    <h3 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#142D35] sm:text-4xl">{item.title}</h3>
+                                    <p className="mt-5 text-sm leading-7 text-[#52666B] sm:text-base">{item.description}</p>
+                                    <ul className="mt-6 space-y-3">
+                                        {item.points.map((point) => (
+                                            <li key={point} className="flex items-start gap-3 text-sm font-medium text-[#34464B]">
+                                                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#E8F4F2] text-[#167D78]"><Check size={14} /></span>
+                                                {point}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <p className="mt-6 max-w-lg border-l-2 border-[#83D4CA] pl-4 text-xs leading-6 text-[#718084]">{item.note}</p>
+                                    <Link href={`/promote-property?package=${item.name.toLowerCase()}`} className="group mt-7 inline-flex items-center gap-2 rounded-full bg-[#167D78] px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#0D2027]">
+                                        Explore {item.name}
+                                        <ArrowUpRight size={17} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                                    </Link>
+                                </div>
+                            </motion.article>
+                        ))}
+                    </div>
                 </div>
             </section>
 
@@ -1069,28 +1098,29 @@ export default function PackagesPage() {
                         <SectionHeading
                             label="COMPARE YOUR OPTIONS"
                             title="Understand the differences."
-                            text="Some deliverables depend on your property and agreed campaign scope. We confirm these details before you make a payment."
+                            text="Compare the features listed for each package. Items marked Not listed are not part of the current package outline; any agreed extras will be confirmed before launch."
                         />
                     </Reveal>
 
                     {/* DESKTOP COMPARISON TABLE */}
 
                     <Reveal className="mt-12 hidden md:block">
-                        <div className="gsap-comparison-table overflow-hidden rounded-3xl border border-[#142D35]/10 bg-white shadow-sm">
+                        <div className="gsap-comparison-table overflow-hidden rounded-[28px] border border-[#DFE7E7] bg-white shadow-[0_18px_50px_rgba(20,45,53,0.07)]">
                             <table className="w-full border-collapse text-left">
                                 <thead>
-                                    <tr>
-                                        <th className="w-[32%] px-6 py-5 text-sm font-semibold text-[#52666B] lg:px-8">
+                                    <tr className="bg-[#142D35]">
+                                        <th className="w-[32%] px-6 py-5 text-sm font-bold text-white lg:px-8">
                                             Features
                                         </th>
 
                                         {packages.map((plan) => (
                                             <th
                                                 key={plan.name}
-                                                className={`px-4 py-5 text-center font-display text-xl text-[#142D35] ${plan.popular
-                                                        ? "border-b-4 border-[#167D78] bg-[#E8F4F2]"
-                                                        : ""
-                                                    }`}
+                                                className={`px-4 py-5 text-center font-display text-xl ${
+                                                    plan.popular
+                                                        ? "bg-[#167D78] text-white"
+                                                        : "text-white"
+                                                }`}
                                             >
                                                 {plan.name}
                                             </th>
@@ -1112,10 +1142,11 @@ export default function PackagesPage() {
                                                 (value, valueIndex) => (
                                                     <td
                                                         key={`${row.feature}-${valueIndex}`}
-                                                        className={`px-4 py-4 text-center text-sm ${valueIndex === 1
-                                                                ? "bg-[#F5F7F7]"
-                                                                : ""
-                                                            }`}
+                                                        className={`px-4 py-4 text-center text-sm ${
+                                                            valueIndex === 1
+                                                                ? "bg-[#E8F4F2]/60"
+                                                                : "border-l border-[#DFE7E7]"
+                                                        }`}
                                                     >
                                                         <CellValue value={value} />
                                                     </td>
@@ -1125,6 +1156,10 @@ export default function PackagesPage() {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-[#718084]">
+                            <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#167D78]" /> Included / listed feature</span>
+                            <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#DFE7E7]" /> Not listed in current package outline</span>
                         </div>
                     </Reveal>
 
@@ -1184,10 +1219,11 @@ export default function PackagesPage() {
                                 className="mx-auto mt-5 max-w-md overflow-hidden rounded-2xl border border-[#142D35]/10 bg-white"
                             >
                                 <div
-                                    className={`flex items-center justify-between px-5 py-4 text-[#142D35] ${packages[activePlan].popular
+                                    className={`flex items-center justify-between px-5 py-4 text-[#142D35] ${
+                                        packages[activePlan].popular
                                             ? "bg-[#E8F4F2]"
                                             : "bg-[#F5F7F7]"
-                                        }`}
+                                    }`}
                                 >
                                     <h3 className="font-display text-2xl">
                                         {packages[activePlan].name}
@@ -1311,9 +1347,9 @@ export default function PackagesPage() {
                                             reduceMotion
                                                 ? undefined
                                                 : {
-                                                    scale: 1.12,
-                                                    rotate: -6,
-                                                }
+                                                      scale: 1.12,
+                                                      rotate: -6,
+                                                  }
                                         }
                                         transition={{
                                             type: "spring",
@@ -1379,10 +1415,11 @@ export default function PackagesPage() {
                                 return (
                                     <div
                                         key={faq.question}
-                                        className={`gsap-faq-item overflow-hidden rounded-2xl border bg-white transition-colors duration-300 ${isOpen
+                                        className={`gsap-faq-item overflow-hidden rounded-2xl border bg-white transition-colors duration-300 ${
+                                            isOpen
                                                 ? "border-[#167D78]/50"
                                                 : "border-[#142D35]/10"
-                                            }`}
+                                        }`}
                                     >
                                         <button
                                             type="button"
@@ -1461,9 +1498,9 @@ export default function PackagesPage() {
                                 reduceMotion
                                     ? undefined
                                     : {
-                                        scale: [1, 1.12, 1],
-                                        rotate: [0, 8, 0],
-                                    }
+                                          scale: [1, 1.12, 1],
+                                          rotate: [0, 8, 0],
+                                      }
                             }
                             transition={{
                                 duration: 14,
