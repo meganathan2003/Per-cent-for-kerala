@@ -1,8 +1,13 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+    motion,
+    AnimatePresence,
+    useReducedMotion,
+} from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -21,12 +26,27 @@ gsap.registerPlugin(ScrollTrigger);
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const GOLD = "#B8924A";
-const GOLD_HOVER = "#9F7C3D";
-const CHARCOAL = "#1C1C1C";
-const MUTED = "#625D53";
-const PAGE = "#F8F6F1";
-const WARM = "#F5EFE3";
+/* =========================================================
+   SAME DESIGN SYSTEM AS HOMEPAGE
+========================================================= */
+
+const C = {
+    navy: "#142D35",
+    navyDark: "#0D2027",
+    teal: "#167D78",
+    tealLight: "#83D4CA",
+    tealSoft: "#E8F4F2",
+    background: "#F5F7F7",
+    text: "#34464B",
+    body: "#52666B",
+    muted: "#718084",
+    border: "#DFE7E7",
+    white: "#FFFFFF",
+};
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
 
 const categories = [
     "All",
@@ -35,6 +55,10 @@ const categories = [
     "Land",
     "Commercial",
 ];
+
+/* =========================================================
+   CAMPAIGNS
+========================================================= */
 
 const campaigns = [
     {
@@ -173,6 +197,10 @@ const campaigns = [
 
 type Campaign = (typeof campaigns)[number];
 
+/* =========================================================
+   CAMPAIGNS PAGE
+========================================================= */
+
 export default function CampaignsPage() {
     const [activeCategory, setActiveCategory] = useState("All");
     const [selected, setSelected] = useState<Campaign | null>(null);
@@ -187,7 +215,10 @@ export default function CampaignsPage() {
                 (item) => item.category === activeCategory
             );
 
-    // GSAP scroll animations
+    /* =========================================================
+       GSAP ANIMATIONS
+    ========================================================= */
+
     useEffect(() => {
         if (reduceMotion) return;
 
@@ -206,28 +237,28 @@ export default function CampaignsPage() {
                 }
             );
 
-            gsap.utils.toArray<HTMLElement>(
-                ".campaign-scroll-reveal"
-            ).forEach((element) => {
-                gsap.fromTo(
-                    element,
-                    {
-                        opacity: 0,
-                        y: 24,
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.65,
-                        ease: "power3.out",
-                        scrollTrigger: {
-                            trigger: element,
-                            start: "top 94%",
-                            once: true,
+            gsap.utils
+                .toArray<HTMLElement>(".campaign-scroll-reveal")
+                .forEach((element) => {
+                    gsap.fromTo(
+                        element,
+                        {
+                            opacity: 0,
+                            y: 24,
                         },
-                    }
-                );
-            });
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.65,
+                            ease: "power3.out",
+                            scrollTrigger: {
+                                trigger: element,
+                                start: "top 94%",
+                                once: true,
+                            },
+                        }
+                    );
+                });
 
             gsap.fromTo(
                 ".campaign-cta-decoration",
@@ -251,7 +282,10 @@ export default function CampaignsPage() {
         return () => ctx.revert();
     }, [reduceMotion]);
 
-    // Close modal on Escape and lock background scrolling
+    /* =========================================================
+       MODAL CONTROLS
+    ========================================================= */
+
     useEffect(() => {
         if (!selected) return;
 
@@ -272,16 +306,24 @@ export default function CampaignsPage() {
         };
     }, [selected]);
 
+    /* =========================================================
+       UI
+    ========================================================= */
+
     return (
         <main
             ref={pageRef}
-            className="min-h-screen overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C] antialiased"
+            className="min-h-screen overflow-x-clip bg-[#F5F7F7] text-[#142D35] antialiased"
         >
-            {/* HERO */}
-            <header className="mx-auto max-w-7xl px-5 pb-10 pt-28 sm:px-6 sm:pt-32 lg:px-8 lg:pb-12">
+            {/* =====================================================
+          01 — HERO
+      ===================================================== */}
+
+            <header className="mx-auto max-w-[1240px] px-5 pb-12 pt-28 sm:px-8 sm:pt-32 lg:px-10 lg:pb-16">
+
                 <Link
                     href="/"
-                    className="group inline-flex items-center gap-2 text-sm font-semibold text-[#9F7C3D] transition-colors hover:text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A]"
+                    className="group inline-flex items-center gap-2 text-sm font-semibold text-[#167D78] transition-colors hover:text-[#142D35] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78]"
                 >
                     <ArrowLeft
                         size={16}
@@ -301,79 +343,71 @@ export default function CampaignsPage() {
                         duration: 0.55,
                         ease: EASE,
                     }}
-                    className="mt-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between"
+                    className="mt-9 flex flex-col gap-7 md:flex-row md:items-end md:justify-between"
                 >
-                    <div className="max-w-3xl">
-                        <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-[#B8924A]">
+                    <div className="max-w-[760px]">
+
+                        <p className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-[#167D78]">
                             Property Marketing · Kerala
                         </p>
 
-                        <h1 className="font-display text-3xl leading-[1.12] tracking-tight sm:text-4xl lg:text-5xl">
+                        <h1 className="text-4xl font-bold leading-[1.1] tracking-[-0.05em] text-[#142D35] sm:text-5xl lg:text-[60px]">
                             Campaigns that bring
-                            <span className="block text-[#B8924A]">
+                            <span className="block text-[#167D78]">
                                 properties into focus.
                             </span>
                         </h1>
 
-                        <div className="campaign-hero-line mt-5 h-[2px] w-24 bg-[#B8924A]" />
+                        <div className="campaign-hero-line mt-6 h-[2px] w-24 bg-[#167D78]" />
 
-                        <p className="mt-5 max-w-xl text-sm leading-7 text-[#625D53] sm:text-base">
-                            Explore illustrative campaign concepts showing
-                            how different property types can be marketed
-                            across Kerala.
+                        <p className="mt-6 max-w-[600px] text-sm leading-8 text-[#52666B] sm:text-base">
+                            Explore illustrative campaign concepts showing how
+                            different property types can be marketed across Kerala.
                         </p>
+
                     </div>
 
-                    <motion.div
-                        initial={
-                            reduceMotion
-                                ? false
-                                : { opacity: 0, x: 18 }
-                        }
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{
-                            duration: 0.5,
-                            delay: 0.12,
-                            ease: EASE,
-                        }}
+                    <Link
+                        href="/promote-property"
+                        className="group inline-flex min-h-[52px] items-center justify-center bg-[#167D78] px-7 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#11645F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                     >
-                        <Link
-                            href="/promote-property"
-                            className="group inline-flex h-12 items-center justify-center rounded-full bg-[#B8924A] px-7 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#9F7C3D] hover:shadow-[0_12px_30px_rgba(184,146,74,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
-                        >
-                            Promote Your Property
-                            <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                        </Link>
-                    </motion.div>
+                        Promote Your Property
+
+                        <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </Link>
+
                 </motion.div>
             </header>
 
-            {/* FILTER BAR */}
-            <div className="sticky top-[72px] z-30 border-y border-[#1C1C1C]/10 bg-[#F8F6F1]/95 backdrop-blur-xl sm:top-20">
-                <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 sm:px-6 lg:px-8">
+            {/* =====================================================
+          02 — FILTER BAR
+      ===================================================== */}
+
+            <div className="sticky top-[72px] z-30 border-y border-[#DFE7E7] bg-[#F5F7F7]/95 backdrop-blur-xl sm:top-20">
+                <div className="mx-auto flex max-w-[1240px] items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
+
                     <div className="-mx-5 min-w-0 flex-1 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
                         <div className="flex w-max gap-2">
+
                             {categories.map((category) => {
-                                const isActive =
-                                    activeCategory === category;
+                                const isActive = activeCategory === category;
 
                                 return (
                                     <button
                                         key={category}
                                         type="button"
-                                        onClick={() =>
-                                            setActiveCategory(category)
-                                        }
+                                        onClick={() => setActiveCategory(category)}
                                         aria-pressed={isActive}
-                                        className={`relative shrink-0 overflow-hidden rounded-full px-4 py-2 text-xs font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:text-sm ${isActive
-                                                ? "bg-[#1C1C1C] text-white shadow-md"
-                                                : "bg-white text-[#625D53] ring-1 ring-[#1C1C1C]/10 hover:text-[#9F7C3D] hover:ring-[#B8924A]/60"
+                                        className={`relative shrink-0 border px-5 py-2.5 text-xs font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 sm:text-sm ${isActive
+                                                ? "border-[#142D35] bg-[#142D35] text-white"
+                                                : "border-[#DFE7E7] bg-white text-[#52666B] hover:border-[#167D78] hover:text-[#167D78]"
                                             }`}
                                     >
                                         {category}
                                     </button>
                                 );
                             })}
+
                         </div>
                     </div>
 
@@ -388,21 +422,26 @@ export default function CampaignsPage() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -5 }}
                             transition={{ duration: 0.2 }}
-                            className="hidden shrink-0 text-xs font-medium text-[#625D53] sm:block"
+                            className="hidden shrink-0 text-xs font-medium text-[#718084] sm:block"
                         >
                             {filtered.length}{" "}
-                            {filtered.length === 1
-                                ? "campaign"
-                                : "campaigns"}
+                            {filtered.length === 1 ? "campaign" : "campaigns"}
                         </motion.p>
                     </AnimatePresence>
+
                 </div>
             </div>
 
-            {/* CAMPAIGN GRID */}
-            <section className="mx-auto max-w-7xl px-5 py-12 sm:px-6 sm:py-16 lg:px-8">
+            {/* =====================================================
+          03 — CAMPAIGN GRID
+      ===================================================== */}
+
+            <section className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
+
                 <div className="grid gap-x-7 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+
                     <AnimatePresence mode="popLayout">
+
                         {filtered.map((item, index) => (
                             <motion.article
                                 layout
@@ -428,9 +467,7 @@ export default function CampaignsPage() {
                                 }}
                                 transition={{
                                     duration: 0.42,
-                                    delay: reduceMotion
-                                        ? 0
-                                        : index * 0.055,
+                                    delay: reduceMotion ? 0 : index * 0.055,
                                     ease: EASE,
                                     layout: {
                                         duration: 0.35,
@@ -444,8 +481,11 @@ export default function CampaignsPage() {
                                     aria-label={`View ${item.title} campaign`}
                                     className="group block w-full text-left focus-visible:outline-none"
                                 >
+
                                     {/* IMAGE */}
-                                    <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#EFE5D2] ring-offset-2 transition-shadow duration-500 group-hover:shadow-[0_18px_40px_rgba(28,28,28,0.12)] group-focus-visible:ring-2 group-focus-visible:ring-[#B8924A]">
+
+                                    <div className="relative aspect-[4/3] overflow-hidden border border-[#DFE7E7] bg-[#E8F4F2] ring-offset-2 transition-shadow duration-500 group-hover:shadow-[0_18px_40px_rgba(20,45,53,0.12)] group-focus-visible:ring-2 group-focus-visible:ring-[#167D78]">
+
                                         <motion.img
                                             src={item.image}
                                             alt={item.title}
@@ -463,118 +503,138 @@ export default function CampaignsPage() {
                                             className="h-full w-full object-cover"
                                         />
 
-                                        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1C]/35 via-transparent to-transparent opacity-50 transition-opacity duration-500 group-hover:opacity-80" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#0D2027]/55 via-transparent to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-90" />
 
-                                        <span className="absolute left-3 top-3 rounded-full border border-white/40 bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-[#1C1C1C] shadow-sm">
+                                        <span className="absolute left-4 top-4 border border-white/30 bg-[#142D35]/85 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur-md">
                                             {item.tag}
                                         </span>
 
-                                        <span className="absolute bottom-4 right-4 flex h-10 w-10 translate-y-3 items-center justify-center rounded-full bg-[#B8924A] text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                                        <span className="absolute bottom-4 right-4 flex h-10 w-10 translate-y-3 items-center justify-center bg-[#167D78] text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                                             <ArrowUpRight size={19} />
                                         </span>
+
                                     </div>
 
                                     {/* CONTENT */}
+
                                     <div className="mt-5">
-                                        <p className="flex items-center gap-1.5 text-xs text-[#625D53]">
+
+                                        <p className="flex items-center gap-1.5 text-xs text-[#718084]">
                                             <MapPin
                                                 size={13}
-                                                className="shrink-0 text-[#B8924A]"
+                                                className="shrink-0 text-[#167D78]"
                                             />
+
                                             <span className="truncate">
-                                                {item.location} ·{" "}
-                                                {item.category}
+                                                {item.location} · {item.category}
                                             </span>
                                         </p>
 
-                                        <div className="mt-2 flex items-start justify-between gap-3">
-                                            <h2 className="font-display text-xl leading-snug transition-colors duration-300 group-hover:text-[#9F7C3D]">
+                                        <div className="mt-3 flex items-start justify-between gap-3">
+
+                                            <h2 className="text-xl font-bold leading-snug text-[#142D35] transition-colors duration-300 group-hover:text-[#167D78]">
                                                 {item.title}
                                             </h2>
 
                                             <ArrowUpRight
                                                 size={19}
-                                                className="mt-1 shrink-0 text-[#B8924A] transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
+                                                className="mt-1 shrink-0 text-[#167D78] transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1"
                                             />
+
                                         </div>
 
-                                        <p className="mt-2 text-sm font-semibold text-[#9F7C3D]">
+                                        <p className="mt-3 text-sm font-semibold text-[#167D78]">
                                             {item.price}
-                                            <span className="ml-2 font-normal text-[#625D53]">
+
+                                            <span className="ml-2 font-normal text-[#718084]">
                                                 · {item.size}
                                             </span>
                                         </p>
 
-                                        <motion.div
-                                            initial={false}
-                                            className="mt-4 h-px w-0 bg-[#B8924A] transition-all duration-500 group-hover:w-full"
-                                        />
+                                        <div className="mt-5 h-px w-0 bg-[#167D78] transition-all duration-500 group-hover:w-full" />
+
                                     </div>
+
                                 </button>
                             </motion.article>
                         ))}
+
                     </AnimatePresence>
+
                 </div>
 
                 {/* DISCLAIMER */}
-                <p className="campaign-scroll-reveal mt-14 text-center text-xs leading-6 text-[#625D53]">
-                    These are illustrative campaign concepts only. They
-                    are not active property listings, verified offers
-                    or live advertisements.
+
+                <p className="campaign-scroll-reveal mt-14 text-center text-xs leading-6 text-[#718084]">
+                    These are illustrative campaign concepts only. They are not
+                    active property listings, verified offers or live advertisements.
                 </p>
 
-                {/* CTA */}
-                <div className="campaign-cta-section relative mt-12 overflow-hidden rounded-3xl bg-[#EFE5D2] p-6 sm:p-9 lg:p-10">
-                    <div className="pointer-events-none absolute -right-16 -top-24 h-64 w-64 rounded-full border border-[#B8924A]/20" />
-                    <div className="pointer-events-none absolute -right-5 -top-12 h-44 w-44 rounded-full border border-[#B8924A]/25" />
+                {/* =====================================================
+            04 — CTA
+        ===================================================== */}
 
-                    <div className="campaign-cta-decoration absolute left-0 top-0 h-1 w-full bg-[#B8924A]" />
+                <div className="campaign-cta-section relative mt-14 overflow-hidden border border-[#DFE7E7] bg-[#E8F4F2] p-6 sm:p-9 lg:p-12">
 
-                    <div className="relative flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-                        <div className="max-w-xl">
-                            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#9F7C3D]">
+                    <div className="pointer-events-none absolute -right-16 -top-24 h-64 w-64 rounded-full border border-[#167D78]/15" />
+
+                    <div className="pointer-events-none absolute -right-5 -top-12 h-44 w-44 rounded-full border border-[#167D78]/20" />
+
+                    <div className="campaign-cta-decoration absolute left-0 top-0 h-[3px] w-full bg-[#167D78]" />
+
+                    <div className="relative flex flex-col items-start justify-between gap-7 sm:flex-row sm:items-center">
+
+                        <div className="max-w-[620px]">
+
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#167D78]">
                                 Your property deserves the right audience
                             </p>
 
-                            <h2 className="mt-3 font-display text-2xl leading-tight sm:text-3xl">
+                            <h2 className="mt-4 text-2xl font-bold leading-tight text-[#142D35] sm:text-3xl">
                                 Want a campaign like this for your property?
                             </h2>
 
-                            <p className="mt-3 text-sm leading-6 text-[#625D53]">
-                                Tell us about your property and our team
-                                will plan the right marketing approach.
+                            <p className="mt-3 text-sm leading-7 text-[#52666B]">
+                                Tell us about your property and our team will plan the
+                                right marketing approach.
                             </p>
+
                         </div>
 
                         <Link
                             href="/promote-property"
-                            className="group inline-flex h-12 w-full shrink-0 items-center justify-center rounded-full bg-[#1C1C1C] px-7 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#B8924A] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:w-auto"
+                            className="group inline-flex min-h-[50px] w-full shrink-0 items-center justify-center bg-[#142D35] px-7 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#167D78] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 sm:w-auto"
                         >
                             Start Your Campaign
+
                             <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </Link>
+
                     </div>
                 </div>
+
             </section>
 
-            {/* CAMPAIGN DETAILS MODAL */}
+            {/* =====================================================
+          05 — CAMPAIGN DETAILS MODAL
+      ===================================================== */}
+
             <AnimatePresence>
                 {selected && (
                     <motion.div
-                        className="fixed inset-0 z-[100] flex items-end justify-center bg-[#1C1C1C]/65 p-0 backdrop-blur-md sm:items-center sm:p-6"
+                        className="fixed inset-0 z-[100] flex items-end justify-center bg-[#0D2027]/70 p-0 backdrop-blur-md sm:items-center sm:p-6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.25 }}
                         onMouseDown={(event) => {
-                            if (
-                                event.target === event.currentTarget
-                            ) {
+                            if (event.target === event.currentTarget) {
                                 setSelected(null);
                             }
                         }}
                         role="presentation"
                     >
+
                         <motion.div
                             role="dialog"
                             aria-modal="true"
@@ -602,10 +662,13 @@ export default function CampaignsPage() {
                                 duration: 0.35,
                                 ease: EASE,
                             }}
-                            className="flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-3xl bg-[#F8F6F1] shadow-2xl sm:max-h-[88dvh] sm:rounded-3xl lg:flex-row"
+                            className="flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-hidden border border-[#DFE7E7] bg-[#F5F7F7] shadow-2xl sm:max-h-[88dvh] lg:flex-row"
                         >
+
                             {/* MODAL IMAGE */}
-                            <div className="relative h-48 shrink-0 overflow-hidden bg-[#EFE5D2] sm:h-64 lg:h-auto lg:w-[42%]">
+
+                            <div className="relative h-48 shrink-0 overflow-hidden bg-[#E8F4F2] sm:h-64 lg:h-auto lg:w-[42%]">
+
                                 <motion.img
                                     src={selected.image}
                                     alt={selected.title}
@@ -622,25 +685,29 @@ export default function CampaignsPage() {
                                     className="absolute inset-0 h-full w-full object-cover"
                                 />
 
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1C]/40 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#0D2027]/50 to-transparent" />
 
-                                <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-[#1C1C1C]">
+                                <span className="absolute left-4 top-4 border border-white/30 bg-[#142D35]/85 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-white backdrop-blur-md">
                                     {selected.tag}
                                 </span>
+
                             </div>
 
                             {/* MODAL CONTENT */}
+
                             <div className="relative min-h-0 flex-1 overflow-y-auto">
+
                                 <button
                                     type="button"
                                     onClick={() => setSelected(null)}
                                     aria-label="Close campaign details"
-                                    className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[#1C1C1C]/10 bg-white text-[#1C1C1C] transition-all duration-300 hover:rotate-90 hover:bg-[#EFE5D2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A]"
+                                    className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center border border-[#DFE7E7] bg-white text-[#142D35] transition-all duration-300 hover:rotate-90 hover:bg-[#E8F4F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78]"
                                 >
                                     <X size={18} />
                                 </button>
 
                                 <div className="p-5 pb-8 sm:p-7 lg:p-9">
+
                                     <motion.div
                                         initial={
                                             reduceMotion
@@ -656,23 +723,24 @@ export default function CampaignsPage() {
                                             delay: 0.08,
                                         }}
                                     >
-                                        <p className="pr-12 text-xs font-bold uppercase tracking-[0.16em] text-[#9F7C3D]">
-                                            {selected.category} · Sample
-                                            Campaign
+
+                                        <p className="pr-12 text-xs font-bold uppercase tracking-[0.16em] text-[#167D78]">
+                                            {selected.category} · Sample Campaign
                                         </p>
 
                                         <h2
                                             id="campaign-title"
-                                            className="mt-3 pr-12 font-display text-2xl leading-tight sm:text-3xl"
+                                            className="mt-3 pr-12 text-2xl font-bold leading-tight text-[#142D35] sm:text-3xl"
                                         >
                                             {selected.title}
                                         </h2>
 
-                                        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#625D53]">
+                                        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[#718084]">
+
                                             <span className="flex items-center gap-1.5">
                                                 <MapPin
                                                     size={15}
-                                                    className="text-[#B8924A]"
+                                                    className="text-[#167D78]"
                                                 />
                                                 {selected.location}
                                             </span>
@@ -680,14 +748,16 @@ export default function CampaignsPage() {
                                             <span className="flex items-center gap-1.5">
                                                 <Ruler
                                                     size={15}
-                                                    className="text-[#B8924A]"
+                                                    className="text-[#167D78]"
                                                 />
                                                 {selected.size}
                                             </span>
+
                                         </div>
                                     </motion.div>
 
                                     {/* PROPERTY VALUE */}
+
                                     <motion.div
                                         initial={
                                             reduceMotion
@@ -702,28 +772,33 @@ export default function CampaignsPage() {
                                             duration: 0.35,
                                             delay: 0.14,
                                         }}
-                                        className="mt-6 rounded-2xl border border-[#B8924A]/15 bg-[#EFE5D2] p-4 sm:p-5"
+                                        className="mt-6 border border-[#DFE7E7] bg-[#E8F4F2] p-5"
                                     >
-                                        <p className="text-xs font-semibold text-[#625D53]">
+
+                                        <p className="text-xs font-semibold text-[#718084]">
                                             Illustrative property value
                                         </p>
 
-                                        <p className="mt-1 font-display text-2xl font-semibold text-[#1C1C1C] sm:text-3xl">
+                                        <p className="mt-1 text-2xl font-bold text-[#142D35] sm:text-3xl">
                                             {selected.price}
                                         </p>
+
                                     </motion.div>
 
-                                    <p className="mt-5 text-sm leading-7 text-[#625D53]">
+                                    <p className="mt-5 text-sm leading-7 text-[#52666B]">
                                         {selected.description}
                                     </p>
 
                                     {/* HIGHLIGHTS */}
-                                    <div className="mt-6">
-                                        <h3 className="text-sm font-bold">
+
+                                    <div className="mt-7">
+
+                                        <h3 className="text-sm font-bold text-[#142D35]">
                                             Property highlights
                                         </h3>
 
-                                        <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+                                        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+
                                             {selected.highlights.map(
                                                 (highlight, index) => (
                                                     <motion.li
@@ -742,76 +817,83 @@ export default function CampaignsPage() {
                                                         }}
                                                         transition={{
                                                             duration: 0.3,
-                                                            delay:
-                                                                0.18 +
-                                                                index * 0.045,
+                                                            delay: 0.18 + index * 0.045,
                                                         }}
-                                                        className="flex items-start gap-2.5 text-sm text-[#1C1C1C]"
+                                                        className="flex items-start gap-2.5 text-sm text-[#34464B]"
                                                     >
+
                                                         <CheckCircle2
                                                             size={16}
-                                                            className="mt-0.5 shrink-0 text-[#B8924A]"
+                                                            className="mt-0.5 shrink-0 text-[#167D78]"
                                                         />
-                                                        <span>
-                                                            {highlight}
-                                                        </span>
+
+                                                        <span>{highlight}</span>
+
                                                     </motion.li>
                                                 )
                                             )}
+
                                         </ul>
                                     </div>
 
                                     {/* AUDIENCE AND STRATEGY */}
-                                    <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                                        <div className="rounded-2xl border border-[#B8924A]/15 bg-white p-4">
+
+                                    <div className="mt-7 grid gap-4 sm:grid-cols-2">
+
+                                        <div className="border border-[#DFE7E7] bg-white p-5">
+
                                             <Target
                                                 size={19}
-                                                className="text-[#B8924A]"
+                                                className="text-[#167D78]"
                                             />
 
-                                            <h3 className="mt-3 text-sm font-bold">
+                                            <h3 className="mt-3 text-sm font-bold text-[#142D35]">
                                                 Target audience
                                             </h3>
 
-                                            <p className="mt-2 text-xs leading-6 text-[#625D53]">
+                                            <p className="mt-2 text-xs leading-6 text-[#718084]">
                                                 {selected.audience}
                                             </p>
+
                                         </div>
 
-                                        <div className="rounded-2xl border border-[#B8924A]/15 bg-white p-4">
+                                        <div className="border border-[#DFE7E7] bg-white p-5">
+
                                             <Megaphone
                                                 size={19}
-                                                className="text-[#B8924A]"
+                                                className="text-[#167D78]"
                                             />
 
-                                            <h3 className="mt-3 text-sm font-bold">
+                                            <h3 className="mt-3 text-sm font-bold text-[#142D35]">
                                                 Marketing approach
                                             </h3>
 
-                                            <p className="mt-2 text-xs leading-6 text-[#625D53]">
+                                            <p className="mt-2 text-xs leading-6 text-[#718084]">
                                                 {selected.strategy}
                                             </p>
+
                                         </div>
+
                                     </div>
 
-                                    <p className="mt-5 text-xs leading-5 text-[#625D53]">
-                                        This sample shows how a campaign
-                                        could be presented. It is not an
-                                        active listing and has no live
-                                        contact details.
+                                    <p className="mt-5 text-xs leading-5 text-[#718084]">
+                                        This sample shows how a campaign could be presented.
+                                        It is not an active listing and has no live contact details.
                                     </p>
 
                                     <Link
                                         href={`/promote-property?campaign=${selected.id}`}
-                                        className="group mt-6 flex h-12 w-full items-center justify-center rounded-full bg-[#B8924A] px-6 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
+                                        className="group mt-6 flex min-h-[50px] w-full items-center justify-center bg-[#167D78] px-6 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#11645F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                                     >
                                         Promote a Similar Property
+
                                         <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                                     </Link>
 
-                                    <p className="mt-3 text-center text-[11px] text-[#625D53]">
+                                    <p className="mt-3 text-center text-[11px] text-[#718084]">
                                         No payment required at this stage.
                                     </p>
+
                                 </div>
                             </div>
                         </motion.div>

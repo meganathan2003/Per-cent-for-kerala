@@ -45,7 +45,7 @@ const contactOptions = [
             "Have a property to promote? Tell us about it and our team can guide you.",
         action: "Promote your property",
         href: "/promote-property",
-        tint: "bg-[#F5EFE3]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         icon: Mail,
@@ -54,7 +54,7 @@ const contactOptions = [
             "Need help understanding our packages or marketing process? Send us a message.",
         action: "Explore packages",
         href: "/packages",
-        tint: "bg-[#EFE5D2]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         icon: MapPin,
@@ -63,7 +63,7 @@ const contactOptions = [
             "We work with property owners across Kerala, helping them promote properties in their local markets.",
         action: "View campaigns",
         href: "/campaigns",
-        tint: "bg-[#E8D9BC]",
+        tint: "bg-[#E8F4F2]",
     },
 ];
 
@@ -72,19 +72,19 @@ const infoItems = [
         icon: MapPin,
         title: "Serving across Kerala",
         text: "Property marketing support for owners across Kerala.",
-        tint: "bg-[#F5EFE3]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         icon: MessageCircle,
         title: "Let's understand your needs",
         text: "We discuss your property, requirements and suitable campaign options before proceeding.",
-        tint: "bg-[#EFE5D2]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         icon: Phone,
         title: "No upfront payment",
         text: "Sending an enquiry does not require payment. We share package and payment details only after discussion.",
-        tint: "bg-[#E8D9BC]",
+        tint: "bg-[#E8F4F2]",
     },
 ];
 
@@ -99,7 +99,7 @@ const initialForm = {
 const MAX_MESSAGE = 1000;
 
 const inputClass =
-    "w-full min-w-0 rounded-xl border border-[#1C1C1C]/15 bg-white px-4 py-3.5 text-base text-[#1C1C1C] outline-none transition-all duration-300 placeholder:text-[#8A857B] hover:border-[#B8924A]/60 focus:border-[#B8924A] focus:ring-4 focus:ring-[#B8924A]/15 sm:text-sm";
+    "w-full min-w-0 rounded-xl border border-[#142D35]/15 bg-white px-4 py-3.5 text-base text-[#142D35] outline-none transition-all duration-300 placeholder:text-[#718084] hover:border-[#167D78]/60 focus:border-[#167D78] focus:ring-4 focus:ring-[#167D78]/15 sm:text-sm";
 
 /* ---------- REVEAL COMPONENT ---------- */
 
@@ -198,11 +198,11 @@ function SectionHeading({
                     : "max-w-xl"
             }
         >
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#9F7C3D]">
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#167D78]">
                 {label}
             </p>
 
-            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#1C1C1C] sm:text-4xl lg:text-[2.75rem]">
+            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#142D35] sm:text-4xl lg:text-[2.75rem]">
                 {title}
             </h2>
 
@@ -217,12 +217,12 @@ function SectionHeading({
                     duration: 0.65,
                     ease: EASE,
                 }}
-                className={`mt-4 block h-[3px] w-16 bg-[#B8924A] ${center ? "mx-auto origin-center" : "origin-left"
+                className={`mt-4 block h-[3px] w-16 bg-[#167D78] ${center ? "mx-auto origin-center" : "origin-left"
                     }`}
             />
 
             {text && (
-                <p className="mt-5 text-base leading-7 text-[#625D53]">
+                <p className="mt-5 text-base leading-7 text-[#52666B]">
                     {text}
                 </p>
             )}
@@ -276,7 +276,7 @@ function FloatChip({
                     ease: "easeInOut",
                 },
             }}
-            className={`absolute z-20 rounded-2xl border border-[#B8924A]/10 bg-white px-4 py-3 shadow-[0_12px_30px_rgba(28,28,28,0.12)] ${className}`}
+            className={`absolute z-20 rounded-2xl border border-[#167D78]/10 bg-white px-4 py-3 shadow-[0_12px_30px_rgba(20,45,53,0.12)] ${className}`}
         >
             {children}
         </motion.div>
@@ -300,10 +300,10 @@ function FormField({
         <div className={`min-w-0 ${className}`}>
             <label
                 htmlFor={id}
-                className="block text-sm font-semibold text-[#1C1C1C]"
+                className="block text-sm font-semibold text-[#142D35]"
             >
                 {label}{" "}
-                <span className="text-[#B8924A]">*</span>
+                <span className="text-[#167D78]">*</span>
             </label>
 
             <div className="mt-2">{children}</div>
@@ -526,7 +526,11 @@ export default function ContactPage() {
             await submitPublicForm("contact", { ...form, consent, honeypot });
             setSubmitted(true);
         } catch (error) {
-            setSubmitError(error instanceof Error ? error.message : "We could not send your enquiry. Please try again.");
+            setSubmitError(
+                error instanceof Error
+                    ? error.message
+                    : "We could not send your enquiry. Please try again."
+            );
         } finally {
             setSending(false);
         }
@@ -544,13 +548,13 @@ export default function ContactPage() {
     return (
         <main
             ref={pageRef}
-            className="min-h-screen overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C] antialiased"
+            className="min-h-screen overflow-x-clip bg-[#F5F7F7] text-[#142D35] antialiased"
         >
             <Navbar />
 
             {/* ================= HERO ================= */}
 
-            <section className="relative overflow-hidden bg-gradient-to-b from-[#F5EFE3] via-[#F8F6F1] to-[#F8F6F1]">
+            <section className="relative overflow-hidden bg-gradient-to-b from-[#E8F4F2] via-[#F5F7F7] to-[#F5F7F7]">
                 <motion.div
                     aria-hidden
                     animate={
@@ -566,7 +570,7 @@ export default function ContactPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="gsap-contact-decoration pointer-events-none absolute -left-24 top-20 h-64 w-64 rounded-full bg-[#B8924A]/10 blur-3xl sm:h-80 sm:w-80"
+                    className="gsap-contact-decoration pointer-events-none absolute -left-24 top-20 h-64 w-64 rounded-full bg-[#167D78]/10 blur-3xl sm:h-80 sm:w-80"
                 />
 
                 <motion.div
@@ -581,7 +585,7 @@ export default function ContactPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#E8D9BC]/60 blur-3xl sm:h-72 sm:w-72"
+                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#E8F4F2]/60 blur-3xl sm:h-72 sm:w-72"
                 />
 
                 <div
@@ -613,21 +617,21 @@ export default function ContactPage() {
                                     },
                                 },
                             }}
-                            className="inline-flex items-center gap-2 rounded-full border border-[#B8924A]/20 bg-white px-4 py-2 text-xs font-semibold text-[#9F7C3D] shadow-sm sm:text-sm"
+                            className="inline-flex items-center gap-2 rounded-full border border-[#167D78]/20 bg-white px-4 py-2 text-xs font-semibold text-[#167D78] shadow-sm sm:text-sm"
                         >
                             <Sparkles
-                                className="h-4 w-4 text-[#B8924A]"
+                                className="h-4 w-4 text-[#167D78]"
                                 data-anime-icon
                             />
                             Get in touch
                         </motion.p>
 
-                        <h1 className="mt-6 font-display text-4xl leading-[1.1] tracking-tight text-[#1C1C1C] sm:text-5xl lg:text-6xl">
+                        <h1 className="mt-6 font-display text-4xl leading-[1.1] tracking-tight text-[#142D35] sm:text-5xl lg:text-6xl">
                             <MaskedLine text="Let's talk about" />
                             <MaskedLine
                                 text="your property."
                                 baseDelay={0.12}
-                                className="text-[#B8924A]"
+                                className="text-[#167D78]"
                             />
                         </h1>
 
@@ -643,7 +647,7 @@ export default function ContactPage() {
                                     },
                                 },
                             }}
-                            className="mt-5 max-w-xl text-base leading-8 text-[#625D53] sm:text-lg"
+                            className="mt-5 max-w-xl text-base leading-8 text-[#52666B] sm:text-lg"
                         >
                             Whether you are looking to sell, rent or
                             promote a property, we are here to understand
@@ -668,7 +672,7 @@ export default function ContactPage() {
                             <a
                                 href="#message-form"
                                 data-anime-button
-                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-[0_12px_30px_rgba(184,146,74,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
+                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#167D78] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#0D2027] hover:shadow-[0_12px_30px_rgba(22,125,120,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                             >
                                 Send a message
                                 <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -677,7 +681,7 @@ export default function ContactPage() {
                             <Link
                                 href="/promote-property"
                                 data-anime-button
-                                className="group inline-flex h-14 items-center justify-center rounded-full border border-[#1C1C1C]/20 bg-white px-8 text-sm font-semibold text-[#1C1C1C] transition duration-300 hover:border-[#B8924A] hover:bg-[#F5EFE3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
+                                className="group inline-flex h-14 items-center justify-center rounded-full border border-[#142D35]/20 bg-white px-8 text-sm font-semibold text-[#142D35] transition duration-300 hover:border-[#167D78] hover:bg-[#E8F4F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                             >
                                 Promote your property
                                 <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -710,7 +714,7 @@ export default function ContactPage() {
                                 delay: 0.1,
                                 ease: EASE,
                             }}
-                            className="relative h-[300px] overflow-hidden rounded-3xl shadow-[0_20px_50px_rgba(28,28,28,0.14)] sm:h-[380px] lg:h-[440px]"
+                            className="relative h-[300px] overflow-hidden rounded-3xl shadow-[0_20px_50px_rgba(20,45,53,0.14)] sm:h-[380px] lg:h-[440px]"
                         >
                             <motion.img
                                 src="/images/sample-kochi-home.png"
@@ -729,14 +733,14 @@ export default function ContactPage() {
                                 className="gsap-contact-image absolute inset-0 h-full w-full object-cover"
                             />
 
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1C]/20 via-transparent to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#142D35]/20 via-transparent to-transparent" />
                         </motion.div>
 
                         <FloatChip className="-top-3 left-3 sm:-left-4 lg:-left-8 lg:top-10">
-                            <p className="text-xs font-semibold text-[#625D53]">
+                            <p className="text-xs font-semibold text-[#52666B]">
                                 Service area
                             </p>
-                            <p className="text-sm font-bold text-[#1C1C1C]">
+                            <p className="text-sm font-bold text-[#142D35]">
                                 Across Kerala
                             </p>
                         </FloatChip>
@@ -745,11 +749,11 @@ export default function ContactPage() {
                             className="-bottom-4 right-3 sm:-right-3 lg:-right-6 lg:bottom-12"
                             delay={0.2}
                         >
-                            <p className="flex items-center gap-1.5 text-xs font-semibold text-[#9F7C3D]">
+                            <p className="flex items-center gap-1.5 text-xs font-semibold text-[#167D78]">
                                 <ShieldCheck size={14} />
                                 No upfront payment
                             </p>
-                            <p className="text-sm font-bold text-[#1C1C1C]">
+                            <p className="text-sm font-bold text-[#142D35]">
                                 Enquire freely
                             </p>
                         </FloatChip>
@@ -793,7 +797,7 @@ export default function ContactPage() {
                                             stiffness: 260,
                                             damping: 20,
                                         }}
-                                        className="group flex h-full min-w-0 flex-col rounded-2xl border border-[#1C1C1C]/10 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-[0_18px_40px_rgba(28,28,28,0.08)] sm:p-7"
+                                        className="group flex h-full min-w-0 flex-col rounded-2xl border border-[#142D35]/10 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-[0_18px_40px_rgba(20,45,53,0.08)] sm:p-7"
                                     >
                                         <motion.div
                                             whileHover={
@@ -810,22 +814,22 @@ export default function ContactPage() {
                                                 damping: 15,
                                             }}
                                             data-anime-icon
-                                            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[#9F7C3D] ${item.tint}`}
+                                            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[#167D78] ${item.tint}`}
                                         >
                                             <Icon size={22} />
                                         </motion.div>
 
-                                        <h3 className="mt-5 font-display text-xl text-[#1C1C1C]">
+                                        <h3 className="mt-5 font-display text-xl text-[#142D35]">
                                             {item.title}
                                         </h3>
 
-                                        <p className="mt-3 flex-1 text-sm leading-7 text-[#625D53]">
+                                        <p className="mt-3 flex-1 text-sm leading-7 text-[#52666B]">
                                             {item.description}
                                         </p>
 
                                         <Link
                                             href={item.href}
-                                            className="group/link mt-6 inline-flex w-fit max-w-full items-center gap-2 text-sm font-bold text-[#9F7C3D] transition-colors hover:text-[#1C1C1C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
+                                            className="group/link mt-6 inline-flex w-fit max-w-full items-center gap-2 text-sm font-bold text-[#167D78] transition-colors hover:text-[#142D35] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                                         >
                                             {item.action}
 
@@ -844,9 +848,9 @@ export default function ContactPage() {
 
             {/* ================= CONTACT FORM ================= */}
 
-            <section className="relative overflow-hidden bg-[#F5EFE3] py-20 sm:py-28">
-                <div className="pointer-events-none absolute -right-32 top-10 h-80 w-80 rounded-full border border-[#B8924A]/15" />
-                <div className="pointer-events-none absolute -right-20 top-20 h-56 w-56 rounded-full border border-[#B8924A]/15" />
+            <section className="relative overflow-hidden bg-[#E8F4F2] py-20 sm:py-28">
+                <div className="pointer-events-none absolute -right-32 top-10 h-80 w-80 rounded-full border border-[#167D78]/15" />
+                <div className="pointer-events-none absolute -right-20 top-20 h-56 w-56 rounded-full border border-[#167D78]/15" />
 
                 <div
                     className={`${container} relative grid grid-cols-1 items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14`}
@@ -874,17 +878,17 @@ export default function ContactPage() {
                                     >
                                         <span
                                             data-anime-icon
-                                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[#9F7C3D] ${item.tint}`}
+                                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[#167D78] ${item.tint}`}
                                         >
                                             <Icon size={20} />
                                         </span>
 
                                         <div className="min-w-0">
-                                            <h3 className="text-sm font-bold text-[#1C1C1C]">
+                                            <h3 className="text-sm font-bold text-[#142D35]">
                                                 {item.title}
                                             </h3>
 
-                                            <p className="mt-1 text-sm leading-6 text-[#625D53]">
+                                            <p className="mt-1 text-sm leading-6 text-[#52666B]">
                                                 {item.text}
                                             </p>
                                         </div>
@@ -899,7 +903,7 @@ export default function ContactPage() {
                     <Reveal delay={0.06} className="min-w-0">
                         <div
                             id="message-form"
-                            className="gsap-form-card scroll-mt-28 w-full min-w-0 rounded-3xl border border-[#B8924A]/15 bg-white p-6 shadow-[0_16px_40px_rgba(28,28,28,0.07)] sm:p-8 lg:p-10"
+                            className="gsap-form-card scroll-mt-28 w-full min-w-0 rounded-3xl border border-[#167D78]/15 bg-white p-6 shadow-[0_16px_40px_rgba(20,45,53,0.07)] sm:p-8 lg:p-10"
                         >
                             {submitted ? (
                                 <motion.div
@@ -929,16 +933,16 @@ export default function ContactPage() {
                                             duration: 0.55,
                                             ease: "backOut",
                                         }}
-                                        className="flex h-20 w-20 items-center justify-center rounded-full bg-[#F5EFE3] text-[#9F7C3D]"
+                                        className="flex h-20 w-20 items-center justify-center rounded-full bg-[#E8F4F2] text-[#167D78]"
                                     >
                                         <CheckCircle2 size={44} />
                                     </motion.div>
 
-                                    <h3 className="mt-6 font-display text-2xl text-[#1C1C1C]">
+                                    <h3 className="mt-6 font-display text-2xl text-[#142D35]">
                                         Form preview completed!
                                     </h3>
 
-                                    <p className="mt-3 max-w-sm text-sm leading-7 text-[#625D53]">
+                                    <p className="mt-3 max-w-sm text-sm leading-7 text-[#52666B]">
                                         The contact form UI is ready.
                                         Actual message submission will be
                                         enabled when the backend API is
@@ -949,7 +953,7 @@ export default function ContactPage() {
                                         type="button"
                                         onClick={resetForm}
                                         data-anime-button
-                                        className="mt-7 inline-flex h-12 items-center justify-center rounded-full bg-[#B8924A] px-7 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
+                                        className="mt-7 inline-flex h-12 items-center justify-center rounded-full bg-[#167D78] px-7 text-sm font-bold text-white transition duration-300 hover:bg-[#0D2027] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                                     >
                                         Back to form
                                     </button>
@@ -957,17 +961,17 @@ export default function ContactPage() {
                             ) : (
                                 <>
                                     <div className="mb-7 sm:mb-8">
-                                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#9F7C3D]">
+                                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#167D78]">
                                             Contact form
                                         </p>
 
-                                        <h3 className="mt-2 font-display text-2xl text-[#1C1C1C] sm:text-3xl">
+                                        <h3 className="mt-2 font-display text-2xl text-[#142D35] sm:text-3xl">
                                             Send an enquiry
                                         </h3>
 
-                                        <p className="mt-2 text-sm text-[#625D53]">
+                                        <p className="mt-2 text-sm text-[#52666B]">
                                             Fields marked with{" "}
-                                            <span className="text-[#B8924A]">
+                                            <span className="text-[#167D78]">
                                                 *
                                             </span>{" "}
                                             are required.
@@ -978,10 +982,25 @@ export default function ContactPage() {
                                         onSubmit={handleSubmit}
                                         className="space-y-5"
                                     >
-                                        <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
-                                            <label htmlFor="contact-website">Leave this field blank</label>
-                                            <input id="contact-website" name="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
+                                        <div
+                                            aria-hidden="true"
+                                            className="absolute -left-[10000px] h-px w-px overflow-hidden"
+                                        >
+                                            <label htmlFor="contact-website">
+                                                Leave this field blank
+                                            </label>
+                                            <input
+                                                id="contact-website"
+                                                name="website"
+                                                tabIndex={-1}
+                                                autoComplete="off"
+                                                value={honeypot}
+                                                onChange={(event) =>
+                                                    setHoneypot(event.target.value)
+                                                }
+                                            />
                                         </div>
+
                                         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                                             <FormField
                                                 id="name"
@@ -1064,7 +1083,7 @@ export default function ContactPage() {
                                                         </option>
                                                     </select>
 
-                                                    <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#625D53]" />
+                                                    <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#52666B]" />
                                                 </div>
                                             </FormField>
                                         </div>
@@ -1085,7 +1104,7 @@ export default function ContactPage() {
                                                 className={`${inputClass} min-h-[140px] resize-y`}
                                             />
 
-                                            <p className="mt-2 text-right text-xs text-[#625D53]">
+                                            <p className="mt-2 text-right text-xs text-[#52666B]">
                                                 {form.message.length}/
                                                 {MAX_MESSAGE}
                                             </p>
@@ -1095,7 +1114,7 @@ export default function ContactPage() {
                                             type="submit"
                                             disabled={sending}
                                             data-anime-button
-                                            className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-80 sm:w-auto"
+                                            className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#167D78] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#0D2027] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-80 sm:w-auto"
                                         >
                                             {sending ? (
                                                 <>
@@ -1114,18 +1133,23 @@ export default function ContactPage() {
                                         </button>
 
                                         {submitError && (
-                                            <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                                            <p
+                                                role="alert"
+                                                className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+                                            >
                                                 {submitError}
                                             </p>
                                         )}
 
-                                        <label className="flex items-start gap-3 text-xs leading-5 text-[#625D53]">
+                                        <label className="flex items-start gap-3 text-xs leading-5 text-[#52666B]">
                                             <input
                                                 type="checkbox"
                                                 required
                                                 checked={consent}
-                                                onChange={(event) => setConsent(event.target.checked)}
-                                                className="mt-1 h-4 w-4 shrink-0 accent-[#B8924A]"
+                                                onChange={(event) =>
+                                                    setConsent(event.target.checked)
+                                                }
+                                                className="mt-1 h-4 w-4 shrink-0 accent-[#167D78]"
                                             />
                                             <span>
                                                 I agree that Per-Cent Kerala may use my details to respond to this enquiry.
@@ -1143,7 +1167,7 @@ export default function ContactPage() {
 
             <section className="px-5 py-16 sm:px-6 sm:py-24 lg:px-8">
                 <Reveal>
-                    <div className="gsap-final-cta relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-[#B8924A]/20 bg-gradient-to-br from-[#EFE5D2] via-[#F5EFE3] to-[#E8D9BC] px-6 py-12 text-[#1C1C1C] shadow-sm sm:px-12 sm:py-16">
+                    <div className="gsap-final-cta relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-[#167D78]/20 bg-gradient-to-br from-[#E8F4F2] via-[#E8F4F2] to-[#E8F4F2] px-6 py-12 text-[#142D35] shadow-sm sm:px-12 sm:py-16">
                         <motion.div
                             aria-hidden
                             animate={
@@ -1159,7 +1183,7 @@ export default function ContactPage() {
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
-                            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#B8924A]/20 bg-white/20"
+                            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#167D78]/20 bg-white/20"
                         />
 
                         <motion.div
@@ -1179,15 +1203,15 @@ export default function ContactPage() {
 
                         <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
                             <div className="min-w-0">
-                                <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#9F7C3D]">
+                                <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#167D78]">
                                     Ready to get started?
                                 </p>
 
-                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#1C1C1C] sm:text-4xl lg:text-5xl">
+                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#142D35] sm:text-4xl lg:text-5xl">
                                     Have a property to promote?
                                 </h2>
 
-                                <p className="mt-4 max-w-xl text-base leading-7 text-[#625D53]">
+                                <p className="mt-4 max-w-xl text-base leading-7 text-[#52666B]">
                                     Share your property details and
                                     explore the right campaign.
                                 </p>
@@ -1197,7 +1221,7 @@ export default function ContactPage() {
                                 <Link
                                     href="/promote-property"
                                     data-anime-button
-                                    className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#1C1C1C] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-1 hover:bg-[#B8924A] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:w-auto"
+                                    className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#142D35] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-1 hover:bg-[#167D78] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 sm:w-auto"
                                 >
                                     Promote your property
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />

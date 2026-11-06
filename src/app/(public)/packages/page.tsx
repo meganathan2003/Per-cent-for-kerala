@@ -35,13 +35,33 @@ gsap.registerPlugin(ScrollTrigger);
 const EASE = [0.22, 1, 0.36, 1] as const;
 const container = "mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8";
 
+const C = {
+    navy: "#142D35",
+    navyDark: "#0D2027",
+    teal: "#167D78",
+    tealLight: "#83D4CA",
+    tealSoft: "#E8F4F2",
+    background: "#F5F7F7",
+    text: "#34464B",
+    body: "#52666B",
+    muted: "#718084",
+    border: "#DFE7E7",
+    white: "#FFFFFF",
+} as const;
+
 /*
-  PER-CENT KERALA V2
-  White:       #FFFFFF
-  Charcoal:    #1C1C1C
-  Gold:        #B8924A
-  Gold Hover:  #9F7C3D
-  Warm BG:     #F8F6F1
+  PER-CENT KERALA HOMEPAGE DESIGN SYSTEM
+  Navy:       #142D35
+  Navy Dark:  #0D2027
+  Teal:       #167D78
+  Teal Light: #83D4CA
+  Teal Soft:  #E8F4F2
+  Background: #F5F7F7
+  Text:       #34464B
+  Body:       #52666B
+  Muted:      #718084
+  Border:     #DFE7E7
+  White:      #FFFFFF
 */
 
 /* ---------- PACKAGE DATA ---------- */
@@ -154,28 +174,28 @@ const steps = [
         number: "1",
         title: "Share details",
         text: "Tell us about your property and marketing goals.",
-        tint: "bg-[#F5EFE3]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         icon: FileCheck,
         number: "2",
         title: "We review",
         text: "Our team reviews the information and understands your needs.",
-        tint: "bg-[#F3EBDD]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         icon: Target,
         number: "3",
         title: "Choose a plan",
         text: "We discuss the suitable package, scope and quotation.",
-        tint: "bg-[#F6EDE1]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         icon: Megaphone,
         number: "4",
         title: "Start promoting",
         text: "After your approval, we prepare and launch the campaign.",
-        tint: "bg-[#EFE5D2]",
+        tint: "bg-[#E8F4F2]",
     },
 ];
 
@@ -293,11 +313,11 @@ function SectionHeading({
 }) {
     return (
         <div className={center ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
-            <p className="text-sm font-semibold tracking-wide text-[#B8924A]">
+            <p className="text-sm font-semibold tracking-wide text-[#167D78]">
                 {label}
             </p>
 
-            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#1C1C1C] sm:text-4xl lg:text-[2.75rem]">
+            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#142D35] sm:text-4xl lg:text-[2.75rem]">
                 {title}
             </h2>
 
@@ -307,13 +327,12 @@ function SectionHeading({
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.25, ease: EASE }}
-                className={`mt-4 block h-1 w-16 rounded-full bg-[#B8924A] ${
-                    center ? "mx-auto origin-center" : "origin-left"
-                }`}
+                className={`mt-4 block h-1 w-16 rounded-full bg-[#167D78] ${center ? "mx-auto origin-center" : "origin-left"
+                    }`}
             />
 
             {text && (
-                <p className="mt-5 text-base leading-7 text-[#66615A]">
+                <p className="mt-5 text-base leading-7 text-[#52666B]">
                     {text}
                 </p>
             )}
@@ -333,7 +352,7 @@ function CellValue({ value }: { value: string }) {
                     stiffness: 380,
                     damping: 18,
                 }}
-                className="mx-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#B8924A]"
+                className="mx-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#167D78]"
             >
                 <Check className="h-4 w-4 text-white" aria-label="Included" />
             </motion.span>
@@ -343,7 +362,7 @@ function CellValue({ value }: { value: string }) {
     if (value === "no") {
         return (
             <Minus
-                className="mx-auto h-5 w-5 text-[#99938A]"
+                className="mx-auto h-5 w-5 text-[#718084]"
                 aria-label="Not included"
             />
         );
@@ -353,10 +372,10 @@ function CellValue({ value }: { value: string }) {
         value.toLowerCase().includes("to be confirmed") ||
         value.toLowerCase().includes("to be discussed")
     ) {
-        return <span className="text-[#81796D]">{value}</span>;
+        return <span className="text-[#718084]">{value}</span>;
     }
 
-    return <span className="text-[#1C1C1C]">{value}</span>;
+    return <span className="text-[#142D35]">{value}</span>;
 }
 
 function FloatChip({
@@ -388,7 +407,7 @@ function FloatChip({
                     ease: "easeInOut",
                 },
             }}
-            className={`absolute z-20 rounded-2xl border border-[#B8924A]/10 bg-white px-4 py-3 shadow-[0_12px_30px_rgba(28,28,28,0.12)] ${className}`}
+            className={`absolute z-20 rounded-2xl border border-[#167D78]/10 bg-white px-4 py-3 shadow-[0_12px_30px_rgba(20,45,53,0.12)] ${className}`}
         >
             {children}
         </motion.div>
@@ -662,14 +681,14 @@ export default function PackagesPage() {
     }, [reduceMotion]);
 
     return (
-        <main className="overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C] antialiased">
+        <main className="overflow-x-clip bg-[#F5F7F7] text-[#142D35] antialiased">
             {/* PAGE PROGRESS */}
 
             {!reduceMotion && (
                 <motion.div
                     aria-hidden
                     style={{ scaleX: progress }}
-                    className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-[#B8924A]"
+                    className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-[#167D78]"
                 />
             )}
 
@@ -679,7 +698,7 @@ export default function PackagesPage() {
 
             <section
                 ref={heroRef}
-                className="relative overflow-hidden bg-gradient-to-b from-[#F5EFE3] to-[#F8F6F1]"
+                className="relative overflow-hidden bg-gradient-to-b from-[#E8F4F2] to-[#F5F7F7]"
             >
                 <motion.div
                     aria-hidden
@@ -693,7 +712,7 @@ export default function PackagesPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -left-24 top-24 h-64 w-64 rounded-full bg-[#E9DFC9] blur-2xl sm:h-80 sm:w-80"
+                    className="pointer-events-none absolute -left-24 top-24 h-64 w-64 rounded-full bg-[#E8F4F2] blur-2xl sm:h-80 sm:w-80"
                 />
 
                 <motion.div
@@ -706,7 +725,7 @@ export default function PackagesPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#E8D9BC] blur-2xl sm:h-72 sm:w-72"
+                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#E8F4F2] blur-2xl sm:h-72 sm:w-72"
                 />
 
                 <div
@@ -724,16 +743,16 @@ export default function PackagesPage() {
                     >
                         <motion.p
                             variants={heroItem}
-                            className="inline-flex items-center gap-2 rounded-full border border-[#B8924A]/15 bg-white px-4 py-2 text-xs font-semibold text-[#8B6B35] shadow-sm sm:text-sm"
+                            className="inline-flex items-center gap-2 rounded-full border border-[#167D78]/15 bg-white px-4 py-2 text-xs font-semibold text-[#718084] shadow-sm sm:text-sm"
                         >
                             <span className="relative flex h-2 w-2">
-                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#B8924A] opacity-70 motion-reduce:animate-none" />
-                                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#B8924A]" />
+                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#167D78] opacity-70 motion-reduce:animate-none" />
+                                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#167D78]" />
                             </span>
                             Property marketing packages
                         </motion.p>
 
-                        <h1 className="packages-gsap-heading mt-6 font-display text-4xl leading-[1.1] tracking-tight text-[#1C1C1C] sm:text-5xl lg:text-6xl">
+                        <h1 className="packages-gsap-heading mt-6 font-display text-4xl leading-[1.1] tracking-tight text-[#142D35] sm:text-5xl lg:text-6xl">
                             <MaskedLine
                                 text="Find the right plan."
                                 baseDelay={0.2}
@@ -746,7 +765,7 @@ export default function PackagesPage() {
 
                         <motion.p
                             variants={heroItem}
-                            className="mt-5 max-w-xl text-base leading-8 text-[#66615A] sm:text-lg"
+                            className="mt-5 max-w-xl text-base leading-8 text-[#52666B] sm:text-lg"
                         >
                             Every property is different. Compare our campaign
                             options and choose the level of marketing support
@@ -760,7 +779,7 @@ export default function PackagesPage() {
                             <Link
                                 href="#packages"
                                 data-anime-button
-                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
+                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#167D78] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#0D2027] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                             >
                                 View packages
                                 <ArrowUpRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -769,7 +788,7 @@ export default function PackagesPage() {
                             <Link
                                 href="#how-it-works"
                                 data-anime-button
-                                className="group inline-flex h-14 items-center justify-center rounded-full border border-[#1C1C1C]/20 bg-white px-8 text-sm font-semibold text-[#1C1C1C] transition duration-300 hover:-translate-y-0.5 hover:border-[#B8924A] hover:bg-[#F5EFE3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
+                                className="group inline-flex h-14 items-center justify-center rounded-full border border-[#142D35]/20 bg-white px-8 text-sm font-semibold text-[#142D35] transition duration-300 hover:-translate-y-0.5 hover:border-[#167D78] hover:bg-[#E8F4F2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                             >
                                 How it works
                                 <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -778,11 +797,11 @@ export default function PackagesPage() {
 
                         <motion.p
                             variants={heroItem}
-                            className="mt-8 flex items-center gap-2 text-sm text-[#66615A]"
+                            className="mt-8 flex items-center gap-2 text-sm text-[#52666B]"
                         >
                             <ShieldCheck
                                 size={18}
-                                className="shrink-0 text-[#B8924A]"
+                                className="shrink-0 text-[#167D78]"
                             />
                             Share your property details first. Discuss the plan
                             before payment.
@@ -822,10 +841,10 @@ export default function PackagesPage() {
                         </motion.div>
 
                         <FloatChip className="-top-3 left-3 sm:-left-4 lg:-left-8 lg:top-10">
-                            <p className="text-xs font-semibold text-[#81796D]">
+                            <p className="text-xs font-semibold text-[#718084]">
                                 Campaign options
                             </p>
-                            <p className="text-sm font-bold text-[#1C1C1C]">
+                            <p className="text-sm font-bold text-[#142D35]">
                                 Choose your level of support
                             </p>
                         </FloatChip>
@@ -834,10 +853,10 @@ export default function PackagesPage() {
                             className="-bottom-4 right-3 sm:-right-3 lg:-right-6 lg:bottom-12"
                             delay={0.25}
                         >
-                            <p className="text-xs font-semibold text-[#9F7C3D]">
+                            <p className="text-xs font-semibold text-[#0D2027]">
                                 Personalised plan
                             </p>
-                            <p className="text-sm font-bold text-[#1C1C1C]">
+                            <p className="text-sm font-bold text-[#142D35]">
                                 Discuss before you start
                             </p>
                         </FloatChip>
@@ -847,13 +866,13 @@ export default function PackagesPage() {
 
             {/* ANIMATED HIGHLIGHTS */}
 
-            <div className="overflow-hidden border-y border-[#B8924A]/20 bg-[#F0E7D7] py-4">
+            <div className="overflow-hidden border-y border-[#167D78]/20 bg-[#E8F4F2] py-4">
                 {reduceMotion ? (
                     <ul className="flex flex-wrap justify-center gap-x-8 gap-y-2 px-5">
                         {marqueeItems.map((item) => (
                             <li
                                 key={item}
-                                className="text-sm font-semibold text-[#1C1C1C]"
+                                className="text-sm font-semibold text-[#142D35]"
                             >
                                 {item}
                             </li>
@@ -875,10 +894,10 @@ export default function PackagesPage() {
                                 <li
                                     key={`${item}-${i}`}
                                     aria-hidden={i >= marqueeItems.length}
-                                    className="flex items-center gap-10 whitespace-nowrap text-sm font-semibold text-[#1C1C1C]"
+                                    className="flex items-center gap-10 whitespace-nowrap text-sm font-semibold text-[#142D35]"
                                 >
                                     {item}
-                                    <span className="h-1.5 w-1.5 rounded-full bg-[#B8924A]" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-[#167D78]" />
                                 </li>
                             )
                         )}
@@ -909,9 +928,8 @@ export default function PackagesPage() {
                                 <Reveal
                                     key={plan.name}
                                     delay={index * 0.1}
-                                    className={`gsap-package-card h-full ${
-                                        featured ? "" : "lg:mt-8"
-                                    }`}
+                                    className={`gsap-package-card h-full ${featured ? "" : "lg:mt-8"
+                                        }`}
                                 >
                                     <motion.article
                                         whileHover={
@@ -924,11 +942,10 @@ export default function PackagesPage() {
                                             stiffness: 260,
                                             damping: 20,
                                         }}
-                                        className={`group relative flex h-full flex-col overflow-hidden rounded-3xl text-[#1C1C1C] ${
-                                            featured
-                                                ? "border-2 border-[#B8924A]/60 bg-gradient-to-b from-[#F5EFE3] to-[#EFE5D2] shadow-[0_18px_40px_rgba(184,146,74,0.16)]"
-                                                : "border border-[#1C1C1C]/10 bg-white shadow-sm"
-                                        }`}
+                                        className={`group relative flex h-full flex-col overflow-hidden rounded-3xl text-[#142D35] ${featured
+                                                ? "border-2 border-[#167D78]/60 bg-gradient-to-b from-[#E8F4F2] to-[#E8F4F2] shadow-[0_18px_40px_rgba(184,146,74,0.16)]"
+                                                : "border border-[#142D35]/10 bg-white shadow-sm"
+                                            }`}
                                     >
                                         {featured && (
                                             <motion.span
@@ -936,19 +953,19 @@ export default function PackagesPage() {
                                                     reduceMotion
                                                         ? undefined
                                                         : {
-                                                              scale: [
-                                                                  1,
-                                                                  1.06,
-                                                                  1,
-                                                              ],
-                                                          }
+                                                            scale: [
+                                                                1,
+                                                                1.06,
+                                                                1,
+                                                            ],
+                                                        }
                                                 }
                                                 transition={{
                                                     duration: 2.4,
                                                     repeat: Infinity,
                                                     ease: "easeInOut",
                                                 }}
-                                                className="absolute right-4 top-4 z-10 rounded-full bg-[#B8924A] px-4 py-1.5 text-xs font-bold text-white shadow-sm"
+                                                className="absolute right-4 top-4 z-10 rounded-full bg-[#167D78] px-4 py-1.5 text-xs font-bold text-white shadow-sm"
                                             >
                                                 Popular choice
                                             </motion.span>
@@ -966,15 +983,15 @@ export default function PackagesPage() {
                                         </div>
 
                                         <div className="flex flex-1 flex-col p-6 sm:p-7">
-                                            <h3 className="font-display text-3xl text-[#1C1C1C]">
+                                            <h3 className="font-display text-3xl text-[#142D35]">
                                                 {plan.name}
                                             </h3>
 
-                                            <p className="mt-1 text-sm font-semibold text-[#9F7C3D]">
+                                            <p className="mt-1 text-sm font-semibold text-[#0D2027]">
                                                 {plan.subtitle}
                                             </p>
 
-                                            <p className="mt-4 text-sm leading-7 text-[#66615A] lg:min-h-[84px]">
+                                            <p className="mt-4 text-sm leading-7 text-[#52666B] lg:min-h-[84px]">
                                                 {plan.description}
                                             </p>
 
@@ -987,9 +1004,9 @@ export default function PackagesPage() {
                                                         <li
                                                             key={feature}
                                                             data-anime-feature
-                                                            className="flex gap-3 text-sm leading-6 text-[#1C1C1C]"
+                                                            className="flex gap-3 text-sm leading-6 text-[#142D35]"
                                                         >
-                                                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F0E7D7] text-[#9F7C3D]">
+                                                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#E8F4F2] text-[#0D2027]">
                                                                 <Check size={13} />
                                                             </span>
 
@@ -1000,17 +1017,16 @@ export default function PackagesPage() {
                                             </ul>
 
                                             <div
-                                                className={`mt-7 rounded-2xl p-4 ${
-                                                    featured
+                                                className={`mt-7 rounded-2xl p-4 ${featured
                                                         ? "bg-white/80"
-                                                        : "bg-[#F8F6F1]"
-                                                }`}
+                                                        : "bg-[#F5F7F7]"
+                                                    }`}
                                             >
-                                                <p className="text-xs font-semibold text-[#81796D]">
+                                                <p className="text-xs font-semibold text-[#718084]">
                                                     Best suited for
                                                 </p>
 
-                                                <p className="mt-1 text-sm font-bold text-[#1C1C1C]">
+                                                <p className="mt-1 text-sm font-bold text-[#142D35]">
                                                     {plan.suitable}
                                                 </p>
                                             </div>
@@ -1018,11 +1034,10 @@ export default function PackagesPage() {
                                             <Link
                                                 href={`/promote-property?package=${plan.name.toLowerCase()}`}
                                                 data-anime-button
-                                                className={`group/btn mt-6 flex h-12 items-center justify-center rounded-full px-5 text-sm font-bold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 ${
-                                                    featured
-                                                        ? "bg-[#B8924A] text-white hover:bg-[#9F7C3D]"
-                                                        : "border border-[#B8924A]/60 bg-white text-[#1C1C1C] hover:border-[#B8924A] hover:bg-[#F5EFE3]"
-                                                }`}
+                                                className={`group/btn mt-6 flex h-12 items-center justify-center rounded-full px-5 text-sm font-bold transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 ${featured
+                                                        ? "bg-[#167D78] text-white hover:bg-[#0D2027]"
+                                                        : "border border-[#167D78]/60 bg-white text-[#142D35] hover:border-[#167D78] hover:bg-[#E8F4F2]"
+                                                    }`}
                                             >
                                                 Enquire about {plan.name}
                                                 <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5" />
@@ -1034,7 +1049,7 @@ export default function PackagesPage() {
                         })}
                     </div>
 
-                    <p className="mx-auto mt-10 max-w-2xl text-center text-xs leading-6 text-[#81796D]">
+                    <p className="mx-auto mt-10 max-w-2xl text-center text-xs leading-6 text-[#718084]">
                         Package pricing, deliverables, advertising budget and
                         campaign duration are confirmed with you before
                         payment. Enquiry outcomes depend on campaign
@@ -1047,7 +1062,7 @@ export default function PackagesPage() {
 
             <section
                 id="compare"
-                className="scroll-mt-24 bg-[#F0EDE6] py-20 sm:py-28"
+                className="scroll-mt-24 bg-[#E8F4F2] py-20 sm:py-28"
             >
                 <div className={container}>
                     <Reveal>
@@ -1061,22 +1076,21 @@ export default function PackagesPage() {
                     {/* DESKTOP COMPARISON TABLE */}
 
                     <Reveal className="mt-12 hidden md:block">
-                        <div className="gsap-comparison-table overflow-hidden rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-sm">
+                        <div className="gsap-comparison-table overflow-hidden rounded-3xl border border-[#142D35]/10 bg-white shadow-sm">
                             <table className="w-full border-collapse text-left">
                                 <thead>
                                     <tr>
-                                        <th className="w-[32%] px-6 py-5 text-sm font-semibold text-[#66615A] lg:px-8">
+                                        <th className="w-[32%] px-6 py-5 text-sm font-semibold text-[#52666B] lg:px-8">
                                             Features
                                         </th>
 
                                         {packages.map((plan) => (
                                             <th
                                                 key={plan.name}
-                                                className={`px-4 py-5 text-center font-display text-xl text-[#1C1C1C] ${
-                                                    plan.popular
-                                                        ? "border-b-4 border-[#B8924A] bg-[#F5EFE3]"
+                                                className={`px-4 py-5 text-center font-display text-xl text-[#142D35] ${plan.popular
+                                                        ? "border-b-4 border-[#167D78] bg-[#E8F4F2]"
                                                         : ""
-                                                }`}
+                                                    }`}
                                             >
                                                 {plan.name}
                                             </th>
@@ -1088,9 +1102,9 @@ export default function PackagesPage() {
                                     {comparison.map((row) => (
                                         <tr
                                             key={row.feature}
-                                            className="gsap-comparison-row border-t border-[#1C1C1C]/10 transition-colors hover:bg-[#FAF8F3]"
+                                            className="gsap-comparison-row border-t border-[#142D35]/10 transition-colors hover:bg-[#F5F7F7]"
                                         >
-                                            <td className="px-6 py-4 text-sm font-semibold text-[#1C1C1C] lg:px-8">
+                                            <td className="px-6 py-4 text-sm font-semibold text-[#142D35] lg:px-8">
                                                 {row.feature}
                                             </td>
 
@@ -1098,11 +1112,10 @@ export default function PackagesPage() {
                                                 (value, valueIndex) => (
                                                     <td
                                                         key={`${row.feature}-${valueIndex}`}
-                                                        className={`px-4 py-4 text-center text-sm ${
-                                                            valueIndex === 1
-                                                                ? "bg-[#F8F3E9]"
+                                                        className={`px-4 py-4 text-center text-sm ${valueIndex === 1
+                                                                ? "bg-[#F5F7F7]"
                                                                 : ""
-                                                        }`}
+                                                            }`}
                                                     >
                                                         <CellValue value={value} />
                                                     </td>
@@ -1121,7 +1134,7 @@ export default function PackagesPage() {
                         <div
                             role="tablist"
                             aria-label="Choose a package to view"
-                            className="relative mx-auto flex max-w-sm rounded-full bg-white p-1 shadow-sm ring-1 ring-[#1C1C1C]/10"
+                            className="relative mx-auto flex max-w-sm rounded-full bg-white p-1 shadow-sm ring-1 ring-[#142D35]/10"
                         >
                             {packages.map((plan, i) => (
                                 <button
@@ -1130,7 +1143,7 @@ export default function PackagesPage() {
                                     role="tab"
                                     aria-selected={activePlan === i}
                                     onClick={() => setActivePlan(i)}
-                                    className="relative z-10 flex-1 rounded-full px-3 py-2.5 text-sm font-bold text-[#1C1C1C] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A]"
+                                    className="relative z-10 flex-1 rounded-full px-3 py-2.5 text-sm font-bold text-[#142D35] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78]"
                                 >
                                     {activePlan === i && (
                                         <motion.span
@@ -1140,7 +1153,7 @@ export default function PackagesPage() {
                                                 stiffness: 380,
                                                 damping: 30,
                                             }}
-                                            className="absolute inset-0 -z-10 rounded-full bg-[#F0E7D7] ring-2 ring-[#B8924A]/50"
+                                            className="absolute inset-0 -z-10 rounded-full bg-[#E8F4F2] ring-2 ring-[#167D78]/50"
                                         />
                                     )}
 
@@ -1168,33 +1181,32 @@ export default function PackagesPage() {
                                     duration: 0.3,
                                     ease: EASE,
                                 }}
-                                className="mx-auto mt-5 max-w-md overflow-hidden rounded-2xl border border-[#1C1C1C]/10 bg-white"
+                                className="mx-auto mt-5 max-w-md overflow-hidden rounded-2xl border border-[#142D35]/10 bg-white"
                             >
                                 <div
-                                    className={`flex items-center justify-between px-5 py-4 text-[#1C1C1C] ${
-                                        packages[activePlan].popular
-                                            ? "bg-[#F0E7D7]"
-                                            : "bg-[#F8F6F1]"
-                                    }`}
+                                    className={`flex items-center justify-between px-5 py-4 text-[#142D35] ${packages[activePlan].popular
+                                            ? "bg-[#E8F4F2]"
+                                            : "bg-[#F5F7F7]"
+                                        }`}
                                 >
                                     <h3 className="font-display text-2xl">
                                         {packages[activePlan].name}
                                     </h3>
 
                                     {packages[activePlan].popular && (
-                                        <span className="rounded-full bg-[#B8924A] px-3 py-1 text-xs font-bold text-white">
+                                        <span className="rounded-full bg-[#167D78] px-3 py-1 text-xs font-bold text-white">
                                             Popular
                                         </span>
                                     )}
                                 </div>
 
-                                <div className="divide-y divide-[#1C1C1C]/10 px-5">
+                                <div className="divide-y divide-[#142D35]/10 px-5">
                                     {comparison.map((row) => (
                                         <div
                                             key={row.feature}
                                             className="flex items-center justify-between gap-4 py-3.5"
                                         >
-                                            <span className="text-sm text-[#66615A]">
+                                            <span className="text-sm text-[#52666B]">
                                                 {row.feature}
                                             </span>
 
@@ -1213,17 +1225,17 @@ export default function PackagesPage() {
                     {/* PACKAGE RECOMMENDATION CTA */}
 
                     <Reveal className="mt-10">
-                        <div className="flex flex-col items-start justify-between gap-5 rounded-3xl border border-[#B8924A]/15 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:p-8">
+                        <div className="flex flex-col items-start justify-between gap-5 rounded-3xl border border-[#167D78]/15 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:p-8">
                             <div>
-                                <p className="text-sm font-semibold text-[#9F7C3D]">
+                                <p className="text-sm font-semibold text-[#0D2027]">
                                     NEED SOME GUIDANCE?
                                 </p>
 
-                                <h3 className="mt-1 font-display text-2xl text-[#1C1C1C] sm:text-3xl">
+                                <h3 className="mt-1 font-display text-2xl text-[#142D35] sm:text-3xl">
                                     Not sure which package fits?
                                 </h3>
 
-                                <p className="mt-2 text-sm text-[#66615A]">
+                                <p className="mt-2 text-sm text-[#52666B]">
                                     Tell us about your property. We will help
                                     you choose.
                                 </p>
@@ -1232,7 +1244,7 @@ export default function PackagesPage() {
                             <Link
                                 href="/promote-property"
                                 data-anime-button
-                                className="group inline-flex h-12 w-full shrink-0 items-center justify-center rounded-full bg-[#B8924A] px-6 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#9F7C3D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:w-auto"
+                                className="group inline-flex h-12 w-full shrink-0 items-center justify-center rounded-full bg-[#167D78] px-6 text-sm font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#0D2027] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 sm:w-auto"
                             >
                                 Get a recommendation
                                 <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -1269,7 +1281,7 @@ export default function PackagesPage() {
                                 duration: 1.2,
                                 ease: EASE,
                             }}
-                            className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-6 hidden h-0.5 origin-left bg-[#B8924A]/40 lg:block"
+                            className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-6 hidden h-0.5 origin-left bg-[#167D78]/40 lg:block"
                         />
 
                         {/* MOBILE CONNECTING LINE */}
@@ -1283,7 +1295,7 @@ export default function PackagesPage() {
                                 duration: 1.2,
                                 ease: EASE,
                             }}
-                            className="pointer-events-none absolute bottom-6 left-6 top-6 w-0.5 origin-top bg-[#B8924A]/40 lg:hidden"
+                            className="pointer-events-none absolute bottom-6 left-6 top-6 w-0.5 origin-top bg-[#167D78]/40 lg:hidden"
                         />
 
                         {steps.map((step) => {
@@ -1299,30 +1311,30 @@ export default function PackagesPage() {
                                             reduceMotion
                                                 ? undefined
                                                 : {
-                                                      scale: 1.12,
-                                                      rotate: -6,
-                                                  }
+                                                    scale: 1.12,
+                                                    rotate: -6,
+                                                }
                                         }
                                         transition={{
                                             type: "spring",
                                             stiffness: 300,
                                             damping: 15,
                                         }}
-                                        className={`relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#B8924A]/40 text-[#8B6B35] ${step.tint}`}
+                                        className={`relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#167D78]/40 text-[#718084] ${step.tint}`}
                                     >
                                         <Icon size={20} />
 
-                                        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#B8924A] text-[11px] font-bold text-white">
+                                        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#167D78] text-[11px] font-bold text-white">
                                             {step.number}
                                         </span>
                                     </motion.span>
 
                                     <div className="lg:mt-5">
-                                        <h3 className="font-display text-xl text-[#1C1C1C]">
+                                        <h3 className="font-display text-xl text-[#142D35]">
                                             {step.title}
                                         </h3>
 
-                                        <p className="mt-2 text-sm leading-6 text-[#66615A]">
+                                        <p className="mt-2 text-sm leading-6 text-[#52666B]">
                                             {step.text}
                                         </p>
                                     </div>
@@ -1335,7 +1347,7 @@ export default function PackagesPage() {
 
             {/* FAQ SECTION */}
 
-            <section className="bg-[#F0EDE6] py-20 sm:py-28">
+            <section className="bg-[#E8F4F2] py-20 sm:py-28">
                 <div
                     className={`${container} grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16`}
                 >
@@ -1349,7 +1361,7 @@ export default function PackagesPage() {
 
                         <Link
                             href="/contact"
-                            className="group mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#9F7C3D] transition-colors hover:text-[#7D602F]"
+                            className="group mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#0D2027] transition-colors hover:text-[#167D78]"
                         >
                             Contact our team
                             <ArrowUpRight
@@ -1367,11 +1379,10 @@ export default function PackagesPage() {
                                 return (
                                     <div
                                         key={faq.question}
-                                        className={`gsap-faq-item overflow-hidden rounded-2xl border bg-white transition-colors duration-300 ${
-                                            isOpen
-                                                ? "border-[#B8924A]/50"
-                                                : "border-[#1C1C1C]/10"
-                                        }`}
+                                        className={`gsap-faq-item overflow-hidden rounded-2xl border bg-white transition-colors duration-300 ${isOpen
+                                                ? "border-[#167D78]/50"
+                                                : "border-[#142D35]/10"
+                                            }`}
                                     >
                                         <button
                                             type="button"
@@ -1381,7 +1392,7 @@ export default function PackagesPage() {
                                                 )
                                             }
                                             aria-expanded={isOpen}
-                                            className="flex w-full items-center justify-between gap-5 px-5 py-5 text-left text-[#1C1C1C] transition-colors duration-300 hover:bg-[#FAF8F3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#B8924A] sm:px-6"
+                                            className="flex w-full items-center justify-between gap-5 px-5 py-5 text-left text-[#142D35] transition-colors duration-300 hover:bg-[#F5F7F7] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#167D78] sm:px-6"
                                         >
                                             <span className="text-sm font-semibold sm:text-base">
                                                 {faq.question}
@@ -1395,7 +1406,7 @@ export default function PackagesPage() {
                                                     duration: 0.3,
                                                     ease: EASE,
                                                 }}
-                                                className="shrink-0 text-[#B8924A]"
+                                                className="shrink-0 text-[#167D78]"
                                             >
                                                 <ChevronDown size={19} />
                                             </motion.span>
@@ -1425,7 +1436,7 @@ export default function PackagesPage() {
                                                     }}
                                                     className="overflow-hidden"
                                                 >
-                                                    <p className="px-5 pb-5 text-sm leading-7 text-[#66615A] sm:px-6">
+                                                    <p className="px-5 pb-5 text-sm leading-7 text-[#52666B] sm:px-6">
                                                         {faq.answer}
                                                     </p>
                                                 </motion.div>
@@ -1443,23 +1454,23 @@ export default function PackagesPage() {
 
             <section className="px-5 py-16 sm:px-6 sm:py-24 lg:px-8">
                 <Reveal>
-                    <div className="gsap-package-cta relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-[#B8924A]/20 bg-gradient-to-br from-[#F5EFE3] via-[#EFE5D2] to-[#E8D9BC] px-6 py-12 text-[#1C1C1C] shadow-sm sm:px-12 sm:py-16">
+                    <div className="gsap-package-cta relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-[#167D78]/20 bg-gradient-to-br from-[#E8F4F2] via-[#E8F4F2] to-[#E8F4F2] px-6 py-12 text-[#142D35] shadow-sm sm:px-12 sm:py-16">
                         <motion.div
                             aria-hidden
                             animate={
                                 reduceMotion
                                     ? undefined
                                     : {
-                                          scale: [1, 1.12, 1],
-                                          rotate: [0, 8, 0],
-                                      }
+                                        scale: [1, 1.12, 1],
+                                        rotate: [0, 8, 0],
+                                    }
                             }
                             transition={{
                                 duration: 14,
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
-                            className="gsap-cta-ring pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#B8924A]/30 bg-white/20"
+                            className="gsap-cta-ring pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#167D78]/30 bg-white/20"
                         />
 
                         <motion.div
@@ -1479,15 +1490,15 @@ export default function PackagesPage() {
 
                         <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
                             <div>
-                                <p className="text-sm font-semibold tracking-wide text-[#8B6B35]">
+                                <p className="text-sm font-semibold tracking-wide text-[#718084]">
                                     YOUR PROPERTY JOURNEY STARTS HERE
                                 </p>
 
-                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#1C1C1C] sm:text-4xl lg:text-5xl">
+                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#142D35] sm:text-4xl lg:text-5xl">
                                     Ready to give your property more reach?
                                 </h2>
 
-                                <p className="mt-4 max-w-xl text-base leading-7 text-[#66615A]">
+                                <p className="mt-4 max-w-xl text-base leading-7 text-[#52666B]">
                                     Share your property details. Let us
                                     understand your goals and discuss a
                                     campaign that works for you.
@@ -1506,7 +1517,7 @@ export default function PackagesPage() {
                                     <Link
                                         href="/promote-property"
                                         data-anime-button
-                                        className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:w-auto"
+                                        className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#167D78] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#0D2027] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 sm:w-auto"
                                     >
                                         Promote your property
                                         <ArrowUpRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

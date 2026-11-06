@@ -1,38 +1,50 @@
-
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import Lenis from "lenis";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import {
     ArrowRight,
     ArrowUpRight,
-    BadgeCheck,
-    BarChart3,
     CheckCircle2,
-    ChevronRight,
-    Eye,
-    MapPin,
+    MessageCircle,
     ShieldCheck,
     Target,
-    TrendingUp,
 } from "lucide-react";
+
+import "lenis/dist/lenis.css";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-/* =========================================================
-   PER-CENT KERALA — V2 DESIGN SYSTEM
+const jakarta = Plus_Jakarta_Sans({
+    subsets: ["latin"],
+    variable: "--font-jakarta",
+    display: "swap",
+});
 
-   Gold:             #B8924A
-   Gold Hover:       #9F7C3D
-   Charcoal:         #1C1C1C
-   Warm Background:  #F8F6F1
-   Light Neutral:    #F5EFE3
-   White:            #FFFFFF
+/* =========================================================
+   DESIGN SYSTEM
+========================================================= */
+
+const C = {
+    navy: "#142D35",
+    navyDark: "#0D2027",
+    teal: "#167D78",
+    tealLight: "#E8F4F2",
+    background: "#F5F7F7",
+    text: "#34464B",
+    muted: "#718084",
+    border: "#DFE7E7",
+    white: "#FFFFFF",
+};
+
+/* =========================================================
+   PROPERTY CATEGORIES
 ========================================================= */
 
 const categories = [
@@ -40,153 +52,93 @@ const categories = [
         number: "01",
         title: "Houses & Villas",
         description:
-            "From independent homes to premium villas, we create focused campaigns that connect your property with the right audience.",
+            "From independent family homes to premium villas, we create focused campaigns that present your property with care and connect it with relevant audiences.",
         image: "/images/kerala-house-villa.jpg",
+        label: "Residential properties",
     },
     {
         number: "02",
         title: "Land & Estates",
         description:
-            "Give residential plots, agricultural land and estate properties the visibility they deserve.",
+            "Give residential plots, agricultural land and estate properties a thoughtful presentation that highlights their location and potential.",
         image: "/images/kerala-land-estates.png",
+        label: "Land and plantations",
     },
     {
         number: "03",
         title: "Apartments",
         description:
-            "Position apartments and residential developments in front of buyers exploring the right location and lifestyle.",
+            "Position apartments and residential developments through considered visuals and digital campaigns designed around your property.",
         image: "/images/kerala-apartments.png",
+        label: "Modern living",
     },
     {
         number: "04",
         title: "Commercial Properties",
         description:
-            "Connect commercial spaces with businesses, investors and potential buyers through targeted marketing.",
+            "Present shops, offices and commercial spaces to relevant audiences with a marketing approach suited to your property.",
         image: "/images/kerala-commercial.png",
-    },
-];
-
-const packages = [
-    {
-        name: "Basic",
-        description: "A focused starting point for property promotion.",
-        features: [
-            "Property presentation",
-            "Marketing campaign planning",
-            "Digital promotion",
-            "Lead enquiry coordination",
-        ],
-    },
-    {
-        name: "Premium",
-        description: "More visibility with a broader marketing approach.",
-        features: [
-            "Everything in Basic",
-            "Enhanced property creatives",
-            "Expanded campaign approach",
-            "Campaign performance reporting",
-        ],
-        featured: true,
-    },
-    {
-        name: "Diamond",
-        description:
-            "A more involved marketing and sales coordination experience.",
-        features: [
-            "Everything in Premium",
-            "Dedicated sales coordination",
-            "Buyer follow-up support",
-            "Enhanced campaign monitoring",
-        ],
-    },
-];
-
-const steps = [
-    {
-        number: "01",
-        title: "Submit Your Property",
-        description:
-            "Share your property details, location, asking price and contact information.",
-        icon: Eye,
-    },
-    {
-        number: "02",
-        title: "Property Verification",
-        description:
-            "Our team reviews ownership details, property information and supporting documents.",
-        icon: ShieldCheck,
-    },
-    {
-        number: "03",
-        title: "Get Your Recommendation",
-        description:
-            "We assess your property and recommend a suitable marketing package and campaign approach.",
-        icon: Target,
-    },
-    {
-        number: "04",
-        title: "Launch Your Campaign",
-        description:
-            "Once the scope and payment are agreed, your campaign moves into execution.",
-        icon: TrendingUp,
-    },
-];
-
-const campaigns = [
-    {
-        title: "Premium Home in Kochi",
-        location: "Kochi, Kerala",
-        category: "Residential",
-        image: "/images/sample-kochi-home.png",
-        description:
-            "An illustrative campaign showcasing how a premium home can be presented to a targeted audience.",
-    },
-    {
-        title: "Residential Property in Kozhikode",
-        location: "Kozhikode, Kerala",
-        category: "Apartment",
-        image: "/images/sample-kozhikode-apartment.png",
-        description:
-            "An illustrative campaign concept focused on property presentation and audience reach.",
-    },
-    {
-        title: "Estate Property in Munnar",
-        location: "Munnar, Kerala",
-        category: "Land & Estate",
-        image: "/images/sample-munnar-estate.png",
-        description:
-            "An illustrative marketing concept for estate and land properties.",
-    },
-];
-
-const commitments = [
-    {
-        icon: BadgeCheck,
-        title: "Verified Owners",
-        description: "Property verification before campaign activation.",
-    },
-    {
-        icon: BarChart3,
-        title: "Campaign Reporting",
-        description: "Clear updates on campaign activity and enquiries.",
-    },
-    {
-        icon: CheckCircle2,
-        title: "Zero Brokerage",
-        description: "A marketing service model, not a brokerage listing.",
+        label: "Business spaces",
     },
 ];
 
 /* =========================================================
-   SMALL COMPONENTS
+   CUSTOMER EXPERIENCE
 ========================================================= */
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+const ownerBenefits = [
+    {
+        icon: ShieldCheck,
+        number: "01",
+        title: "A clear process",
+        description:
+            "Know what information is needed, how your property is reviewed and what happens before a campaign begins.",
+    },
+    {
+        icon: Target,
+        number: "02",
+        title: "Marketing with purpose",
+        description:
+            "Your property's type, location and goals help shape the presentation and promotional approach.",
+    },
+    {
+        icon: MessageCircle,
+        number: "03",
+        title: "Communication that matters",
+        description:
+            "Stay informed about the agreed campaign scope, activity and enquiries through clear communication.",
+    },
+];
+
+/* =========================================================
+   REUSABLE COMPONENTS
+========================================================= */
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
     return (
-        <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#9F7C3D]">
-            <span className="h-px w-7 bg-[#B8924A]" />
+        <div className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#167D78]">
+            <span className="h-[2px] w-7 bg-[#167D78]" />
             {children}
-        </span>
+        </div>
+    );
+}
+
+function PrimaryButton({
+    href,
+    children,
+}: {
+    href: string;
+    children: React.ReactNode;
+}) {
+    return (
+        <Link
+            href={href}
+            className="group inline-flex min-h-[54px] items-center justify-center gap-3 rounded-md bg-[#167D78] px-7 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#11645F]"
+        >
+            {children}
+
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </Link>
     );
 }
 
@@ -198,149 +150,115 @@ export default function Home() {
     const mainRef = useRef<HTMLElement>(null);
     const categorySectionRef = useRef<HTMLElement>(null);
 
+    /* =========================================================
+       LENIS SMOOTH SCROLL
+    ========================================================= */
+
+    useEffect(() => {
+        const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        if (prefersReducedMotion) return;
+
+        const lenis = new Lenis({
+            duration: 1.1,
+            smoothWheel: true,
+            wheelMultiplier: 0.9,
+            touchMultiplier: 1.4,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        });
+
+        lenis.on("scroll", ScrollTrigger.update);
+
+        const ticker = (time: number) => {
+            lenis.raf(time * 1000);
+        };
+
+        gsap.ticker.add(ticker);
+        gsap.ticker.lagSmoothing(0);
+
+        return () => {
+            gsap.ticker.remove(ticker);
+            lenis.destroy();
+        };
+    }, []);
+
+    /* =========================================================
+       GSAP ANIMATIONS
+    ========================================================= */
+
     useGSAP(
         () => {
-            const mm = gsap.matchMedia();
+            const media = gsap.matchMedia();
 
-            const reducedMotion = window.matchMedia(
+            const reduceMotion = window.matchMedia(
                 "(prefers-reduced-motion: reduce)"
             ).matches;
 
-            if (reducedMotion) {
-                return () => mm.revert();
-            }
+            if (reduceMotion) return;
 
-            /* ---------------------------------------------
-               FAST HERO TEXT ANIMATION
-
-               Starts immediately.
-               Short duration, no long stagger.
-            --------------------------------------------- */
-
-            const heroTimeline = gsap.timeline({
-                defaults: {
-                    ease: "power3.out",
-                },
-            });
-
-            heroTimeline
-                .from(".hero-label", {
-                    y: 14,
+            // Hero animation
+            gsap
+                .timeline({
+                    defaults: { ease: "power3.out" },
+                })
+                .from(".hero-kicker", {
+                    y: 18,
                     opacity: 0,
-                    duration: 0.4,
+                    duration: 0.55,
                 })
                 .from(
-                    ".hero-heading",
+                    ".hero-title",
+                    {
+                        y: 38,
+                        opacity: 0,
+                        duration: 0.85,
+                    },
+                    "-=0.2"
+                )
+                .from(
+                    ".hero-copy",
                     {
                         y: 22,
                         opacity: 0,
+                        duration: 0.65,
+                    },
+                    "-=0.4"
+                )
+                .from(
+                    ".hero-actions",
+                    {
+                        y: 18,
+                        opacity: 0,
                         duration: 0.55,
                     },
-                    "-=0.25"
-                )
-                .from(
-                    ".hero-description",
-                    {
-                        y: 14,
-                        opacity: 0,
-                        duration: 0.45,
-                    },
                     "-=0.3"
-                )
-                .from(
-                    ".hero-buttons",
-                    {
-                        y: 12,
-                        opacity: 0,
-                        duration: 0.4,
-                    },
-                    "-=0.25"
-                )
-                .from(
-                    ".hero-proof",
-                    {
-                        y: 10,
-                        opacity: 0,
-                        duration: 0.35,
-                    },
-                    "-=0.2"
                 );
 
-            /* ---------------------------------------------
-               QUICK SECTION TEXT REVEALS
-
-               Trigger early.
-               Small movement.
-               Short duration.
-               No noticeable waiting.
-            --------------------------------------------- */
-
-            gsap.utils
-                .toArray<HTMLElement>(".text-reveal")
-                .forEach((element) => {
-                    gsap.fromTo(
-                        element,
-                        {
-                            y: 18,
-                            opacity: 0,
+            // Section reveal
+            gsap.utils.toArray<HTMLElement>(".reveal-item").forEach((element) => {
+                gsap.fromTo(
+                    element,
+                    { y: 24, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.75,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: element,
+                            start: "top 86%",
+                            once: true,
                         },
-                        {
-                            y: 0,
-                            opacity: 1,
-                            duration: 0.55,
-                            ease: "power2.out",
-                            scrollTrigger: {
-                                trigger: element,
-                                start: "top 96%",
-                                once: true,
-                            },
-                        }
-                    );
-                });
+                    }
+                );
+            });
 
-            /* ---------------------------------------------
-               QUICK STAGGER FOR CARD GROUPS
-
-               Maximum 0.08s between cards.
-            --------------------------------------------- */
-
-            gsap.utils
-                .toArray<HTMLElement>(".text-stagger")
-                .forEach((group) => {
-                    const items = group.querySelectorAll(
-                        ".text-stagger-item"
-                    );
-
-                    gsap.fromTo(
-                        items,
-                        {
-                            y: 16,
-                            opacity: 0,
-                        },
-                        {
-                            y: 0,
-                            opacity: 1,
-                            duration: 0.5,
-                            stagger: 0.08,
-                            ease: "power2.out",
-                            scrollTrigger: {
-                                trigger: group,
-                                start: "top 96%",
-                                once: true,
-                            },
-                        }
-                    );
-                });
-
-            /* ---------------------------------------------
-               HERO VIDEO PARALLAX
-            --------------------------------------------- */
-
+            // Hero image parallax
             gsap.fromTo(
                 ".hero-video",
-                {
-                    scale: 1.12,
-                },
+                { scale: 1.08 },
                 {
                     scale: 1,
                     ease: "none",
@@ -348,41 +266,20 @@ export default function Home() {
                         trigger: ".hero-section",
                         start: "top top",
                         end: "bottom top",
-                        scrub: 1.5,
+                        scrub: 1.2,
                     },
                 }
             );
 
-            gsap.to(".hero-background-content", {
-                yPercent: 12,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: ".hero-section",
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: 1.5,
-                },
-            });
-
-            /* ---------------------------------------------
-               STICKY CATEGORY STACK
-
-               One pinned stage.
-               One scroll-linked timeline.
-               No individual card pins.
-            --------------------------------------------- */
-
-            mm.add("(min-width: 768px)", () => {
+            // Desktop category stack
+            media.add("(min-width: 768px)", () => {
                 const section = categorySectionRef.current;
+                const stage = section?.querySelector<HTMLElement>(".category-stage");
 
-                const stage = section?.querySelector<HTMLElement>(
-                    ".category-stack-stage"
-                );
-
-                if (!section || !stage) return;
+                if (!stage) return;
 
                 const cards = gsap.utils.toArray<HTMLElement>(
-                    stage.querySelectorAll(".category-stack-card")
+                    stage.querySelectorAll(".category-card")
                 );
 
                 if (!cards.length) return;
@@ -390,8 +287,8 @@ export default function Home() {
                 gsap.set(cards, {
                     position: "absolute",
                     inset: 0,
-                    yPercent: 105,
-                    scale: 0.96,
+                    yPercent: 110,
+                    scale: 0.97,
                     opacity: 1,
                     transformOrigin: "center center",
                     force3D: true,
@@ -404,21 +301,16 @@ export default function Home() {
                 });
 
                 cards.forEach((card, index) => {
-                    gsap.set(card, {
-                        zIndex: index + 1,
-                    });
+                    gsap.set(card, { zIndex: index + 1 });
                 });
 
-                const stackTimeline = gsap.timeline({
-                    defaults: {
-                        ease: "none",
-                    },
+                const timeline = gsap.timeline({
+                    defaults: { ease: "none" },
                     scrollTrigger: {
                         trigger: stage,
-                        start: "top top+=100",
-                        end: () =>
-                            `+=${window.innerHeight * (cards.length - 1)}`,
-                        scrub: 1.4,
+                        start: "top top+=88",
+                        end: () => `+=${window.innerHeight * (cards.length - 1)}`,
+                        scrub: 1.15,
                         pin: true,
                         pinSpacing: true,
                         anticipatePin: 1,
@@ -429,20 +321,20 @@ export default function Home() {
                 cards.forEach((card, index) => {
                     if (index === 0) return;
 
-                    const previousCard = cards[index - 1];
+                    const previous = cards[index - 1];
 
-                    stackTimeline.to(
-                        previousCard,
+                    timeline.to(
+                        previous,
                         {
-                            scale: 0.93,
-                            y: -30,
-                            opacity: 0.5,
+                            scale: 0.95,
+                            y: -18,
+                            opacity: 0.6,
                             duration: 1,
                         },
                         index - 1
                     );
 
-                    stackTimeline.to(
+                    timeline.to(
                         card,
                         {
                             yPercent: 0,
@@ -454,96 +346,42 @@ export default function Home() {
                 });
 
                 return () => {
-                    stackTimeline.scrollTrigger?.kill();
-                    stackTimeline.kill();
+                    timeline.scrollTrigger?.kill();
+                    timeline.kill();
                 };
             });
 
-            /* ---------------------------------------------
-               MOBILE CATEGORY CARDS
-
-               Natural document flow.
-               No sticky pinning.
-            --------------------------------------------- */
-
-            mm.add("(max-width: 767px)", () => {
-                const cards = gsap.utils.toArray<HTMLElement>(
-                    ".category-stack-card"
-                );
-
-                cards.forEach((card) => {
-                    gsap.set(card, {
-                        clearProps: "all",
-                    });
-                });
-            });
-
-            /* ---------------------------------------------
-               CAMPAIGN IMAGE PARALLAX
-            --------------------------------------------- */
-
+            // Category image parallax
             gsap.utils
-                .toArray<HTMLElement>(".campaign-image-wrap")
-                .forEach((image) => {
-                    const imageElement =
-                        image.querySelector<HTMLElement>(".campaign-image");
+                .toArray<HTMLElement>(".category-image-wrap")
+                .forEach((wrapper) => {
+                    const image = wrapper.querySelector<HTMLElement>(".category-image");
 
-                    if (!imageElement) return;
+                    if (!image) return;
 
                     gsap.fromTo(
-                        imageElement,
-                        {
-                            scale: 1.12,
-                        },
+                        image,
+                        { scale: 1.08 },
                         {
                             scale: 1,
                             ease: "none",
                             scrollTrigger: {
-                                trigger: image,
+                                trigger: wrapper,
                                 start: "top bottom",
                                 end: "bottom top",
-                                scrub: 1.5,
+                                scrub: 1.2,
                             },
                         }
                     );
                 });
 
-            /* ---------------------------------------------
-               IMAGE REVEAL
-            --------------------------------------------- */
-
-            gsap.utils
-                .toArray<HTMLElement>(".gsap-image-reveal")
-                .forEach((element) => {
-                    gsap.fromTo(
-                        element,
-                        {
-                            clipPath: "inset(0 0 100% 0)",
-                        },
-                        {
-                            clipPath: "inset(0 0 0% 0)",
-                            duration: 0.9,
-                            ease: "power2.out",
-                            scrollTrigger: {
-                                trigger: element,
-                                start: "top 94%",
-                                once: true,
-                            },
-                        }
-                    );
-                });
-
-            /* ---------------------------------------------
-               REFRESH SCROLL TRIGGERS
-            --------------------------------------------- */
-
-            const refreshTimer = window.setTimeout(() => {
+            const refresh = window.setTimeout(() => {
                 ScrollTrigger.refresh();
             }, 500);
 
             return () => {
-                window.clearTimeout(refreshTimer);
-                mm.revert();
+                window.clearTimeout(refresh);
+                media.revert();
             };
         },
         {
@@ -553,16 +391,21 @@ export default function Home() {
         }
     );
 
+    /* =========================================================
+       UI
+    ========================================================= */
+
     return (
         <main
             ref={mainRef}
-            className="overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C]"
+            className={`${jakarta.variable} overflow-x-clip bg-[#F5F7F7] font-sans text-[#142D35]`}
+            style={{ fontFamily: "var(--font-jakarta), sans-serif" }}
         >
-            {/* =================================================
-                HERO
-            ================================================= */}
+            {/* =====================================================
+          01 — HERO SECTION
+      ===================================================== */}
 
-            <section className="hero-section relative flex min-h-[760px] items-center overflow-hidden bg-[#1C1C1C] pt-28 sm:min-h-[820px]">
+            <section className="hero-section relative flex min-h-[720px] items-center justify-center overflow-hidden bg-[#0D2027] px-5 py-28 text-center sm:min-h-[780px] lg:min-h-[850px]">
                 <div className="absolute inset-0">
                     <video
                         className="hero-video h-full w-full object-cover"
@@ -578,626 +421,271 @@ export default function Home() {
                         />
                     </video>
 
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#1C1C1C]/90 via-[#1C1C1C]/65 to-[#1C1C1C]/20" />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1C]/65 via-transparent to-[#1C1C1C]/15" />
-
-                    <div className="pointer-events-none absolute right-[12%] top-[25%] h-40 w-40 rounded-full border border-white/20" />
-
-                    <div className="pointer-events-none absolute bottom-[18%] right-[30%] h-24 w-24 rounded-full bg-[#B8924A]/15 blur-2xl" />
-
-                    <div className="pointer-events-none absolute bottom-[30%] right-[8%] h-3 w-3 rounded-full bg-[#B8924A]" />
+                    <div className="absolute inset-0 bg-[#0D2027]/55" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#0D2027]/30 via-[#0D2027]/30 to-[#0D2027]/85" />
                 </div>
 
-                <div className="hero-background-content relative z-10 mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 lg:px-10">
-                    <div className="max-w-3xl">
-                        <div className="hero-label mb-7 inline-flex items-center gap-3 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md">
-                            <span className="h-2 w-2 rounded-full bg-[#B8924A]" />
-                            Premium Property Marketing · Kerala
-                        </div>
-
-                        <h1 className="hero-heading font-display text-5xl leading-[1.08] text-white sm:text-6xl lg:text-7xl">
-                            We don't list your property.
-                            <span className="mt-3 block text-[#D8BB82]">
-                                We market it to the right buyers.
-                            </span>
-                        </h1>
-
-                        <p className="hero-description mt-7 max-w-2xl text-base leading-8 text-white/80 sm:text-lg">
-                            Your property deserves more than a listing.
-                            We build focused marketing campaigns that
-                            connect verified properties with the right audience.
-                        </p>
-
-                        <div className="hero-buttons mt-10 flex flex-col gap-4 sm:flex-row">
-                            <Link
-                                href="/promote-property"
-                                className="inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:-translate-y-1 hover:bg-[#9F7C3D]"
-                            >
-                                Promote My Property
-                                <ArrowUpRight className="ml-2 h-5 w-5" />
-                            </Link>
-
-                            <Link
-                                href="/campaigns"
-                                className="inline-flex h-14 items-center justify-center rounded-full border border-white/50 bg-white/10 px-8 text-sm font-semibold text-white backdrop-blur-sm transition duration-300 hover:bg-white/20"
-                            >
-                                See Campaign Examples
-                                <ArrowRight className="ml-2 h-4 w-4" />
-                            </Link>
-                        </div>
-
-                        <div className="hero-proof mt-14 flex flex-wrap gap-x-8 gap-y-4 text-sm font-medium text-white/85">
-                            <span className="flex items-center gap-2">
-                                <ShieldCheck className="h-4 w-4 text-[#B8924A]" />
-                                Verified Owners
-                            </span>
-
-                            <span className="flex items-center gap-2">
-                                <BarChart3 className="h-4 w-4 text-[#B8924A]" />
-                                Campaign Reporting
-                            </span>
-
-                            <span className="flex items-center gap-2">
-                                <CheckCircle2 className="h-4 w-4 text-[#B8924A]" />
-                                Zero Brokerage
-                            </span>
-                        </div>
+                <div className="relative z-10 mx-auto w-full max-w-[1100px] py-16">
+                    <div className="hero-kicker mx-auto inline-flex items-center gap-3 border border-white/25 bg-white/10 px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md sm:text-xs">
+                        <span className="h-2 w-2 bg-[#5BC1B5]" />
+                        Property marketing across Kerala
                     </div>
-                </div>
-            </section>
 
-            {/* =================================================
-                COMMITMENTS
-            ================================================= */}
+                    <h1 className="hero-title mt-9 text-[42px] font-bold leading-[1.08] tracking-[-0.055em] text-white sm:text-6xl lg:text-[78px]">
+                        Your property deserves
+                        <span className="block text-[#83D4CA]">
+                            the right attention.
+                        </span>
+                    </h1>
 
-            <section className="border-b border-[#1C1C1C]/10 bg-white px-5 py-12 sm:px-8 lg:px-10">
-                <div className="text-stagger mx-auto grid max-w-7xl gap-9 md:grid-cols-3">
-                    {commitments.map((item) => {
-                        const Icon = item.icon;
+                    <p className="hero-copy mx-auto mt-8 max-w-[680px] text-[15px] leading-8 text-white/85 sm:text-lg sm:leading-9">
+                        We bring property presentation, digital advertising and enquiry
+                        coordination together to help property owners reach relevant
+                        audiences across Kerala.
+                    </p>
 
-                        return (
-                            <div
-                                key={item.title}
-                                className="text-stagger-item flex items-start gap-4"
-                            >
-                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F5EFE3] text-[#9F7C3D]">
-                                    <Icon className="h-6 w-6" />
-                                </div>
-
-                                <div>
-                                    <h3 className="font-display text-xl text-[#1C1C1C]">
-                                        {item.title}
-                                    </h3>
-
-                                    <p className="mt-2 text-sm leading-6 text-[#5F5A50]">
-                                        {item.description}
-                                    </p>
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </section>
-
-            {/* =================================================
-                WHY DIFFERENT
-            ================================================= */}
-
-            <section className="px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
-                <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:items-center">
-                    <div className="text-reveal">
-                        <SectionLabel>Why Per-Cent Kerala</SectionLabel>
-
-                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
-                            More than a listing.
-                            <span className="block text-[#B8924A]">
-                                A planned marketing approach.
-                            </span>
-                        </h2>
-
-                        <p className="mt-7 max-w-xl text-base leading-8 text-[#5F5A50]">
-                            Traditional property listings give your property
-                            a place to appear. We take a service-led approach:
-                            verify the property, plan the campaign, reach
-                            relevant audiences and report enquiries.
-                        </p>
+                    <div className="hero-actions mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+                        <PrimaryButton href="/promote-property">
+                            Sell your property
+                        </PrimaryButton>
 
                         <Link
-                            href="/how-it-works"
-                            className="mt-9 inline-flex items-center gap-2 text-sm font-bold text-[#9F7C3D] transition-all duration-300 hover:gap-4"
+                            href="/contact"
+                            className="inline-flex min-h-[54px] items-center justify-center gap-3 border border-white/50 bg-white/10 px-7 text-sm font-semibold text-white backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-white/20"
                         >
-                            Discover how it works
+                            Talk to our team
                             <ArrowRight className="h-4 w-4" />
                         </Link>
                     </div>
 
-                    <div className="text-stagger space-y-4">
-                        {[
-                            {
-                                title: "Property verification",
-                                description:
-                                    "Ownership and property details are reviewed before campaign activation.",
-                            },
-                            {
-                                title: "A suitable marketing plan",
-                                description:
-                                    "Recommendations consider property type, location and asking price.",
-                            },
-                            {
-                                title: "Campaign visibility",
-                                description:
-                                    "Understand campaign activity and enquiries through reporting.",
-                            },
-                        ].map((item, index) => (
-                            <div
-                                key={item.title}
-                                className="text-stagger-item rounded-2xl border border-[#1C1C1C]/10 bg-white p-7 shadow-sm transition duration-500 hover:-translate-y-1 hover:border-[#B8924A]/40 hover:shadow-lg"
-                            >
-                                <span className="text-xs font-bold tracking-widest text-[#B8924A]">
-                                    0{index + 1}
-                                </span>
+                    <div className="mt-14 flex flex-wrap justify-center gap-x-8 gap-y-4 text-xs font-medium text-white/90 sm:text-sm">
+                        <span className="inline-flex items-center gap-2">
+                            <ShieldCheck className="h-4 w-4 text-[#83D4CA]" />
+                            Owner details reviewed
+                        </span>
 
-                                <h3 className="mt-3 font-display text-2xl text-[#1C1C1C]">
-                                    {item.title}
-                                </h3>
+                        <span className="inline-flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-[#83D4CA]" />
+                            Clear campaign scope
+                        </span>
 
-                                <p className="mt-3 text-sm leading-7 text-[#5F5A50]">
-                                    {item.description}
-                                </p>
-                            </div>
-                        ))}
+                        <span className="inline-flex items-center gap-2">
+                            <Target className="h-4 w-4 text-[#83D4CA]" />
+                            Purposeful promotion
+                        </span>
                     </div>
+                </div>
+
+                <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#F5F7F7] to-transparent" />
+
+                <div className="absolute bottom-7 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 sm:flex">
+                    Scroll to explore
+                    <span className="h-8 w-px bg-[#83D4CA]" />
                 </div>
             </section>
 
-            {/* =================================================
-                HOW IT WORKS
-            ================================================= */}
+            {/* =====================================================
+          02 — PROPERTY SHOWCASE
+      ===================================================== */}
 
-            <section className="bg-[#F5EFE3] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
-                <div className="mx-auto max-w-7xl">
-                    <div className="text-reveal mx-auto mb-16 max-w-2xl text-center">
-                        <SectionLabel>Our Process</SectionLabel>
+            <section
+                ref={categorySectionRef}
+                className="relative bg-[#F5F7F7] px-5 py-20 sm:px-8 lg:px-10 lg:py-28"
+            >
+                <div className="mx-auto max-w-[1240px]">
+                    <div className="reveal-item mb-12 flex flex-col justify-between gap-6 md:mb-14 md:flex-row md:items-end">
+                        <div className="max-w-[700px]">
+                            <Eyebrow>Explore what we promote</Eyebrow>
 
-                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
-                            From property enquiry
-                            <span className="block text-[#B8924A]">
-                                to campaign launch.
-                            </span>
-                        </h2>
+                            <h2 className="mt-6 text-4xl font-bold leading-[1.1] tracking-[-0.05em] text-[#142D35] sm:text-5xl lg:text-[60px]">
+                                Every property has
+                                <span className="block text-[#167D78]">
+                                    a story worth telling.
+                                </span>
+                            </h2>
+                        </div>
 
-                        <p className="mt-5 text-base leading-8 text-[#5F5A50]">
-                            A clear process designed to keep property owners
-                            informed at every stage.
+                        <p className="max-w-[380px] text-sm leading-7 text-[#52666B] sm:text-base">
+                            From family homes to commercial spaces, we shape the presentation
+                            around the property and the people you want to reach.
                         </p>
                     </div>
 
-                    <div className="text-stagger grid gap-7 md:grid-cols-2 lg:grid-cols-4">
-                        {steps.map((step) => {
-                            const Icon = step.icon;
+                    <div className="category-stage relative space-y-6 md:h-[580px] md:space-y-0">
+                        {categories.map((category, index) => (
+                            <article
+                                key={category.number}
+                                className="category-card relative grid min-h-[540px] overflow-hidden border border-[#DFE7E7] bg-white shadow-[0_16px_50px_rgba(20,45,53,0.08)] md:min-h-0 md:h-full md:grid-cols-2"
+                                style={{ zIndex: index + 1 }}
+                            >
+                                <div className="category-image-wrap relative min-h-[280px] overflow-hidden bg-[#DFE7E7] md:order-2 md:min-h-full">
+                                    <Image
+                                        src={category.image}
+                                        alt={category.title}
+                                        fill
+                                        priority={index === 0}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                        className="category-image object-cover"
+                                    />
 
-                            return (
-                                <div
-                                    key={step.number}
-                                    className="text-stagger-item rounded-3xl border border-white bg-white p-7 shadow-sm transition duration-500 hover:-translate-y-2 hover:shadow-xl"
-                                >
-                                    <div className="flex items-center justify-between">
-                                        <span className="font-display text-3xl text-[#B8924A]">
-                                            {step.number}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0D2027]/55 via-transparent to-transparent" />
+
+                                    <span className="absolute bottom-6 left-6 border border-white/40 bg-[#0D2027]/70 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-white backdrop-blur-md">
+                                        {category.label}
+                                    </span>
+                                </div>
+
+                                <div className="flex flex-col justify-center px-7 py-10 sm:px-12 sm:py-12 md:order-1 lg:px-16">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-xs font-bold tracking-[0.2em] text-[#167D78]">
+                                            {category.number}
                                         </span>
 
-                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F5EFE3] text-[#9F7C3D]">
-                                            <Icon className="h-6 w-6" />
-                                        </div>
+                                        <span className="h-px w-9 bg-[#167D78]" />
+
+                                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#718084]">
+                                            Property category
+                                        </span>
                                     </div>
 
-                                    <h3 className="mt-8 font-display text-xl text-[#1C1C1C]">
-                                        {step.title}
+                                    <h3 className="mt-8 text-3xl font-bold leading-[1.12] tracking-[-0.045em] text-[#142D35] sm:text-4xl lg:text-[44px]">
+                                        {category.title}
                                     </h3>
 
-                                    <p className="mt-4 text-sm leading-7 text-[#5F5A50]">
-                                        {step.description}
+                                    <p className="mt-6 max-w-[460px] text-sm leading-8 text-[#52666B] sm:text-[15px]">
+                                        {category.description}
                                     </p>
+
+                                    <Link
+                                        href="/promote-property"
+                                        className="group mt-9 inline-flex min-h-[50px] w-fit items-center gap-3 bg-[#142D35] px-6 text-xs font-bold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#167D78]"
+                                    >
+                                        Promote this property
+                                        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                                    </Link>
                                 </div>
+                            </article>
+                        ))}
+                    </div>
+
+                    <p className="mt-8 text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-[#718084]">
+                        Scroll to move through the property categories
+                    </p>
+                </div>
+            </section>
+
+            {/* =====================================================
+          03 — CUSTOMER EXPERIENCE
+      ===================================================== */}
+
+            <section className="border-y border-[#DFE7E7] bg-white px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
+                <div className="mx-auto grid max-w-[1240px] gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20">
+                    <div className="reveal-item">
+                        <Eyebrow>Customer satisfaction</Eyebrow>
+
+                        <h2 className="mt-7 text-4xl font-bold leading-[1.1] tracking-[-0.05em] text-[#142D35] sm:text-5xl lg:text-[56px]">
+                            A better experience
+                            <span className="block text-[#167D78]">
+                                for every property owner.
+                            </span>
+                        </h2>
+
+                        <p className="mt-7 max-w-[540px] text-sm leading-8 text-[#52666B] sm:text-base">
+                            Good property marketing starts with understanding the owner. We
+                            focus on a clear process, thoughtful presentation and honest
+                            communication, so you know what to expect at every stage.
+                        </p>
+
+                        <Link
+                            href="/how-it-works"
+                            className="group mt-9 inline-flex items-center gap-3 text-sm font-bold text-[#142D35]"
+                        >
+                            Understand how it works
+
+                            <span className="flex h-10 w-10 items-center justify-center border border-[#DFE7E7] transition duration-300 group-hover:border-[#167D78] group-hover:bg-[#167D78] group-hover:text-white">
+                                <ArrowUpRight className="h-4 w-4" />
+                            </span>
+                        </Link>
+                    </div>
+
+                    <div className="grid gap-4">
+                        {ownerBenefits.map((benefit) => {
+                            const Icon = benefit.icon;
+
+                            return (
+                                <article
+                                    key={benefit.number}
+                                    className="reveal-item border border-[#DFE7E7] bg-[#F8FAFA] p-6 transition duration-300 hover:-translate-y-1 hover:border-[#167D78]/50 hover:bg-white hover:shadow-[0_14px_40px_rgba(20,45,53,0.07)] sm:p-8"
+                                >
+                                    <div className="flex items-start gap-5">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-[#E8F4F2] text-[#167D78]">
+                                            <Icon className="h-5 w-5" />
+                                        </div>
+
+                                        <div>
+                                            <div className="text-[10px] font-bold tracking-[0.18em] text-[#167D78]">
+                                                {benefit.number}
+                                            </div>
+
+                                            <h3 className="mt-2 text-lg font-bold text-[#142D35]">
+                                                {benefit.title}
+                                            </h3>
+
+                                            <p className="mt-2 text-sm leading-7 text-[#52666B]">
+                                                {benefit.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </article>
                             );
                         })}
                     </div>
                 </div>
             </section>
 
-            {/* =================================================
-                PROPERTY CATEGORIES — STICKY STACK
-            ================================================= */}
+            {/* =====================================================
+          04 — CONTACT CTA
+      ===================================================== */}
 
-            <section
-                ref={categorySectionRef}
-                className="relative bg-[#F8F6F1] px-5 py-24 sm:px-8 lg:px-10 lg:py-32"
-            >
-                <div className="mx-auto max-w-7xl">
-                    <div className="text-reveal mb-16 max-w-2xl">
-                        <SectionLabel>Property Categories</SectionLabel>
+            <section className="relative overflow-hidden bg-[#142D35] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
+                <div className="pointer-events-none absolute -right-32 -top-40 h-[480px] w-[480px] rounded-full border border-white/10" />
 
-                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
-                            Every property has
-                            <span className="block text-[#B8924A]">
-                                a story to tell.
-                            </span>
-                        </h2>
+                <div className="pointer-events-none absolute -bottom-64 -left-24 h-[520px] w-[520px] rounded-full border border-[#83D4CA]/20" />
 
-                        <p className="mt-5 text-base leading-8 text-[#5F5A50]">
-                            Different properties need different marketing
-                            approaches. Explore the categories we work with.
-                        </p>
-                    </div>
+                <div className="reveal-item relative mx-auto max-w-[900px] text-center">
+                    <Eyebrow>Let's get started</Eyebrow>
 
-                    <div className="category-stack-stage relative h-auto space-y-6 md:h-[520px] md:space-y-0">
-                        {categories.map((category, index) => (
-                            <article
-                                key={category.number}
-                                className="category-stack-card relative grid min-h-[480px] overflow-hidden rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-[0_20px_60px_rgba(28,28,28,0.12)] md:absolute md:inset-0 md:min-h-0 md:grid-cols-2"
-                                style={{ zIndex: index + 1 }}
-                            >
-                                <div className="relative min-h-[260px] overflow-hidden md:order-2 md:min-h-full">
-                                    <Image
-                                        src={category.image}
-                                        alt={category.title}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, 50vw"
-                                        className="object-cover transition-transform duration-700 hover:scale-105"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col justify-center p-8 sm:p-12 md:order-1 lg:p-16">
-                                    <span className="text-sm font-semibold tracking-widest text-[#B8924A]">
-                                        {category.number} / 04
-                                    </span>
-
-                                    <h3 className="mt-6 font-display text-4xl leading-tight text-[#1C1C1C] sm:text-5xl">
-                                        {category.title}
-                                    </h3>
-
-                                    <p className="mt-6 max-w-md text-base leading-8 text-[#5F5A50]">
-                                        {category.description}
-                                    </p>
-
-                                    <Link
-                                        href="/promote-property"
-                                        className="mt-9 inline-flex w-fit items-center gap-2 rounded-full bg-[#B8924A] px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-[#9F7C3D]"
-                                    >
-                                        Promote Your Property
-                                        <ArrowUpRight className="h-4 w-4" />
-                                    </Link>
-                                </div>
-                            </article>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* =================================================
-                PACKAGES
-            ================================================= */}
-
-            <section className="bg-white px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
-                <div className="mx-auto max-w-7xl">
-                    <div className="text-reveal mx-auto mb-16 max-w-2xl text-center">
-                        <SectionLabel>Marketing Packages</SectionLabel>
-
-                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
-                            The right plan for
-                            <span className="block text-[#B8924A]">
-                                your property.
-                            </span>
-                        </h2>
-
-                        <p className="mt-5 text-base leading-8 text-[#5F5A50]">
-                            Choose a service level based on your property
-                            and marketing requirements. Final scope and
-                            pricing are discussed with our team.
-                        </p>
-                    </div>
-
-                    <div className="text-stagger grid gap-7 lg:grid-cols-3">
-                        {packages.map((pkg) => (
-                            <div
-                                key={pkg.name}
-                                className={`text-stagger-item relative isolate flex flex-col rounded-3xl border p-8 transition duration-500 hover:-translate-y-2 hover:shadow-xl ${
-                                    pkg.featured
-                                        ? "border-[#B8924A] bg-[#F5EFE3] shadow-lg"
-                                        : "border-[#1C1C1C]/10 bg-[#F8F6F1]"
-                                }`}
-                            >
-                                <div className="relative z-10 flex flex-1 flex-col">
-                                    {pkg.featured && (
-                                        <span className="mb-5 inline-flex w-fit rounded-full bg-[#B8924A] px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white">
-                                            Popular choice
-                                        </span>
-                                    )}
-
-                                    <h3 className="font-display text-3xl text-[#1C1C1C]">
-                                        {pkg.name}
-                                    </h3>
-
-                                    <p className="mt-4 min-h-14 text-sm leading-7 text-[#5F5A50]">
-                                        {pkg.description}
-                                    </p>
-
-                                    <div className="my-7 h-px bg-[#1C1C1C]/10" />
-
-                                    <ul className="flex-1 space-y-4">
-                                        {pkg.features.map((feature) => (
-                                            <li
-                                                key={feature}
-                                                className="flex items-start gap-3 text-sm text-[#5F5A50]"
-                                            >
-                                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#B8924A]" />
-                                                {feature}
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    <Link
-                                        href="/packages"
-                                        className="mt-9 inline-flex h-12 items-center justify-center rounded-full border border-[#B8924A] px-6 text-sm font-bold text-[#9F7C3D] transition duration-300 hover:bg-[#B8924A] hover:text-white"
-                                    >
-                                        Explore Package
-                                        <ArrowUpRight className="ml-2 h-4 w-4" />
-                                    </Link>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* =================================================
-                CAMPAIGN EXAMPLES
-            ================================================= */}
-
-            <section className="bg-[#F8F6F1] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
-                <div className="mx-auto max-w-7xl">
-                    <div className="text-reveal mb-14 flex flex-col justify-between gap-7 md:flex-row md:items-end">
-                        <div className="max-w-2xl">
-                            <SectionLabel>Campaign Examples</SectionLabel>
-
-                            <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
-                                See how property
-                                <span className="block text-[#B8924A]">
-                                    marketing comes together.
-                                </span>
-                            </h2>
-
-                            <p className="mt-5 text-base leading-8 text-[#5F5A50]">
-                                Explore illustrative campaign concepts
-                                created for different property types.
-                            </p>
-                        </div>
-
-                        <Link
-                            href="/campaigns"
-                            className="inline-flex items-center gap-2 text-sm font-bold text-[#9F7C3D] transition-all duration-300 hover:gap-4"
-                        >
-                            View all examples
-                            <ArrowRight className="h-4 w-4" />
-                        </Link>
-                    </div>
-
-                    <div className="campaign-grid text-stagger grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        {campaigns.map((campaign) => (
-                            <article
-                                key={campaign.title}
-                                className="text-stagger-item campaign-card group overflow-hidden rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-sm transition duration-500 hover:-translate-y-2 hover:shadow-xl"
-                            >
-                                <div className="campaign-image-wrap relative h-64 overflow-hidden">
-                                    <Image
-                                        src={campaign.image}
-                                        alt={campaign.title}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, 33vw"
-                                        className="campaign-image object-cover"
-                                    />
-
-                                    <span className="absolute left-5 top-5 rounded-full bg-white/90 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[#9F7C3D] backdrop-blur">
-                                        Illustrative concept
-                                    </span>
-                                </div>
-
-                                <div className="p-7">
-                                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#9F7C3D]">
-                                        <MapPin className="h-3.5 w-3.5" />
-                                        {campaign.location}
-                                    </div>
-
-                                    <h3 className="mt-4 font-display text-2xl text-[#1C1C1C]">
-                                        {campaign.title}
-                                    </h3>
-
-                                    <p className="mt-4 text-sm leading-7 text-[#5F5A50]">
-                                        {campaign.description}
-                                    </p>
-
-                                    <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-[#9F7C3D]">
-                                        {campaign.category}
-                                        <ChevronRight className="h-4 w-4" />
-                                    </span>
-                                </div>
-                            </article>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* =================================================
-                CAMPAIGN REPORT
-            ================================================= */}
-
-            <section className="bg-[#1C1C1C] px-5 py-24 text-white sm:px-8 lg:px-10 lg:py-32">
-                <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:items-center">
-                    <div className="text-reveal">
-                        <SectionLabel>Campaign Transparency</SectionLabel>
-
-                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
-                            Understand where
-                            <span className="block text-[#D8BB82]">
-                                your campaign stands.
-                            </span>
-                        </h2>
-
-                        <p className="mt-7 max-w-xl text-base leading-8 text-white/65">
-                            Campaign reporting helps property owners
-                            understand activity, enquiries and marketing
-                            performance without relying on guesswork.
-                        </p>
-
-                        <div className="mt-9 flex items-center gap-3 text-sm text-white/80">
-                            <ShieldCheck className="h-5 w-5 text-[#B8924A]" />
-                            Clear campaign updates
-                        </div>
-                    </div>
-
-                    <div className="text-reveal rounded-3xl border border-white/15 bg-white/10 p-7 backdrop-blur-xl sm:p-10">
-                        <div className="flex items-center justify-between border-b border-white/15 pb-6">
-                            <div>
-                                <p className="text-xs font-bold uppercase tracking-widest text-[#D8BB82]">
-                                    Sample Campaign Report
-                                </p>
-
-                                <h3 className="mt-2 font-display text-2xl">
-                                    Campaign Overview
-                                </h3>
-                            </div>
-
-                            <BarChart3 className="h-8 w-8 text-[#D8BB82]" />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4 py-7">
-                            {[
-                                {
-                                    label: "Ad Spend",
-                                    value: "₹15,000",
-                                },
-                                {
-                                    label: "Enquiries",
-                                    value: "42",
-                                },
-                                {
-                                    label: "Campaign Reach",
-                                    value: "18,500",
-                                },
-                                {
-                                    label: "Best Creative",
-                                    value: "Villa Tour",
-                                },
-                            ].map((item) => (
-                                <div
-                                    key={item.label}
-                                    className="rounded-2xl border border-white/10 bg-white/5 p-5"
-                                >
-                                    <p className="text-xs text-white/55">
-                                        {item.label}
-                                    </p>
-
-                                    <p className="mt-3 font-display text-xl text-[#D8BB82]">
-                                        {item.value}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-
-                        <p className="text-xs leading-6 text-white/45">
-                            Illustrative sample figures only. These are
-                            not actual Per-Cent Kerala campaign results.
-                            Replace them with verified campaign data later.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* =================================================
-                TRUST SECTION
-            ================================================= */}
-
-            <section className="px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
-                <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2 lg:items-center">
-                    <div className="gsap-image-reveal relative min-h-[430px] overflow-hidden rounded-3xl">
-                        <Image
-                            src="/images/kerala-luxury-interior.png"
-                            alt="Premium Kerala property interior"
-                            fill
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            className="object-cover"
-                        />
-                    </div>
-
-                    <div className="text-reveal">
-                        <SectionLabel>Built Around Trust</SectionLabel>
-
-                        <h2 className="mt-6 font-display text-4xl leading-tight sm:text-5xl">
-                            Your property.
-                            <span className="block text-[#B8924A]">
-                                Our focused attention.
-                            </span>
-                        </h2>
-
-                        <p className="mt-7 text-base leading-8 text-[#5F5A50]">
-                            We believe property marketing should be
-                            transparent, structured and accountable.
-                            Every campaign starts with understanding
-                            the property and agreeing on the right approach.
-                        </p>
-
-                        <ul className="mt-8 space-y-5">
-                            {[
-                                "Property details reviewed before promotion",
-                                "Marketing scope discussed before activation",
-                                "Campaign activity and enquiries reported",
-                                "No brokerage-based listing model",
-                            ].map((item) => (
-                                <li
-                                    key={item}
-                                    className="flex items-start gap-3 text-sm leading-7 text-[#5F5A50]"
-                                >
-                                    <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-[#B8924A]" />
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            {/* =================================================
-                FINAL CTA
-            ================================================= */}
-
-            <section className="relative overflow-hidden bg-[#F5EFE3] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
-                <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full border border-[#B8924A]/25" />
-
-                <div className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full border border-[#B8924A]/20" />
-
-                <div className="text-reveal relative mx-auto max-w-4xl text-center">
-                    <SectionLabel>Start Your Campaign</SectionLabel>
-
-                    <h2 className="mt-7 font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
+                    <h2 className="mt-7 text-4xl font-bold leading-[1.1] tracking-[-0.05em] text-white sm:text-5xl lg:text-[64px]">
                         Ready to give your property
-                        <span className="block text-[#B8924A]">
+                        <span className="block text-[#83D4CA]">
                             the attention it deserves?
                         </span>
                     </h2>
 
-                    <p className="mx-auto mt-7 max-w-2xl text-base leading-8 text-[#5F5A50]">
-                        Tell us about your property. Our team will review
-                        the details and help identify a suitable marketing approach.
+                    <p className="mx-auto mt-7 max-w-[620px] text-sm leading-8 text-white/75 sm:text-base">
+                        Tell us about your property and what you are looking to achieve.
+                        Our team will understand your requirements and discuss a suitable
+                        marketing approach with you.
                     </p>
 
-                    <Link
-                        href="/promote-property"
-                        className="mt-10 inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-9 text-sm font-bold text-white shadow-lg transition duration-300 hover:-translate-y-1 hover:bg-[#9F7C3D]"
-                    >
-                        Promote My Property
-                        <ArrowUpRight className="ml-2 h-5 w-5" />
-                    </Link>
+                    <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+                        <PrimaryButton href="/promote-property">
+                            Sell your property
+                        </PrimaryButton>
+
+                        <Link
+                            href="/contact"
+                            className="inline-flex min-h-[54px] items-center justify-center gap-3 border border-white/35 bg-white/5 px-7 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-white/15"
+                        >
+                            Contact us
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    </div>
+
+                    <p className="mt-8 text-[11px] leading-6 text-white/50">
+                        Clear campaign scope and terms will be discussed before anything
+                        begins.
+                    </p>
                 </div>
             </section>
         </main>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -27,13 +26,23 @@ gsap.registerPlugin(ScrollTrigger);
 const EASE = [0.22, 1, 0.36, 1] as const;
 const container = "mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8";
 
-/* ---------- BRAND COLORS ---------- */
-/*
-   White:       #FFFFFF
-   Charcoal:    #1C1C1C
-   Gold:        #B8924A
-   Warm neutral:#F8F6F1
-*/
+/* ---------- HOMEPAGE DESIGN SYSTEM ---------- */
+
+const COLORS = {
+    navy: "#142D35",
+    navyDark: "#0D2027",
+    teal: "#167D78",
+    tealLight: "#83D4CA",
+    tealSoft: "#E8F4F2",
+    background: "#F5F7F7",
+    text: "#34464B",
+    body: "#52666B",
+    muted: "#718084",
+    border: "#DFE7E7",
+    white: "#FFFFFF",
+};
+
+/* ---------- PROCESS STEPS ---------- */
 
 const steps = [
     {
@@ -49,7 +58,7 @@ const steps = [
         ],
         image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200",
         imageAlt: "Property documents and planning",
-        tint: "bg-[#F5EFE3]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         number: "02",
@@ -64,7 +73,7 @@ const steps = [
         ],
         image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200",
         imageAlt: "Business consultation meeting",
-        tint: "bg-[#F3EBDD]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         number: "03",
@@ -79,7 +88,7 @@ const steps = [
         ],
         image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200",
         imageAlt: "Digital marketing campaign analytics",
-        tint: "bg-[#F6EDE1]",
+        tint: "bg-[#E8F4F2]",
     },
     {
         number: "04",
@@ -94,7 +103,7 @@ const steps = [
         ],
         image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=1200",
         imageAlt: "Real estate agent speaking with a buyer",
-        tint: "bg-[#F5EFE3]",
+        tint: "bg-[#E8F4F2]",
     },
 ];
 
@@ -141,11 +150,11 @@ function SectionHeading({
 }) {
     return (
         <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold tracking-wide text-[#B8924A]">
+            <p className="text-sm font-semibold tracking-wide text-[#167D78]">
                 {label}
             </p>
 
-            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#1C1C1C] sm:text-4xl lg:text-[2.75rem]">
+            <h2 className="mt-3 font-display text-3xl leading-tight tracking-tight text-[#142D35] sm:text-4xl lg:text-[2.75rem]">
                 {title}
             </h2>
 
@@ -155,11 +164,11 @@ function SectionHeading({
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-                className="mx-auto mt-4 block h-1 w-16 origin-center rounded-full bg-[#B8924A]"
+                className="mx-auto mt-4 block h-1 w-16 origin-center rounded-full bg-[#167D78]"
             />
 
             {text && (
-                <p className="mt-5 text-base leading-7 text-[#66615A]">
+                <p className="mt-5 text-base leading-7 text-[#52666B]">
                     {text}
                 </p>
             )}
@@ -198,6 +207,7 @@ export default function HowItWorksPage() {
 
         const ctx = gsap.context(() => {
             /* Hero title entrance */
+
             gsap.fromTo(
                 ".how-hero-title",
                 {
@@ -220,6 +230,7 @@ export default function HowItWorksPage() {
             );
 
             /* Step cards stagger entrance */
+
             gsap.fromTo(
                 ".gsap-step-card",
                 {
@@ -243,6 +254,7 @@ export default function HowItWorksPage() {
             );
 
             /* Step images reveal */
+
             gsap.utils.toArray<HTMLElement>(".gsap-step-image").forEach(
                 (image) => {
                     gsap.fromTo(
@@ -267,6 +279,7 @@ export default function HowItWorksPage() {
             );
 
             /* Step number entrance */
+
             gsap.fromTo(
                 ".gsap-step-number",
                 {
@@ -288,6 +301,7 @@ export default function HowItWorksPage() {
             );
 
             /* Final CTA entrance */
+
             gsap.fromTo(
                 ".gsap-how-cta",
                 {
@@ -310,6 +324,7 @@ export default function HowItWorksPage() {
             );
 
             /* CTA decorative movement */
+
             gsap.to(".gsap-cta-decoration", {
                 rotate: 360,
                 duration: 35,
@@ -319,6 +334,7 @@ export default function HowItWorksPage() {
         });
 
         /* Anime.js: step icons */
+
         const iconObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -343,6 +359,7 @@ export default function HowItWorksPage() {
             .forEach((icon) => iconObserver.observe(icon));
 
         /* Anime.js: checklist stagger */
+
         const pointObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -371,6 +388,7 @@ export default function HowItWorksPage() {
             .forEach((list) => pointObserver.observe(list));
 
         /* Anime.js: button hover */
+
         const buttons = document.querySelectorAll("[data-anime-button]");
         const buttonCleanups: (() => void)[] = [];
 
@@ -409,14 +427,14 @@ export default function HowItWorksPage() {
     }, [reduceMotion]);
 
     return (
-        <main className="min-h-screen overflow-x-clip bg-[#F8F6F1] text-[#1C1C1C] antialiased">
+        <main className="min-h-screen overflow-x-clip bg-[#F5F7F7] text-[#142D35] antialiased">
             {/* PAGE SCROLL PROGRESS */}
 
             {!reduceMotion && (
                 <motion.div
                     aria-hidden
                     style={{ scaleX: pageProgress }}
-                    className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-[#B8924A]"
+                    className="fixed inset-x-0 top-0 z-[60] h-1 origin-left bg-[#167D78]"
                 />
             )}
 
@@ -424,7 +442,7 @@ export default function HowItWorksPage() {
 
             {/* HERO */}
 
-            <section className="relative overflow-hidden bg-gradient-to-b from-[#F5EFE3] to-[#F8F6F1]">
+            <section className="relative overflow-hidden bg-gradient-to-b from-[#E8F4F2] to-[#F5F7F7]">
                 <motion.div
                     aria-hidden
                     animate={
@@ -437,7 +455,7 @@ export default function HowItWorksPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#E9DFC9] blur-2xl sm:h-80 sm:w-80"
+                    className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#E8F4F2] blur-2xl sm:h-80 sm:w-80"
                 />
 
                 <motion.div
@@ -450,24 +468,24 @@ export default function HowItWorksPage() {
                         repeat: Infinity,
                         ease: "easeInOut",
                     }}
-                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#E8D9BC] blur-2xl sm:h-72 sm:w-72"
+                    className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-[#E8F4F2] blur-2xl sm:h-72 sm:w-72"
                 />
 
                 <div className={`${container} relative py-24 sm:py-28 lg:py-32`}>
                     <Reveal className="mx-auto max-w-3xl text-center">
-                        <div className="inline-flex items-center gap-2 rounded-full border border-[#B8924A]/20 bg-white px-4 py-2 text-sm font-semibold text-[#8B6B35] shadow-sm">
-                            <span className="h-2 w-2 rounded-full bg-[#B8924A]" />
+                        <div className="inline-flex items-center gap-2 rounded-full border border-[#167D78]/20 bg-white px-4 py-2 text-sm font-semibold text-[#167D78] shadow-sm">
+                            <span className="h-2 w-2 rounded-full bg-[#167D78]" />
                             Simple. Clear. Structured.
                         </div>
 
-                        <h1 className="how-hero-title mt-7 font-display text-4xl leading-tight tracking-tight text-[#1C1C1C] sm:text-5xl lg:text-6xl">
+                        <h1 className="how-hero-title mt-7 font-display text-4xl leading-tight tracking-tight text-[#142D35] sm:text-5xl lg:text-6xl">
                             How It{" "}
-                            <span className="text-[#B8924A]">
+                            <span className="text-[#167D78]">
                                 Works
                             </span>
                         </h1>
 
-                        <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#66615A] sm:text-lg">
+                        <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#52666B] sm:text-lg">
                             Promoting your property doesn't have to be
                             complicated. We follow a simple process from
                             your first enquiry to campaign launch and
@@ -478,7 +496,7 @@ export default function HowItWorksPage() {
                             <Link
                                 href="/promote-property"
                                 data-anime-button
-                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2"
+                                className="group inline-flex h-14 items-center justify-center rounded-full bg-[#167D78] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#0D2027] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2"
                             >
                                 Promote your property
 
@@ -493,7 +511,7 @@ export default function HowItWorksPage() {
 
             <section
                 id="steps"
-                className="scroll-mt-24 bg-[#F3F0E9] py-20 sm:py-24"
+                className="scroll-mt-24 bg-[#F5F7F7] py-20 sm:py-24"
             >
                 <div className={container}>
                     <Reveal>
@@ -512,13 +530,13 @@ export default function HowItWorksPage() {
 
                         <div
                             aria-hidden
-                            className="pointer-events-none absolute bottom-6 left-6 top-6 hidden w-0.5 bg-[#B8924A]/20 lg:block"
+                            className="pointer-events-none absolute bottom-6 left-6 top-6 hidden w-0.5 bg-[#167D78]/20 lg:block"
                         >
                             <motion.div
                                 style={{
                                     scaleY: reduceMotion ? 1 : railFill,
                                 }}
-                                className="h-full w-full origin-top bg-[#B8924A]"
+                                className="h-full w-full origin-top bg-[#167D78]"
                             />
                         </div>
 
@@ -551,7 +569,7 @@ export default function HowItWorksPage() {
                                                 stiffness: 320,
                                                 damping: 18,
                                             }}
-                                            className="gsap-step-number flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#B8924A] bg-white font-display text-base font-bold text-[#8B6B35] shadow-sm"
+                                            className="gsap-step-number flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#167D78] bg-white font-display text-base font-bold text-[#167D78] shadow-sm"
                                         >
                                             {step.number}
                                         </motion.span>
@@ -559,7 +577,7 @@ export default function HowItWorksPage() {
 
                                     {/* STEP CARD */}
 
-                                    <motion.article className="gsap-step-card group grid min-w-0 overflow-hidden rounded-3xl border border-[#1C1C1C]/10 bg-white shadow-sm transition-shadow duration-300 hover:shadow-[0_20px_55px_rgba(28,28,28,0.10)] lg:grid-cols-2">
+                                    <motion.article className="gsap-step-card group grid min-w-0 overflow-hidden rounded-3xl border border-[#142D35]/10 bg-white shadow-sm transition-shadow duration-300 hover:shadow-[0_20px_55px_rgba(20,45,53,0.10)] lg:grid-cols-2">
                                         {/* STEP IMAGE */}
 
                                         <div
@@ -573,7 +591,7 @@ export default function HowItWorksPage() {
                                                 className="gsap-step-image absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                                             />
 
-                                            <div className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#B8924A]/20 bg-white font-display text-lg font-semibold text-[#8B6B35] shadow-md sm:left-7 sm:top-7 lg:hidden">
+                                            <div className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-[#167D78]/20 bg-white font-display text-lg font-semibold text-[#167D78] shadow-md sm:left-7 sm:top-7 lg:hidden">
                                                 {step.number}
                                             </div>
                                         </div>
@@ -596,20 +614,20 @@ export default function HowItWorksPage() {
                                                     damping: 15,
                                                 }}
                                                 data-anime-icon
-                                                className={`flex h-12 w-12 items-center justify-center rounded-xl text-[#8B6B35] ${step.tint}`}
+                                                className={`flex h-12 w-12 items-center justify-center rounded-xl text-[#167D78] ${step.tint}`}
                                             >
                                                 <Icon size={23} />
                                             </motion.div>
 
-                                            <p className="mt-5 text-sm font-semibold tracking-wide text-[#B8924A]">
+                                            <p className="mt-5 text-sm font-semibold tracking-wide text-[#167D78]">
                                                 STEP {step.number}
                                             </p>
 
-                                            <h3 className="mt-2 font-display text-2xl leading-tight text-[#1C1C1C] sm:text-3xl">
+                                            <h3 className="mt-2 font-display text-2xl leading-tight text-[#142D35] sm:text-3xl">
                                                 {step.title}
                                             </h3>
 
-                                            <p className="mt-4 text-sm leading-7 text-[#66615A] sm:text-base">
+                                            <p className="mt-4 text-sm leading-7 text-[#52666B] sm:text-base">
                                                 {step.description}
                                             </p>
 
@@ -623,11 +641,11 @@ export default function HowItWorksPage() {
                                                         data-anime-point
                                                         className="flex min-w-0 items-start gap-3"
                                                     >
-                                                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F5EFE3] text-[#9F7C3D]">
+                                                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#E8F4F2] text-[#167D78]">
                                                             <Check size={13} />
                                                         </span>
 
-                                                        <span className="text-sm leading-6 text-[#1C1C1C]">
+                                                        <span className="text-sm leading-6 text-[#142D35]">
                                                             {point}
                                                         </span>
                                                     </li>
@@ -646,7 +664,7 @@ export default function HowItWorksPage() {
 
             <section className="px-5 py-16 sm:px-6 sm:py-20 lg:px-8">
                 <Reveal>
-                    <div className="gsap-how-cta relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-[#B8924A]/20 bg-gradient-to-br from-[#F5EFE3] via-[#EFE5D2] to-[#E8D9BC] px-6 py-12 text-[#1C1C1C] shadow-sm sm:px-12 sm:py-16">
+                    <div className="gsap-how-cta relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-[#167D78]/20 bg-gradient-to-br from-[#E8F4F2] via-[#E8F4F2] to-[#E8F4F2] px-6 py-12 text-[#142D35] shadow-sm sm:px-12 sm:py-16">
                         <motion.div
                             aria-hidden
                             animate={
@@ -662,7 +680,7 @@ export default function HowItWorksPage() {
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
-                            className="gsap-cta-decoration pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#B8924A]/20 bg-white/30"
+                            className="gsap-cta-decoration pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[#167D78]/20 bg-white/30"
                         />
 
                         <motion.div
@@ -682,15 +700,15 @@ export default function HowItWorksPage() {
 
                         <div className="relative z-10 grid items-center gap-8 lg:grid-cols-[1.4fr_1fr] lg:gap-12">
                             <div>
-                                <p className="text-sm font-semibold tracking-wide text-[#8B6B35]">
+                                <p className="text-sm font-semibold tracking-wide text-[#167D78]">
                                     YOUR PROPERTY JOURNEY STARTS HERE
                                 </p>
 
-                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#1C1C1C] sm:text-4xl lg:text-5xl">
+                                <h2 className="mt-3 font-display text-3xl leading-tight text-[#142D35] sm:text-4xl lg:text-5xl">
                                     Ready to promote your property?
                                 </h2>
 
-                                <p className="mt-4 max-w-xl text-base leading-7 text-[#66615A]">
+                                <p className="mt-4 max-w-xl text-base leading-7 text-[#52666B]">
                                     Share your property details. Our team
                                     will review your requirements and
                                     discuss the next steps with you.
@@ -701,7 +719,7 @@ export default function HowItWorksPage() {
                                 <Link
                                     href="/promote-property"
                                     data-anime-button
-                                    className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#B8924A] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#9F7C3D] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8924A] focus-visible:ring-offset-2 sm:w-auto"
+                                    className="group inline-flex h-14 w-full items-center justify-center rounded-full bg-[#167D78] px-8 text-sm font-bold text-white transition duration-300 hover:bg-[#0D2027] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#167D78] focus-visible:ring-offset-2 sm:w-auto"
                                 >
                                     Promote your property
 
@@ -711,7 +729,7 @@ export default function HowItWorksPage() {
                                 <Link
                                     href="/packages"
                                     data-anime-button
-                                    className="inline-flex h-14 w-full items-center justify-center rounded-full border border-[#B8924A]/50 bg-white px-8 text-sm font-semibold text-[#1C1C1C] transition duration-300 hover:border-[#B8924A] hover:bg-[#F5EFE3] sm:w-auto"
+                                    className="inline-flex h-14 w-full items-center justify-center rounded-full border border-[#167D78]/50 bg-white px-8 text-sm font-semibold text-[#142D35] transition duration-300 hover:border-[#167D78] hover:bg-[#E8F4F2] sm:w-auto"
                                 >
                                     Explore packages
                                 </Link>
