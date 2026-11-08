@@ -724,19 +724,17 @@ export default function Home() {
                         {packages.map((pkg) => (
                             <article
                                 key={pkg.number}
-                                className={`reveal-item group relative flex h-full flex-col overflow-hidden rounded-[28px] border p-7 transition-all duration-500 sm:p-8 ${
-                                    pkg.featured
+                                className={`reveal-item group relative flex h-full flex-col overflow-hidden rounded-[28px] border p-7 transition-all duration-500 sm:p-8 ${pkg.featured
                                         ? "border-[#167D78]/50 bg-white shadow-[0_24px_65px_rgba(22,125,120,0.14)] lg:-translate-y-3 lg:scale-[1.025] lg:hover:-translate-y-5"
                                         : "border-[#DFE7E7] bg-white/90 shadow-[0_16px_45px_rgba(20,45,53,0.06)] hover:-translate-y-2 hover:border-[#167D78]/40 hover:shadow-[0_24px_55px_rgba(20,45,53,0.10)]"
-                                }`}
+                                    }`}
                             >
                                 {/* Featured top accent */}
                                 <div
-                                    className={`absolute inset-x-0 top-0 h-1.5 ${
-                                        pkg.featured
+                                    className={`absolute inset-x-0 top-0 h-1.5 ${pkg.featured
                                             ? "bg-[#167D78]"
                                             : "bg-[#E8F4F2]"
-                                    }`}
+                                        }`}
                                 />
 
                                 {pkg.featured && (
@@ -753,11 +751,10 @@ export default function Home() {
                                     </span>
 
                                     <div
-                                        className={`flex h-14 w-14 items-center justify-center rounded-full transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110 ${
-                                            pkg.featured
+                                        className={`flex h-14 w-14 items-center justify-center rounded-full transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110 ${pkg.featured
                                                 ? "bg-[#167D78] text-white shadow-lg shadow-[#167D78]/20"
                                                 : "bg-[#E8F4F2] text-[#167D78]"
-                                        }`}
+                                            }`}
                                     >
                                         {pkg.featured ? (
                                             <Sparkles className="h-6 w-6" />
@@ -810,11 +807,10 @@ export default function Home() {
                                 {/* PACKAGE CTA */}
                                 <Link
                                     href="/packages"
-                                    className={`group/button mt-9 flex min-h-[52px] w-full items-center justify-center gap-3 rounded-full px-5 text-sm font-bold transition-all duration-300 ${
-                                        pkg.featured
+                                    className={`group/button mt-9 flex min-h-[52px] w-full items-center justify-center gap-3 rounded-full px-5 text-sm font-bold transition-all duration-300 ${pkg.featured
                                             ? "bg-[#167D78] text-white shadow-lg shadow-[#167D78]/15 hover:-translate-y-0.5 hover:bg-[#0D2027]"
                                             : "border border-[#DFE7E7] bg-[#F8FAFA] text-[#142D35] hover:-translate-y-0.5 hover:border-[#167D78] hover:bg-[#E8F4F2] hover:text-[#167D78]"
-                                    }`}
+                                        }`}
                                 >
                                     Explore Package
 

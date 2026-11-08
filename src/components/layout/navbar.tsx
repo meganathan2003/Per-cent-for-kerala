@@ -84,7 +84,7 @@ export default function Navbar() {
             </div>
 
             {/* MAIN NAVBAR */}
-            <nav className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between px-5 sm:h-[78px] sm:px-8 lg:px-10">
+            <nav className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-5 sm:h-19.5 sm:px-8 lg:px-10">
 
                 {/* BRAND */}
                 <Link
@@ -93,7 +93,7 @@ export default function Navbar() {
                     className="flex shrink-0 items-center"
                 >
                     <Image
-                        src="/images/logo.png"
+                        src="/images/website-logo.png"
                         alt="Per-Cent Kerala"
                         width={450}
                         height={100}
@@ -108,11 +108,11 @@ export default function Navbar() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className="group relative flex h-[78px] items-center whitespace-nowrap text-[13px] font-semibold text-[#34464B] transition-colors duration-200 hover:text-[#167D78]"
+                            className="group relative flex h-19.5 items-center whitespace-nowrap text-[13px] font-semibold text-[#34464B] transition-colors duration-200 hover:text-[#167D78]"
                         >
                             {link.label}
 
-                            <span className="absolute bottom-0 left-0 h-[3px] w-full origin-left scale-x-0 rounded-t-full bg-[#167D78] transition-transform duration-200 group-hover:scale-x-100" />
+                            <span className="absolute bottom-0 left-0 h-0.75 w-full origin-left scale-x-0 rounded-t-full bg-[#167D78] transition-transform duration-200 group-hover:scale-x-100" />
                         </Link>
                     ))}
                 </div>
@@ -150,13 +150,13 @@ export default function Navbar() {
                             className="flex w-[85%] flex-col border-l border-[#DFE7E7] bg-white p-0 sm:max-w-sm"
                         >
                             {/* MOBILE HEADER */}
-                            <div className="flex h-[76px] items-center justify-between border-b border-[#DFE7E7] px-6">
+                            <div className="flex h-19 items-center justify-between border-b border-[#DFE7E7] px-6">
                                 <Link
                                     href="/"
                                     onClick={() => setMenuOpen(false)}
                                 >
                                     <Image
-                                        src="/images/logo.png"
+                                        src="/images/website-logo.png"
                                         alt="Per-Cent Kerala"
                                         width={450}
                                         height={100}
@@ -206,7 +206,7 @@ export default function Navbar() {
                                         <Link
                                             href={link.href}
                                             onClick={() => setMenuOpen(false)}
-                                            className="group flex min-h-[54px] items-center justify-between border-b border-[#DFE7E7] px-2 text-[14px] font-semibold text-[#34464B] transition-colors hover:text-[#167D78]"
+                                            className="group flex min-h-13.5 items-center justify-between border-b border-[#DFE7E7] px-2 text-[14px] font-semibold text-[#34464B] transition-colors hover:text-[#167D78]"
                                         >
                                             {link.label}
 
